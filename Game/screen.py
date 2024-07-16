@@ -55,4 +55,20 @@ class Screen:
         
         return temp
 
-    def translatePointToScreen(self, point): pass
+    def translatePointToScreen(self, point):
+        temp = list(point)
+
+        # Handle resolution diff
+        res_delta = self.resolution/self.screen.get_height()
+        temp[0] /= res_delta
+        temp[1] /= res_delta
+
+        # Handle edge blackspace
+        temp[0] += self.center_delta[0]
+        temp[1] += self.center_delta[1]
+
+        # Truncate decimals
+        temp[0] = round(temp[0])
+        temp[1] = round(temp[1])
+        
+        return temp

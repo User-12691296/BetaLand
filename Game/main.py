@@ -2,16 +2,17 @@ import pygame
 pygame.init()
 
 from screen import Screen
-from menus import MainMenu
+from managers import MainWindowManager
 
 # Create the screen
 ASPECT_RATIO = 8/5
 RESOLUTION = 1600
-screen = Screen(ASPECT_RATIO, RESOLUTION)
+SCREEN = Screen(ASPECT_RATIO, RESOLUTION)
 
-main_menu = MainMenu(screen.get_size())
+# Reroutes events and drawing commands through a manager to clean the main code
+main_manager = MainWindowManager(SCREEN)
 
-
+# Main loop
 clock = pygame.time.Clock()
 running = True
 while running:
@@ -19,21 +20,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.MOUSEMOTION:
-            main_menu.onMouseMotion(screen.translatePointFromScreen(event.pos))
+        else:
+            main_manager.handleEvent(event)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            main_menu.onMouseDown(screen.translatePointFromScreen(event.pos), event.button)
+    # Tick the loop
+    main_manager.tick()
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            main_menu.onMouseUp(screen.translatePointFromScreen(event.pos), event.button)
-            
-    screen.get().fill((0, 0, 0))
+    # Draw to screen
+    SCREEN.get().fill((0, 0, 0))
 
-    main_menu.draw(screen.get())
+    main_manager.draw(SCREEN.get())
+    
+    SCREEN.update()
 
-    screen.update()
-
+    # FPS control
     clock.tick(60)
 
 pygame.quit()
