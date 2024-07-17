@@ -4,20 +4,19 @@ import events
 ASSETS = "assets\\menus\\"
 
 class MainMenuOption:
-    def __init__(self, name, center):
+    def __init__(self, name, center, action):
         self.name = name
 
         self.rect = pygame.Rect(0, 0, 300, 100)
         self.rect.center = center
+
+        self.action = action
 
         self.hovered = False
         self.pressed = False
         
         self.font = pygame.font.SysFont("Times New Roman", 80)
         self.hovered_font = pygame.font.SysFont("Times New Roman", 100)
-
-    def action(self):
-        print(self.name)
 
     def checkHover(self, point):
         if self.rect.collidepoint(point):
@@ -57,11 +56,14 @@ class MainMenu(events.EventAcceptor):
 
         self.options = {}
         option_names = ("Play", "Settings", "Exit")
+        option_actions = [lambda: pygame.event.post(pygame.event.Event(events.GAME_START)),
+                          lambda: pygame.event.post(pygame.event.Event(events.OPEN_SETTINGS)),
+                          lambda: pygame.event.post(pygame.event.Event(pygame.QUIT))]
 
         y = 400 + 200
         
-        for option_name in option_names:
-            self.options[option_name] = MainMenuOption(option_name, (550, y))
+        for option_name, option_action in zip(option_names, option_actions):
+            self.options[option_name] = MainMenuOption(option_name, (550, y), option_action)
             y += 120
 
     def onMouseDown(self, pos, button):
@@ -89,3 +91,15 @@ class MainMenu(events.EventAcceptor):
         # Options
         for option in self.options.values():
             option.draw(surface)
+
+class SettingsMenu(events.EventAcceptor):
+    def __init__(self, screen_size):
+        bg = pygame.image.load(ASSETS+"settings-menu-bg.png")
+        self.bg = pygame.transform.scale(bg, screen_size)
+
+    def onMouseDown(self, pos, button):
+        if button == pygame.BUTTON_LEFT:
+            pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+
+    def draw(self, surface):
+        surface.blit(self.bg, (surface.get_rect().centerx-self.bg.get_rect().centerx, 0))

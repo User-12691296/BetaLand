@@ -45,7 +45,7 @@ class Screen:
         temp[1] -= self.center_delta[1]
 
         # Handle resolution diff
-        res_delta = self.resolution/self.screen.get_height()
+        res_delta = self.resolution/self._buffer_size[1]
         temp[0] *= res_delta
         temp[1] *= res_delta
 
@@ -59,7 +59,7 @@ class Screen:
         temp = list(point)
 
         # Handle resolution diff
-        res_delta = self.resolution/self.screen.get_height()
+        res_delta = self.resolution/self._buffer_size[1]
         temp[0] /= res_delta
         temp[1] /= res_delta
 

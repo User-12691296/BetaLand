@@ -4,6 +4,8 @@ pygame.init()
 from screen import Screen
 from managers import MainWindowManager
 
+import events
+
 # Create the screen
 ASPECT_RATIO = 8/5
 RESOLUTION = 1600
@@ -20,6 +22,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        elif event.type == events.GAME_START:
+            print("Starting game!!!")
+            
         else:
             main_manager.handleEvent(event)
 
