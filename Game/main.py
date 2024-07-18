@@ -22,9 +22,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        elif event.type == events.GAME_START:
-            print("Starting game!!!")
-            
         else:
             main_manager.handleEvent(event)
 

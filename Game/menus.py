@@ -3,36 +3,17 @@ import events
 
 ASSETS = "assets\\menus\\"
 
-class MainMenuOption:
+class MainMenuOption(events.ButtonShell):
     def __init__(self, name, center, action):
+        super().__init__(action)
+        
         self.name = name
 
         self.rect = pygame.Rect(0, 0, 300, 100)
         self.rect.center = center
-
-        self.action = action
-
-        self.hovered = False
-        self.pressed = False
         
         self.font = pygame.font.SysFont("Times New Roman", 80)
         self.hovered_font = pygame.font.SysFont("Times New Roman", 100)
-
-    def checkHover(self, point):
-        if self.rect.collidepoint(point):
-            self.hovered = True
-        else:
-            self.hovered = False
-            self.pressed = False
-
-    def pressEvent(self, point):
-        if self.rect.collidepoint(point):
-            self.pressed = True
-
-    def releaseEvent(self, point):
-        if self.rect.collidepoint(point) and self.pressed:
-            self.pressed = False
-            self.action()
 
     def draw(self, surface):
         if not self.hovered:
@@ -44,7 +25,7 @@ class MainMenuOption:
                 option_text = self.hovered_font.render(self.name, True, (80, 50, 100))
         surface.blit(option_text, (self.rect.centerx-option_text.get_rect().centerx, self.rect.centery-option_text.get_rect().centery))
 
-class MainMenu(events.EventAcceptor):
+class MainMenu(events.Alpha):
     def __init__(self, screen_size):
         bg = pygame.image.load(ASSETS+"main-menu-bg.png")
         self.bg = pygame.transform.scale(bg, screen_size)
@@ -67,18 +48,16 @@ class MainMenu(events.EventAcceptor):
             y += 120
 
     def onMouseDown(self, pos, button):
-        if button == pygame.BUTTON_LEFT:
-            for option in self.options.values():
-                option.pressEvent(pos)
+        for option in self.options.values():
+            option.onMouseDown(pos, button)
 
     def onMouseUp(self, pos, button):
-        if button == pygame.BUTTON_LEFT:
-            for option in self.options.values():
-                option.releaseEvent(pos)
+        for option in self.options.values():
+            option.onMouseUp(pos, button)
     
     def onMouseMotion(self, pos):
         for option in self.options.values():
-            option.checkHover(pos)
+            option.onMouseMotion(pos)
 
     def draw(self, surface):
         # Background
@@ -92,7 +71,7 @@ class MainMenu(events.EventAcceptor):
         for option in self.options.values():
             option.draw(surface)
 
-class SettingsMenu(events.EventAcceptor):
+class SettingsMenu(events.Alpha):
     def __init__(self, screen_size):
         bg = pygame.image.load(ASSETS+"settings-menu-bg.png")
         self.bg = pygame.transform.scale(bg, screen_size)

@@ -1,45 +1,60 @@
 import pygame
 import events
+import game
 import menus
 
 class MainWindowManager(events.EventAcceptor):
     def __init__(self, screen):
         self.screen = screen
 
-        self.active_menu = "main"
-        
-        self.menus = {"main": menus.MainMenu(self.screen.get_size()),
-                      "settings": menus.SettingsMenu(self.screen.get_size())}
+        self.active_alpha = "main-menu"
+
+        screen_size = self.screen.get_size()
+        self.alphas = {"main-menu": menus.MainMenu(screen_size),
+                       "settings-menu": menus.SettingsMenu(screen_size),
+                       "game": game.GameWindow(screen_size)}
     
 
-    def callOnAllMenus(self, action):
-        for menu in self.menus.values():
-            action(menu)
+    def callOnAllAlphas(self, action):
+        for alpha in self.alphas.values():
+            action(alpha)
 
-    def callOnActiveMenu(self, action):
-        action(self.menus[self.active_menu])
+    def callOnActiveAlpha(self, action):
+        action(self.alphas[self.active_alpha])
     
     def handleEvent(self, event):
+        if event.type == events.GAME_START:
+            self.alphas[self.active_alpha].close()
+            self.active_alpha = "game"
+            self.alphas[self.active_alpha].start()
+        
         if event.type == events.RETURN_TO_MAIN_MENU:
-            self.active_menu = "main"
+            self.alphas[self.active_alpha].close()
+            self.active_alpha = "main-menu"
+            self.alphas[self.active_alpha].start()
             
         if event.type == events.OPEN_SETTINGS:
-            self.active_menu = "settings"
+            self.alphas[self.active_alpha].close()
+            self.active_alpha = "settings-menu"
+            self.alphas[self.active_alpha].start()
             
         if event.type == pygame.MOUSEMOTION:
-            self.callOnActiveMenu(lambda menu: menu.onMouseMotion(self.screen.translatePointFromScreen(event.pos)))
-            #self.main_menu.onMouseMotion(self.screen.translatePointFromScreen(event.pos))
+            self.callOnActiveAlpha(lambda alpha: alpha.onMouseMotion(self.screen.translatePointFromScreen(event.pos)))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            self.callOnActiveMenu(lambda menu: menu.onMouseDown(self.screen.translatePointFromScreen(event.pos), event.button))
-            #self.main_menu.onMouseDown(self.screen.translatePointFromScreen(event.pos), event.button)
+            self.callOnActiveAlpha(lambda alpha: alpha.onMouseDown(self.screen.translatePointFromScreen(event.pos), event.button))
 
         if event.type == pygame.MOUSEBUTTONUP:
-            self.callOnActiveMenu(lambda menu: menu.onMouseUp(self.screen.translatePointFromScreen(event.pos), event.button))
-            #self.main_menu.onMouseUp(self.screen.translatePointFromScreen(event.pos), event.button)
+            self.callOnActiveAlpha(lambda alpha: alpha.onMouseUp(self.screen.translatePointFromScreen(event.pos), event.button))
 
+        if event.type == pygame.KEYDOWN:
+            self.callOnActiveAlpha(lambda alpha: alpha.onKeyDown(event.key, event.mod, event.unicode))
+
+        if event.type == pygame.KEYUP:
+            self.callOnActiveAlpha(lambda alpha: alpha.onKeyUp(event.key, event.mod, event.unicode))
+            
     def draw(self, surface):
-        self.menus[self.active_menu].draw(self.screen.get())
+        self.alphas[self.active_alpha].draw(self.screen.get())
 
     def tick(self):
-        pass
+        self.alphas[self.active_alpha].tick()
