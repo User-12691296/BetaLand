@@ -1,10 +1,14 @@
 # Create the fullscreen window which locks the game into 16:9 aspect ratio
 import pygame
+import ctypes
+import platform
 
+if platform.system() == "Windows":
+    ctypes.windll.user32.SetProcessDPIAware()
 
 class Screen:
     def __init__(self, aspect, resolution):
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.NOFRAME)
 
         self.aspect = aspect
         self.screen_aspect = self.screen.get_width()/self.screen.get_height()

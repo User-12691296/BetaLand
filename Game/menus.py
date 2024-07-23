@@ -1,7 +1,8 @@
 import pygame
 import events
+import os
 
-ASSETS = "assets\\menus\\"
+ASSETS = os.path.join("assets", "menus")
 
 class MainMenuOption(events.ButtonShell):
     def __init__(self, name, center, action):
@@ -27,7 +28,7 @@ class MainMenuOption(events.ButtonShell):
 
 class MainMenu(events.Alpha):
     def __init__(self, screen_size):
-        bg = pygame.image.load(ASSETS+"main-menu-bg.png")
+        bg = pygame.image.load(os.path.join(ASSETS, "main-menu-bg.png")).convert()
         self.bg = pygame.transform.scale(bg, screen_size)
         
         self.fonts = {}
@@ -73,7 +74,7 @@ class MainMenu(events.Alpha):
 
 class SettingsMenu(events.Alpha):
     def __init__(self, screen_size):
-        bg = pygame.image.load(ASSETS+"settings-menu-bg.png")
+        bg = pygame.image.load(os.path.join(ASSETS, "settings-menu-bg.png")).convert()
         self.bg = pygame.transform.scale(bg, screen_size)
 
     def onMouseDown(self, pos, button):

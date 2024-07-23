@@ -12,7 +12,7 @@ class MainWindowManager(events.EventAcceptor):
         screen_size = self.screen.get_size()
         self.alphas = {"main-menu": menus.MainMenu(screen_size),
                        "settings-menu": menus.SettingsMenu(screen_size),
-                       "game": game.GameWindow(screen_size)}
+                       "game": game.GameManager(screen_size)}
     
 
     def callOnAllAlphas(self, action):
