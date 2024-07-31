@@ -73,14 +73,3 @@ class TextureAtlas:
 
     def drawTexture(self, surface, pos, asset_name):
         surface.blit(self.getTexture(asset_name), pos)
-
-
-
-GAME_ASSETS_FOLDER = os.path.join("assets", "game")
-
-class TEXTURE_PRESETS:
-    class MAP_TILES:
-        FOLDER      = os.path.join(GAME_ASSETS_FOLDER, "tiles")
-        SIZE        = 32
-        EXT         = ".png"
-
