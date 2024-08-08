@@ -12,13 +12,12 @@ class EventAcceptor:
     def onMouseUp(self, pos, button): pass
     def onKeyDown(self, key, mod, unicode): pass
     def onKeyUp(self, key, mod, unicode): pass
-    
 
 
 class Alpha(EventAcceptor):
+    def tick(self): pass
     def start(self): pass
     def close(self): pass
-    def tick(self): pass
 
 
 
