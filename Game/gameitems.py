@@ -11,10 +11,13 @@ ASSETS = os.path.join("assets", "game")
 
 def initialiseItems():
     REGISTRY.loadAtlas()
-    loadItems()
+    registerAllItems()
 
-def loadItems():
+def registerAllItems():
     REGISTRY.addItem(Item("debug_sword", "sword"))
+    REGISTRY.addItem(Item("epic_sword", "emerald_studded_sword"))
+    REGISTRY.addItem(Item("cool_sword", "ruby_studded_sword"))
+    REGISTRY.addItem(Item("lil_sword", "sapphire_studded_sword"))
 
 class ITEM_TEXTURE_PRESETS:
     FOLDER       = os.path.join(ASSETS, "items")
@@ -52,9 +55,10 @@ class ItemRegistry:
 REGISTRY = ItemRegistry()
 
 class Item:
-    def __init__(self, itemid, tex_name):
+    def __init__(self, itemid, tex_name, stackable=True):
         self.itemid = itemid
         self.tex_name = tex_name
+        self.stackable = stackable
 
         self._atlas_given = False
 
@@ -65,9 +69,12 @@ class Item:
 
         self._atlas_given = True
 
+    def isStackable(self):
+        return self.stackable
+
     def getItemID(self):
         return self.itemid
-
+    
     def onLeft(self, player, world, tile, tile_pos): pass
     def onRight(self, player, world, tile, tile_pos): pass
     def onMiddle(self, player, world, tile, tile_pos): pass
@@ -85,6 +92,46 @@ class ItemStack:
     def __init__(self, itemid, count):
         self.item = REGISTRY.getItem(itemid)
         self.count = count
+
+    def getItemID(self):
+        return self.item.getItemID()
+
+    def getCount(self):
+        return self.count
+
+    def isEmpty(self):
+        return self.getCount()==0
+
+    def setCount(self, count):
+        self.count = count
+
+    def isStackableWith(self, stack):
+        if stack == None:
+            return False
+        
+        if not self.item.isStackable():
+            return False
+        if not stack.item.isStackable():
+            return False
+        
+        if self.getItemID() != stack.getItemID():
+            return False
+
+        return True
+
+    def stackWith(self, stack):
+        if self.isStackableWith(stack):
+            self.count += stack.count
+
+            return True
+
+        else:
+            return False
+
+    def duplicateStack(self):
+        new_stack = self.__class__(self.getItemID(), self.getCount())
+
+        return new_stack
 
     def draw(self, surface, center):
         self.item.draw(surface, center)
@@ -122,10 +169,54 @@ class Inventory(events.EventAcceptor):
     def getItemStack(self, loc):
         return self.item_stacks[loc]
 
+    def isActiveStackClear(self):
+        return self.getActiveStack() == None
+
+    def isStackClear(self, loc):
+        return self.getItemStack(loc) == None
+
+    def getActiveStack(self):
+        return self.active_stack
+
+    def setActiveStack(self, stack):
+        self.active_stack = stack
+
     def swapActiveWithStack(self, loc):
-        temp = self.active_stack
-        self.active_stack = self.getItemStack(loc)
+        temp = self.getActiveStack()
+        self.setActiveStack(self.getItemStack(loc))
         self.setItemStack(temp, loc)
+
+    def stackActiveWithStack(self, loc):
+        stack = self.getItemStack(loc)
+
+        if stack == None:
+            self.swapActiveWithStack(loc)
+
+        else:
+            if stack.stackWith(self.getActiveStack()):
+                self.setActiveStack(None)
+
+            else:
+                self.swapActiveWithStack(loc)
+
+    def splitStackIntoActive(self, loc):
+        # Get the current stack
+        stack = self.getItemStack(loc)
+        total_count = stack.getCount()
+
+        # Calculate the amount before and after split
+        remaining_count = total_count//2
+        active_count = total_count - remaining_count
+
+        if active_count > 0:
+            active_stack = stack.duplicateStack()
+            active_stack.setCount(active_count)
+            self.setActiveStack(active_stack)
+        
+        if remaining_count > 0:            
+            stack.setCount(remaining_count)
+        else:
+            self.setItemStack(None, loc)
 
     def getPosOfStack(self, loc, topleft):
         # Grid position of item stack
@@ -166,14 +257,19 @@ class Inventory(events.EventAcceptor):
         if stack_loc >= self.size:
             return False
 
-        # Bring it to the active stack
-        self.swapActiveWithStack(stack_loc)
+        # If a split is possible, split, otherwise swap stack and active
+        if button == pygame.BUTTON_RIGHT and self.isActiveStackClear() and not self.isStackClear(stack_loc):
+            self.splitStackIntoActive(stack_loc)
 
+        else:
+            # Bring it to the active stack
+            self.stackActiveWithStack(stack_loc)
+        
         return True
 
     def close(self):
         self.addItemStack(self.active_stack)
-        self.active_stack = None
+        self.setActiveStack(None)
 
     def draw(self, surface, topleft):
         for stack_loc in range(self.size):
@@ -186,5 +282,5 @@ class Inventory(events.EventAcceptor):
                 stack.draw(surface, pos)
 
     def drawActiveStack(self, surface, pos):
-        if self.active_stack:
-            self.active_stack.draw(surface, pos)
+        if self.getActiveStack() != None:
+            self.getActiveStack().draw(surface, pos)

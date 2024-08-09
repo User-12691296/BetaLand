@@ -87,7 +87,7 @@ class TextureAtlas:
             return self.default
 
     def getTexture(self, asset_name):
-        return self.getTexterAtLoc(self.getTextureLoc(asset_name))
+        return self.getTextureAtLoc(self.getTextureLoc(asset_name))
 
     def drawTextureAtLoc(self, surface, pos, loc):
         surface.blit(self.getTextureAtLoc(loc), pos)

@@ -5,6 +5,7 @@ import os
 import events
 from textures import TextureAtlas
 from gameitems import initialiseItems, Item, ItemStack, Inventory
+from gameentities import initialiseEntities, Entity, Creature, Player, TestCreature
 
 ASSETS = os.path.join("assets", "game")
 
@@ -13,6 +14,7 @@ class GameManager(events.Alpha):
         self.screen_size = screen_size
 
         initialiseItems()
+        initialiseEntities()
         
         self.loadBgs()
         self.loadWorld()
@@ -85,7 +87,8 @@ class GameManager(events.Alpha):
         surface.blit(self.bg, (0, 0))
 
     def drawWorld(self, surface):
-        self.world.draw(surface, self.getScreenBufferDelta())
+        viewing_rect = pygame.Rect(self.getScreenBufferDelta(), self.screen_size)
+        self.world.draw(surface, viewing_rect)
 
     def drawPlayer(self, surface):
         self.player.draw(surface)
@@ -119,6 +122,13 @@ class BasicTile:
         if self._atlas_given:
             self.atlas.drawTextureAtLoc(surface, pos, self.tex_loc)
 
+    def getDrawable(self):
+        if self._atlas_given:
+            return self.atlas.getTextureAtLoc(self.tex_loc)
+
+        else:
+            return pygame.Surface((1, 1))
+
 class GrassTile(BasicTile):
     def __init__(self):
         super().__init__("grass", "grass")
@@ -144,19 +154,98 @@ BarrierTile().addTileToList(OVERWORLD_TILES)
 BasicTile("gremlin",
           "barrier").addTileToList(OVERWORLD_TILES)
     
-TILE_SIZE = 32
+TILE_SIZE = 128
 
 class Map:
+    MAX_BUFFER_SIZE = (2048, 2048)
     class MAP_TILES_TEXTURE_PRESETS:
         FOLDER  = os.path.join(ASSETS, "tiles")
         SIZE    = TILE_SIZE
         EXT     = ".png"
+        RESCALE = True
         
-    def __init__(self):        
-        self.buffer = pygame.Surface((3200, 3200))
+    def __init__(self, map_size):
+        self.total_size = map_size
+        self.createBlankBuffers()
 
         self.tileAtlas = TextureAtlas.fromPreset(self.MAP_TILES_TEXTURE_PRESETS)
 
+    def createBlankBuffers(self):
+        self.buffers = []
+
+        max_buffers_x_axis = self.total_size[0]//self.MAX_BUFFER_SIZE[0]
+        max_buffers_y_axis = self.total_size[1]//self.MAX_BUFFER_SIZE[1]
+        self.MAX_BUFFERS = [max_buffers_x_axis, max_buffers_y_axis]
+
+        right_edge_buffer_width = self.total_size[0]%self.MAX_BUFFER_SIZE[0]
+        bottom_edge_buffer_height = self.total_size[1]%self.MAX_BUFFER_SIZE[1]
+
+        for y_buf_index in range(max_buffers_y_axis):
+            # All buffers in current row
+            row = []
+            
+            for x_buf_index in range(max_buffers_x_axis):
+                buf = pygame.Surface(self.MAX_BUFFER_SIZE)
+                row.append(buf)
+                
+            if right_edge_buffer_width > 0:
+                buf = pygame.Surface((right_edge_buffer_width, self.MAX_BUFFER_SIZE[1]))
+                row.append(buf)
+
+            self.buffers.append(row)
+
+        if bottom_edge_buffer_height > 0:
+            row = []
+
+            for x_buf_index in range(max_buffers_x_axis):
+                buf = pygame.Surface((self.MAX_BUFFER_SIZE[0], bottom_edge_buffer_height))
+                row.append(buf)
+
+            if right_edge_buffer_width > 0:
+                buf = pygame.Surface((right_edge_buffer_width, bottom_edge_buffer_height))
+                row.append(buf)
+
+            self.buffers.append(row)
+
+    def getBufferAtLoc(self, buffer_loc):
+        try:
+            return self.buffers[buffer_loc[1]][buffer_loc[0]]
+        except IndexError:
+            print("Bad Buffer indexed:", buffer_loc)
+            return None
+
+    def bufferLocToVirtualPos(self, buffer_loc):
+        return (self.MAX_BUFFER_SIZE[0]*buffer_loc[0],
+                self.MAX_BUFFER_SIZE[1]*buffer_loc[1])
+
+    def getRelevantBuffers(self, rect):
+        # Keep errant inputs within bounds
+        clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
+        
+        left_bound = clamp(rect.left//self.MAX_BUFFER_SIZE[0], 0, self.MAX_BUFFERS[0])
+        right_bound = clamp(-(rect.right//-self.MAX_BUFFER_SIZE[0]), 0, self.MAX_BUFFERS[0]) # Ceil div
+        top_bound = clamp(rect.top//self.MAX_BUFFER_SIZE[1], 0, self.MAX_BUFFERS[1])
+        bottom_bound = clamp(-(rect.bottom//-self.MAX_BUFFER_SIZE[1]), 0, self.MAX_BUFFERS[1])
+
+        relevant_buffers = [(x, y)
+                            for x in range(left_bound, right_bound)
+                            for y in range(top_bound, bottom_bound)]
+
+        return relevant_buffers
+
+    def blit(self, source, dest):
+        rect = source.get_rect()
+        rect.topleft = dest
+
+        relevant_buffers = self.getRelevantBuffers(rect)
+
+        for buffer_loc in relevant_buffers:
+            delta = self.bufferLocToVirtualPos(buffer_loc)
+
+            buffer = self.getBufferAtLoc(buffer_loc)
+
+            buffer.blit(source, (dest[0]-delta[0], dest[1]-delta[1]))
+        
     def setWorld(self, world):
         self.world = world
 
@@ -168,13 +257,27 @@ class Map:
 
     def regenTile(self, tile_pos):
         tile = self.world.getTile(tile_pos)
-        tile.draw(self.buffer, self.world.worldPosToBufferPos(tile_pos))
+
+        self.blit(tile.getDrawable(), self.world.tilePosToBufferPos(tile_pos))
 
     def regenMap(self):
         for i in range(self.world.getHeight()): #y
             for j in range(self.world.getWidth()): #x
                 self.regenTile((j, i))
 
+    def draw(self, surface, visible_rect):
+        relevant_buffers = self.getRelevantBuffers(pygame.Rect((-visible_rect.left, -visible_rect.top),
+                                                               visible_rect.size))
+        
+        for buffer_loc in relevant_buffers:
+            v_pos = self.bufferLocToVirtualPos(buffer_loc)
+
+            buffer = self.getBufferAtLoc(buffer_loc)
+
+            if buffer != None:
+                surface.blit(self.getBufferAtLoc(buffer_loc),
+                                 (visible_rect.left+v_pos[0], visible_rect.top+v_pos[1]))
+            
 
 class World(events.EventAcceptor):
     ALL_TILES = OVERWORLD_TILES
@@ -186,7 +289,7 @@ class World(events.EventAcceptor):
     def __init__(self):
         self.loadWorld()
 
-        self.map = Map()
+        self.map = Map((self.WORLD_SIZE[0]*self.TILE_SIZE[0], self.WORLD_SIZE[1]*self.TILE_SIZE[1]))
         self.map.setWorld(self)
 
         self.tiles = {}
@@ -197,6 +300,9 @@ class World(events.EventAcceptor):
         self.map.regenMap()
 
         self.entities = []
+
+        self.addEntity(TestCreature())
+        self.entities[0].setPos((2, 3))
 
     def loadWorld(self):
         self.world_data = np.array(["grass", "grass"]*5000, dtype='<U16').reshape((100, 100))
@@ -221,6 +327,12 @@ class World(events.EventAcceptor):
         if tileid != None:
             return self.tiles[tileid]
 
+    def getTileRect(self, tile_pos):
+        rect = pygame.Rect(self.tilePosToBufferPos(tile_pos),
+                           self.TILE_SIZE)
+
+        return rect
+
     def getWidth(self):
         return self.WORLD_SIZE[0]
 
@@ -242,6 +354,7 @@ class World(events.EventAcceptor):
 
     def addEntity(self, entity):
         self.entities.append(entity)
+        entity.setWorld(self)
 
     def removeEntity(self, entity):
         self.entities.remove(entity)
@@ -265,154 +378,15 @@ class World(events.EventAcceptor):
     def bufferPosToWorldPos(self, bpos):
         return (int(bpos[0]//self.TILE_SIZE[0]), int(bpos[1]//self.TILE_SIZE[1]))
     
-    def worldPosToBufferPos(self, wpos):
+    def tilePosToBufferPos(self, wpos):
         return (wpos[0]*self.TILE_SIZE[0], wpos[1]*self.TILE_SIZE[1])
 
-    def draw(self, surface, delta):
-        map_ = self.map.getMap()
-        surface.blit(map_, delta)
+    def draw(self, surface, visible_rect):
+        visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)
 
+        for entity in self.entities:
+            entity.draw(visible_world)
 
-class Entity(events.EventAcceptor):
-    def __init__(self):
-        self.pos = [0, 0]
+        surface.blit(visible_world, visible_rect.topleft)
 
-    def setWorld(self, world):
-        self.world = world
-
-    def setPos(self, pos):
-        self.pos = pos
-
-    def kill(self):
-        self.world.removeEntity(self)
-
-    def getBufferPos(self):
-        return self.world.worldPosToBufferPos(self.pos)
-
-    def tick(self): pass
-    def draw(self, surface): pass
-
-class Creature(Entity):
-    def __init__(self, health):
-        super().__init__()
-        
-        self.max_health = health
-        self.health = health
-
-    def changeHealth(self, delta):
-        self.health += delta
-
-    def calcDamageModifiers(self, damage):
-        return damage # No changes to damage, can be overridden for entities with armor
-
-    def damage(self, damage):
-        self.true_damage = self.calcDamageModifiers(damage)
-
-        self.changeHealth(-self.true_damage)
-
-        if self.health <= 0:
-            self.kill()
-
-    def getHealth(self):
-        return self.health
-
-    def getHealthPercentage(self):
-        return self.health/self.max_health
-    
-    
-class PlayerHUD(events.EventAcceptor):
-    HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
-    INVENTORY_POS = (1600, 100)
-    
-    def __init__(self, player):
-        self.player = player
-
-    def onMouseDown(self, pos, button):
-        used = 0
-        
-        # Inventory
-        ipos = [pos[0], pos[1]]
-        ipos[0] -= self.INVENTORY_POS[0]
-        ipos[1] -= self.INVENTORY_POS[1]
-
-        used += int(self.player.inventory.onMouseDown(ipos, button))
-
-        return bool(used)
-
-    def drawHealthBar(self, surface):
-        bar = self.HEALTH_BAR_BOUNDS
-
-        # Background
-        pygame.draw.rect(surface, (128, 128, 128), bar)
-
-        # Health stats
-        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(bar.topleft, (bar.width*self.player.getHealthPercentage(), bar.height)))
-
-    def drawInventory(self, surface):
-        mouse_pos = pygame.mouse.get_pos()
-
-        self.player.inventory.draw(surface, self.INVENTORY_POS)
-        self.player.inventory.drawActiveStack(surface, mouse_pos)        
-        
-    def draw(self, surface):
-        self.drawHealthBar(surface)
-        self.drawInventory(surface)
-
-INITIAL_PLAYER_HEALTH = 10
-
-class Player(Creature):
-    def __init__(self):
-        super().__init__(INITIAL_PLAYER_HEALTH)
-
-        self.loadHUD()
-        self.loadInventory()
-
-    def loadHUD(self):
-        self.HUD = PlayerHUD(self)
-
-    def loadInventory(self):
-        self.inventory = Inventory(27, 8, (100, 100))
-        self.inventory.setItemStack(ItemStack("debug_sword", 45), 10)
-
-    def setManager(self, manager):
-        self.manager = manager
-
-    def tick(self):
-        self.handleMotion()
-
-    def handleMotion(self):
-        pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
-            self.pos[1] -= .1
-        if pressed[pygame.K_a]:
-            self.pos[0] -= .1
-        if pressed[pygame.K_s]:
-            self.pos[1] += .1
-        if pressed[pygame.K_d]:
-            self.pos[0] += .1
-
-    def onMouseDown(self, pos, button):
-        # If anything uses the button, player will hog mouse input
-        used = 0
-        
-        used += int(self.HUD.onMouseDown(pos, button))
-        
-        return bool(used)
-
-    def worldClosed(self):
-        self.inventory.close()
-        
-    def kill(self):
-        pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
-            
-    def getMapDelta(self):
-        bpos = self.getBufferPos()
-        return (-bpos[0], -bpos[1])
-
-    def draw(self, surface):
-        # Draw player sprite
-        pos = self.manager.bufferPosToScreenPos(self.getBufferPos())
-        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(pos, (80, 120)))
-
-        # Draw GUI
-        self.HUD.draw(surface)
+        self.map.draw(surface, visible_rect)
