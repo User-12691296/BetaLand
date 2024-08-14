@@ -27,7 +27,7 @@ class EntityRegistry:
     def loadAtlas(self):
         self.atlas = TextureAtlas(os.path.join(ASSETS, "entities"),
                                   ".png",
-                                  (128, 128),
+                                  (64, 64),
                                   self.assets_needed,
                                   True,
                                   True)
@@ -55,8 +55,13 @@ class Entity(events.EventAcceptor):
     def __init__(self):
         self.pos = [0, 0]
 
+        self.cooldowns = {}
+
     def setWorld(self, world):
         self.world = world
+
+    def getPos(self):
+        return self.pos
 
     def setPos(self, pos):
         self.pos = pos
@@ -76,7 +81,16 @@ class Entity(events.EventAcceptor):
     def getBufferPos(self):
         return self.world.tilePosToBufferPos(self.pos)
 
-    def tick(self): pass
+    def registerCooldown(self, cooldown, frames):
+        self.cooldowns[cooldown] = frames
+
+    def isCooldownActive(self, cooldown):
+        return self.cooldowns.get(cooldown, False)
+
+    def tick(self):
+        for cooldown in self.cooldowns.keys():
+            self.cooldowns[cooldown] -= 1
+        
     def draw(self, surface): pass
 
 class Creature(Entity):
@@ -120,18 +134,30 @@ class Player(Creature):
         self.manager = manager
 
     def tick(self):
+        super().tick()
+        
         self.handleMotion()
 
     def handleMotion(self):
+        if self.isCooldownActive("movement_input"):
+            return
+
+        self.prev_pos = [self.pos[0], self.pos[1]]
+        
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_w]:
-            self.pos[1] -= .3
+            self.pos[1] -= 1
         if pressed[pygame.K_a]:
-            self.pos[0] -= .3
+            self.pos[0] -= 1
         if pressed[pygame.K_s]:
-            self.pos[1] += .3
+            self.pos[1] += 1
         if pressed[pygame.K_d]:
-            self.pos[0] += .3
+            self.pos[0] += 1
+
+        if not self.world.isTileValidForWalking(self.pos):
+            self.pos = self.prev_pos
+
+        self.registerCooldown("movement_input", 5)
 
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input
