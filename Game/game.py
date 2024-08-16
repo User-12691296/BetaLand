@@ -154,6 +154,7 @@ class GrassTile(BasicTile):
         super().__init__("grass", "grass")
 
     def onLeft(self, world, tile_pos):
+        world.setTileElevation(tile_pos, 10)
         world.setTileID(tile_pos, "barrier")
 
 class BarrierTile(BasicTile):
@@ -166,15 +167,17 @@ class BarrierTile(BasicTile):
         player.damage(0.5)
 
     def onRight(self, world, tile_pos):
+        world.setTileElevation(tile_pos, 0)
         world.setTileID(tile_pos, "grass")
 
 OVERWORLD_TILES = []
 GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
-BasicTile("gremlin",
+BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
     
 TILE_SIZE = 64
+TILE_RESOLUTION = 16
 
 class Quadrant:
     north = 0
@@ -225,10 +228,10 @@ class Row:
         self.end_slope = end_slope
 
     def tiles(self):
-        min_col = Quadrant.round_ties_up(self.depth * self.start_slope)
+        min_col = Quadrant.round_ties_down(self.depth * self.start_slope)
         max_col = Quadrant.round_ties_down(self.depth * self.end_slope)
 
-        for col in range(min_col-1, max_col + 1):
+        for col in range(min_col, max_col+1):
             yield (self.depth, col)
 
 
@@ -245,6 +248,8 @@ class Map:
         SIZE    = TILE_SIZE
         EXT     = ".png"
         RESCALE = True
+
+    CORNER_ROUNDING_ELEV_DELTA = 5
         
     def __init__(self, map_size, tile_size):
         self.map_size = map_size
@@ -335,6 +340,18 @@ class Map:
         
         return relevant_buffers
 
+    def getRelevantTilesAsRect(self, rect):
+        clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
+        
+        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0])
+        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]) # Ceil div
+        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1])
+        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1])
+
+        relevant_tiles = pygame.Rect(left_bound, top_bound, right_bound-left_bound, bottom_bound-top_bound)
+        
+        return relevant_tiles
+
     def blit(self, source, dest):
         rect = source.get_rect()
         rect.topleft = dest
@@ -358,15 +375,69 @@ class Map:
         tile_class.setAtlas(self.tileAtlas)
 
     def regenTile(self, tile_pos):
-        if self.getTileVisibility(tile_pos):
-            tile = self.world.getTile(tile_pos)
+        getTile = lambda x, y: self.world.getTile((tile_pos[0]+x, tile_pos[1]+y))
+        tile = getTile(0, 0)
 
-            self.blit(tile.getDrawable(), self.world.tilePosToBufferPos(tile_pos))
+        tbd = tile.getDrawable().copy()
+        
+        shading = pygame.Surface(tbd.get_rect().size, pygame.SRCALPHA)
+        shading.fill(255)
+        
+        getElev = lambda x, y: self.world.getTileElevation((tile_pos[0]+x, tile_pos[1]+y))
+        deltaElev = lambda x, y: getElev(0, 0)-getElev(x, y)
+        minElevDeltaOnCorner = lambda x, y: min((deltaElev(x, 0), deltaElev(x, y), deltaElev(0, y)))
+        maxElevDeltaOnCorner = lambda x, y: max((deltaElev(x, 0), deltaElev(x, y), deltaElev(0, y)))
 
-        else:
-            self.blit(self.default_tile, self.world.tilePosToBufferPos(tile_pos))
+        rounding_pixel_size = (self.tile_size[0]//TILE_RESOLUTION, self.tile_size[1]//TILE_RESOLUTION)
+        # Corner shading, if elevation is high then round corner
+        # Topleft corner
+        if minElevDeltaOnCorner(-1, -1) > self.CORNER_ROUNDING_ELEV_DELTA or maxElevDeltaOnCorner(-1, -1) < -self.CORNER_ROUNDING_ELEV_DELTA:
+            left_col = getTile(-1, 0).getDrawable().get_at((self.tile_size[0]-1, rounding_pixel_size[1]))
+            corn_col = getTile(-1, -1).getDrawable().get_at((self.tile_size[0]-1, self.tile_size[1]-1))
+            top_col  = getTile(0, -1).getDrawable().get_at((rounding_pixel_size[0], self.tile_size[1]-1))
+
+            pygame.draw.rect(tbd, left_col, pygame.Rect((0, rounding_pixel_size[1]), rounding_pixel_size))
+            pygame.draw.rect(tbd, corn_col, pygame.Rect((0, 0), rounding_pixel_size))
+            pygame.draw.rect(tbd, top_col, pygame.Rect((rounding_pixel_size[0], 0), rounding_pixel_size))
+
+        # Topright
+        if minElevDeltaOnCorner(1, -1) > self.CORNER_ROUNDING_ELEV_DELTA or maxElevDeltaOnCorner(1, -1) < -self.CORNER_ROUNDING_ELEV_DELTA:
+            right_col = getTile(1, 0).getDrawable().get_at((0, self.tile_size[1]-rounding_pixel_size[1]))
+            corn_col = getTile(1, -1).getDrawable().get_at((0, self.tile_size[1]-1))
+            top_col  = getTile(0, -1).getDrawable().get_at((self.tile_size[0]-rounding_pixel_size[0], self.tile_size[1]-1))
+
+            pygame.draw.rect(tbd, right_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0], rounding_pixel_size[1]), rounding_pixel_size))
+            pygame.draw.rect(tbd, corn_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0], 0), rounding_pixel_size))
+            pygame.draw.rect(tbd, top_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0]*2, 0), rounding_pixel_size))
+
+        # Bottomright
+        if minElevDeltaOnCorner(1, 1) > self.CORNER_ROUNDING_ELEV_DELTA or maxElevDeltaOnCorner(1, 1) < -self.CORNER_ROUNDING_ELEV_DELTA:
+            right_col = getTile(1, 0).getDrawable().get_at((0, self.tile_size[1]-rounding_pixel_size[1]))
+            corn_col = getTile(1, 1).getDrawable().get_at((0, 0))
+            bot_col  = getTile(0, 1).getDrawable().get_at((self.tile_size[0]-rounding_pixel_size[0], 0))
+
+            pygame.draw.rect(tbd, right_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0], self.tile_size[1]-rounding_pixel_size[1]*2), rounding_pixel_size))
+            pygame.draw.rect(tbd, corn_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0], self.tile_size[1]-rounding_pixel_size[1]), rounding_pixel_size))
+            pygame.draw.rect(tbd, bot_col, pygame.Rect((self.tile_size[0]-rounding_pixel_size[0]*2, self.tile_size[1]-rounding_pixel_size[1]), rounding_pixel_size))
+
+        # Bottomleft
+        if minElevDeltaOnCorner(-1, 1) > self.CORNER_ROUNDING_ELEV_DELTA or maxElevDeltaOnCorner(-1, 1) < -self.CORNER_ROUNDING_ELEV_DELTA:
+            left_col = getTile(-1, 0).getDrawable().get_at((self.tile_size[0]-1, rounding_pixel_size[1]))
+            corn_col = getTile(-1, 1).getDrawable().get_at((self.tile_size[0]-1, 0))
+            bot_col  = getTile(0, 1).getDrawable().get_at((self.tile_size[0]-rounding_pixel_size[0], 0))
+
+            pygame.draw.rect(tbd, left_col, pygame.Rect((0, self.tile_size[1]-rounding_pixel_size[1]*2), rounding_pixel_size))
+            pygame.draw.rect(tbd, corn_col, pygame.Rect((0, self.tile_size[1]-rounding_pixel_size[1]), rounding_pixel_size))
+            pygame.draw.rect(tbd, bot_col, pygame.Rect((rounding_pixel_size[0], self.tile_size[1]-rounding_pixel_size[1]), rounding_pixel_size))
+        
+        self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
+            
 
     def regenMap(self):
+        for buffer_row in self.buffers:
+            for buffer in buffer_row:
+                buffer.fill((0, 0, 0))
+                
         for i in range(self.world.getHeight()): #y
             for j in range(self.world.getWidth()): #x
                 self.regenTile((j, i))
@@ -380,7 +451,7 @@ class Map:
             def isTileOutOfBounds(tile):
                 x, y = quadrant.transform(tile)
 
-                if (origin[0]-x)**2 + (origin[1]-y)**2 > 100:
+                if (origin[0]-x)**2 + (origin[1]-y)**2 > 144:
                     return True
                 
                 if x < 0 or x >= self.map_size[0]:
@@ -389,10 +460,10 @@ class Map:
                     return True
                 
                 return False
+            
             def reveal(tile):
                 x, y = quadrant.transform(tile)
                 self.showTile((x, y))
-
 
             def is_wall(tile):
                 if tile is None:
@@ -400,7 +471,6 @@ class Map:
 
                 x, y = quadrant.transform(tile)
                 return self.world.isTileOpaque((x, y))
-
 
             def is_floor(tile):
                 if tile is None:
@@ -413,6 +483,9 @@ class Map:
                 prev_tile = None
                 
                 for tile in row.tiles():
+                    if self.world.getPlayer().disp and quadrant.transform(tile) == (5, 3):
+                        print(tile, prev_tile, quadrant.transform(tile), row.start_slope, row.end_slope, Quadrant.slope(tile))
+
                     if isTileOutOfBounds(tile):
                         continue
                     
@@ -438,9 +511,19 @@ class Map:
             scan(first_row)
 
     def draw(self, surface, visible_rect):
-        relevant_buffers = self.getRelevantBuffers(pygame.Rect((-visible_rect.left, -visible_rect.top),
-                                                               visible_rect.size))
+        area_visible = pygame.Rect((-visible_rect.left, -visible_rect.top),
+                                                               visible_rect.size)
+        relevant_buffers = self.getRelevantBuffers(area_visible)
+        relevant_tiles = self.getRelevantTilesAsRect(area_visible)
 
+        visible_darkness = self.shown_tiles.T[relevant_tiles.left:relevant_tiles.right,
+                                            relevant_tiles.top:relevant_tiles.bottom]
+        black_darkness = np.array(visible_darkness, dtype=np.int16)*255
+        
+        view_blocking = pygame.surfarray.make_surface(black_darkness)
+        view_blocking = pygame.transform.scale_by(view_blocking, self.tile_size)
+        view_blocking.set_colorkey(255)
+                    
         for buffer_loc in relevant_buffers:
             v_pos = self.bufferLocToVirtualPos(buffer_loc)
 
@@ -449,12 +532,18 @@ class Map:
             if buffer != None:
                 surface.blit(self.getBufferAtLoc(buffer_loc),
                                  (visible_rect.left+v_pos[0], visible_rect.top+v_pos[1]))
+
+        tile_topleft = self.world.tilePosToBufferPos(relevant_tiles.topleft)
+        pos_delta = (-area_visible.left+tile_topleft[0], -area_visible.top+tile_topleft[1])
+        surface.blit(view_blocking, (pos_delta))
             
 
 class World(events.EventAcceptor):
     ALL_TILES = OVERWORLD_TILES
 
     TILE_SIZE = (TILE_SIZE, TILE_SIZE)
+
+    VOID_TILEID = "void"
     
     def __init__(self):
         self.size = (0, 0)
@@ -524,23 +613,32 @@ class World(events.EventAcceptor):
 
     def getTileID(self, tile_pos):
         if (tile_pos[0] < 0 or tile_pos[1] < 0):
-            return None
+            return self.VOID_TILEID
         
         try:
             return self.world_tile_ids[tile_pos[1]][tile_pos[0]]
         except IndexError:
-            return None
+            return self.VOID_TILEID
 
     def getTile(self, tile_pos):
         tileid = self.getTileID(tile_pos)
-        if tileid != None:
-            return self.tiles[tileid]
 
+        return self.tiles[tileid]
+    
     def getTileElevation(self, tile_pos):
+        # If out of bounds, assume 0 elevation. This gives a raised bevel effect to borders
+        if tile_pos[0] < 0 or tile_pos[1] < 0:
+            return 0
+        if tile_pos[0] >= self.size[0] or tile_pos[1] >= self.size[1]:
+            return 0
+        
         return self.world_tile_elevations[tile_pos[1]][tile_pos[0]]
 
+    def setTileElevation(self, tile_pos, elevation):
+        self.world_tile_elevations[tile_pos[1]][tile_pos[0]] = elevation
+
     def isTileOpaque(self, tile_pos):
-        return self.getTileID(tile_pos)=="barrier"
+        return self.getTileElevation(tile_pos) > 3
 
     def isTileValidForWalking(self, tile_pos):
         return not self.isTileOpaque(tile_pos)
@@ -557,6 +655,14 @@ class World(events.EventAcceptor):
     def getHeight(self):
         return self.size[1]
 
+    def updateTile(self, tile_pos):
+        self.map.regenTile(tile_pos)
+
+    def updateTilesAroundTile(self, tile_pos):
+        for x in range(-1, 2):
+            for y in range(-1, 2):
+                self.updateTile((tile_pos[0]+x, tile_pos[1]+y))
+
     def setTileID(self, tile_pos, tile_id):
         if (tile_pos[0] < 0 or tile_pos[1] < 0):
             return None
@@ -566,7 +672,7 @@ class World(events.EventAcceptor):
 
         try:
             self.world_tile_ids[tile_pos[1]][tile_pos[0]] = tile_id
-            self.map.regenTile(tile_pos)
+            self.updateTilesAroundTile(tile_pos)
         except IndexError:
             return None
 
@@ -602,7 +708,6 @@ class World(events.EventAcceptor):
         return (wpos[0]*self.TILE_SIZE[0], wpos[1]*self.TILE_SIZE[1])
 
     def draw(self, surface, visible_rect):
-        self.map.regenMap()
         self.map.draw(surface, visible_rect)
         
         visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)

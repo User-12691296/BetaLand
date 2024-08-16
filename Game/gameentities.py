@@ -117,6 +117,8 @@ class Player(Creature):
         self.loadHUD()
         self.loadInventory()
 
+        self.disp = False
+
     def loadHUD(self):
         self.HUD = PlayerHUD(self)
 
@@ -153,6 +155,8 @@ class Player(Creature):
             self.pos[1] += 1
         if pressed[pygame.K_d]:
             self.pos[0] += 1
+
+        self.disp = pressed[pygame.K_ESCAPE]
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
