@@ -8,13 +8,12 @@ if platform.system() == "Windows":
 
 class Screen:
     def __init__(self, aspect, resolution):
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.NOFRAME)
+        self.screen = pygame.display.set_mode((aspect*resolution, resolution), pygame.FULLSCREEN | pygame.SCALED | pygame.NOFRAME)
 
         self.aspect = aspect
         self.screen_aspect = self.screen.get_width()/self.screen.get_height()
 
         self.resolution = resolution
-        
 
         self._buffer_size = list(self.screen.get_size())
         
@@ -38,7 +37,7 @@ class Screen:
         return self.buffer.get_size()
 
     def update(self):
-        self.screen.blit(pygame.transform.scale(self.buffer, self._buffer_size), self.center_delta)
+        self.screen.blit(self.buffer, self.center_delta)
         pygame.display.update()
 
     def translatePointFromScreen(self, point):

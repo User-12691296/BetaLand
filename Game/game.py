@@ -173,6 +173,7 @@ class BarrierTile(BasicTile):
 OVERWORLD_TILES = []
 GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
+BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
     
@@ -209,9 +210,8 @@ class Quadrant:
 
     @staticmethod
     def is_symmetric(row, tile):
-        row_depth, col = tile
-        return (col >= row.depth * row.start_slope
-                and col <= row.depth * row.end_slope)
+        return (tile[1] >= row.depth * row.start_slope
+                and tile[1] <= row.depth * row.end_slope)
 
     @staticmethod
     def round_ties_up(n):
@@ -255,8 +255,9 @@ class Map:
         self.map_size = map_size
         self.tile_size = tile_size
         self.total_size = (map_size[0]*tile_size[0], map_size[1]*tile_size[1])
-        self.createBlankBuffers()
+##        self.createBlankBuffers()
         self.initFOV()
+        self.initBuffers()
 
         self.tileAtlas = TextureAtlas.fromPreset(self.MAP_TILES_TEXTURE_PRESETS)
         self.default_tile = self.tileAtlas.default
@@ -276,49 +277,92 @@ class Map:
     def showTile(self, tile):
         self.shown_tiles[tile[1]][tile[0]] = True
 
-    def createBlankBuffers(self):
-        self.buffers = []
-
-        max_buffers_x_axis = self.total_size[0]//self.MAX_BUFFER_SIZE[0]
-        max_buffers_y_axis = self.total_size[1]//self.MAX_BUFFER_SIZE[1]
-        self.MAX_BUFFERS = [max_buffers_x_axis, max_buffers_y_axis]
+    def initBuffers(self):
+        self.FULL_SIZE_BUFFERS = (self.total_size[0]//self.MAX_BUFFER_SIZE[0],
+                       self.total_size[1]//self.MAX_BUFFER_SIZE[1])
 
         right_edge_buffer_width = self.total_size[0]%self.MAX_BUFFER_SIZE[0]
         bottom_edge_buffer_height = self.total_size[1]%self.MAX_BUFFER_SIZE[1]
 
-        for y_buf_index in range(max_buffers_y_axis):
-            # All buffers in current row
-            row = []
-            
-            for x_buf_index in range(max_buffers_x_axis):
-                buf = pygame.Surface(self.MAX_BUFFER_SIZE)
-                row.append(buf)
-                
-            if right_edge_buffer_width > 0:
-                buf = pygame.Surface((right_edge_buffer_width, self.MAX_BUFFER_SIZE[1]))
-                row.append(buf)
+        self.MAX_BUFFERS = (self.FULL_SIZE_BUFFERS[0] + 1 if right_edge_buffer_width else 0,
+                            self.FULL_SIZE_BUFFERS[1] + 1 if bottom_edge_buffer_height else 0)
+        
+        self.loaded_buffers = np.empty((self.MAX_BUFFERS[1], self.MAX_BUFFERS[0]), dtype="bool")
 
-            self.buffers.append(row)
+        self.buffers = {}
 
-        if bottom_edge_buffer_height > 0:
-            row = []
+        self.buffers_used_this_frame = []
 
-            for x_buf_index in range(max_buffers_x_axis):
-                buf = pygame.Surface((self.MAX_BUFFER_SIZE[0], bottom_edge_buffer_height))
-                row.append(buf)
+    def getBufferSize(self, buffer_loc):
+        right_edge_buffer_width = self.total_size[0]%self.MAX_BUFFER_SIZE[0]
+        bottom_edge_buffer_height = self.total_size[1]%self.MAX_BUFFER_SIZE[1]
+        
+        if buffer_loc[0] < self.MAX_BUFFERS[0]-1:
+            width = self.MAX_BUFFER_SIZE[0]
 
-            if right_edge_buffer_width > 0:
-                buf = pygame.Surface((right_edge_buffer_width, bottom_edge_buffer_height))
-                row.append(buf)
+        if buffer_loc[0] == self.MAX_BUFFERS[0]-1:
+            width = right_edge_buffer_width
 
-            self.buffers.append(row)
+        if buffer_loc[1] < self.MAX_BUFFERS[1]-1:
+            height = self.MAX_BUFFER_SIZE[1]
+
+        if buffer_loc[1] == self.MAX_BUFFERS[1]-1:
+            height = bottom_edge_buffer_height
+
+        return (width, height)
+        
+    def loadBuffer(self, buffer_loc):
+        # Cleaning input data
+        buffer_loc = tuple(buffer_loc)
+
+        # Gathering data about buffer
+        topleft = self.bufferLocToVirtualPos(buffer_loc)
+        tile_topleft = (topleft[0]//self.tile_size[0], topleft[1]//self.tile_size[1])
+        
+        size = self.getBufferSize(buffer_loc)
+        size_tiles = (size[0]//self.tile_size[0], size[1]//self.tile_size[1])
+        
+        # Build buffer and draw tiles to it
+        self.buffers[buffer_loc] = pygame.Surface(size)
+
+        for x in range(tile_topleft[0], tile_topleft[0]+size_tiles[0]):
+            for y in range(tile_topleft[1], tile_topleft[1]+size_tiles[1]):
+                self.regenTile((x, y))
+        
+        self.loaded_buffers[buffer_loc[1]][buffer_loc[0]] = True
+
+    def startBufferGC(self):
+        self.buffers_used_this_frame = []
+
+    def markBufferUsed(self, buffer_loc):
+        self.buffers_used_this_frame.append(buffer_loc)
+
+    def bufferGC(self):
+        loaded_buffers = (*self.buffers.keys(),)
+        for buffer_loc in loaded_buffers:
+            if not buffer_loc in self.buffers_used_this_frame:
+                self.unloadBuffer(buffer_loc)
+
+    def unloadBuffer(self, buffer_loc):
+        self.loaded_buffers[buffer_loc[1]][buffer_loc[0]] = False
+
+        del self.buffers[buffer_loc]
 
     def getBufferAtLoc(self, buffer_loc):
-        try:
-            return self.buffers[buffer_loc[1]][buffer_loc[0]]
-        except IndexError:
-            print("Bad Buffer indexed:", buffer_loc)
-            return None
+##            return self.buffers[buffer_loc[1]][buffer_loc[0]]
+        return self.buffers.get(buffer_loc, None)
+
+    def getBufferLoadIfUnloaded(self, buffer_loc):
+        buffer = self.getBufferAtLoc(buffer_loc)
+
+        self.markBufferUsed(buffer_loc)
+
+        if buffer != None:
+            return buffer
+
+        else:
+            self.loadBuffer(buffer_loc)
+            return self.getBufferAtLoc(buffer_loc)
 
     def bufferLocToVirtualPos(self, buffer_loc):
         return (self.MAX_BUFFER_SIZE[0]*buffer_loc[0],
@@ -328,10 +372,10 @@ class Map:
         # Keep errant inputs within bounds
         clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
         
-        left_bound = clamp(rect.left//self.MAX_BUFFER_SIZE[0], 0, self.MAX_BUFFERS[0])
-        right_bound = clamp(-(rect.right//-self.MAX_BUFFER_SIZE[0]), 0, self.MAX_BUFFERS[0]) # Ceil div
-        top_bound = clamp(rect.top//self.MAX_BUFFER_SIZE[1], 0, self.MAX_BUFFERS[1])
-        bottom_bound = clamp(-(rect.bottom//-self.MAX_BUFFER_SIZE[1]), 0, self.MAX_BUFFERS[1])
+        left_bound = clamp(rect.left//self.MAX_BUFFER_SIZE[0], 0, self.MAX_BUFFERS[0]-1)
+        right_bound = clamp(-(rect.right//-self.MAX_BUFFER_SIZE[0]), 0, self.MAX_BUFFERS[0]-1) # Ceil div
+        top_bound = clamp(rect.top//self.MAX_BUFFER_SIZE[1], 0, self.MAX_BUFFERS[1]-1)
+        bottom_bound = clamp(-(rect.bottom//-self.MAX_BUFFER_SIZE[1]), 0, self.MAX_BUFFERS[1]-1)
 
         relevant_buffers = [(x, y)
                             for x in range(left_bound, right_bound+1)
@@ -343,10 +387,10 @@ class Map:
     def getRelevantTilesAsRect(self, rect):
         clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
         
-        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0])
-        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]) # Ceil div
-        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1])
-        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1])
+        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0]-1)
+        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]-1) # Ceil div
+        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1]-1)
+        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1]-1)
 
         relevant_tiles = pygame.Rect(left_bound, top_bound, right_bound-left_bound, bottom_bound-top_bound)
         
@@ -363,7 +407,8 @@ class Map:
 
             buffer = self.getBufferAtLoc(buffer_loc)
 
-            buffer.blit(source, (dest[0]-delta[0], dest[1]-delta[1]))
+            if buffer != None:
+                buffer.blit(source, (dest[0]-delta[0], dest[1]-delta[1]))
         
     def setWorld(self, world):
         self.world = world
@@ -431,16 +476,6 @@ class Map:
             pygame.draw.rect(tbd, bot_col, pygame.Rect((rounding_pixel_size[0], self.tile_size[1]-rounding_pixel_size[1]), rounding_pixel_size))
         
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
-            
-
-    def regenMap(self):
-        for buffer_row in self.buffers:
-            for buffer in buffer_row:
-                buffer.fill((0, 0, 0))
-                
-        for i in range(self.world.getHeight()): #y
-            for j in range(self.world.getWidth()): #x
-                self.regenTile((j, i))
 
     def calcFOV(self, origin):
         self.hideAllTiles()
@@ -479,7 +514,7 @@ class Map:
                 x, y = quadrant.transform(tile)
                 return not self.world.isTileOpaque((x, y))
 
-            def scan(row):
+            def scan_recursive(row):
                 prev_tile = None
                 
                 for tile in row.tiles():
@@ -506,11 +541,38 @@ class Map:
                     scan(row.next())
 
                 return
+            
+            def scan(row):
+                rows = [row]
+                while rows:
+                    row = rows.pop()
+                    prev_tile = None
+                    for tile in row.tiles():
+                        if isTileOutOfBounds(tile):
+                            continue
+                        
+                        if is_wall(tile) or quadrant.is_symmetric(row, tile):
+                            reveal(tile)
+
+                        if is_wall(prev_tile) and is_floor(tile):
+                            row.start_slope = quadrant.slope(tile)
+
+                        if is_floor(prev_tile) and is_wall(tile):
+                            next_row = row.next()
+                            next_row.end_slope = quadrant.slope(tile)
+                            rows.append(next_row)
+
+                        prev_tile = tile
+
+                    if is_floor(prev_tile):
+                        rows.append(row.next())
 
             first_row = Row(1, Fraction(-1), Fraction(1))
             scan(first_row)
 
     def draw(self, surface, visible_rect):
+        self.startBufferGC()
+        
         area_visible = pygame.Rect((-visible_rect.left, -visible_rect.top),
                                                                visible_rect.size)
         relevant_buffers = self.getRelevantBuffers(area_visible)
@@ -527,15 +589,17 @@ class Map:
         for buffer_loc in relevant_buffers:
             v_pos = self.bufferLocToVirtualPos(buffer_loc)
 
-            buffer = self.getBufferAtLoc(buffer_loc)
+            buffer = self.getBufferLoadIfUnloaded(buffer_loc)
 
             if buffer != None:
-                surface.blit(self.getBufferAtLoc(buffer_loc),
+                surface.blit(self.getBufferLoadIfUnloaded(buffer_loc),
                                  (visible_rect.left+v_pos[0], visible_rect.top+v_pos[1]))
 
         tile_topleft = self.world.tilePosToBufferPos(relevant_tiles.topleft)
         pos_delta = (-area_visible.left+tile_topleft[0], -area_visible.top+tile_topleft[1])
         surface.blit(view_blocking, (pos_delta))
+
+        self.bufferGC()
             
 
 class World(events.EventAcceptor):
@@ -557,8 +621,6 @@ class World(events.EventAcceptor):
         for tileClass in self.ALL_TILES:
             self.map.bindTileAtlas(tileClass)
             self.tiles[tileClass.getTileID()] = tileClass
-
-        self.map.regenMap()
 
         self.entities = []
 
