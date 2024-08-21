@@ -387,10 +387,10 @@ class Map:
     def getRelevantTilesAsRect(self, rect):
         clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
         
-        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0]-1)
-        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]-1) # Ceil div
-        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1]-1)
-        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1]-1)
+        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0])
+        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]) # Ceil div
+        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1])
+        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1])
 
         relevant_tiles = pygame.Rect(left_bound, top_bound, right_bound-left_bound, bottom_bound-top_bound)
         
