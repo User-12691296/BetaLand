@@ -8,6 +8,7 @@ import events
 from textures import TextureAtlas
 from gameitems import initialiseItems, Item, ItemStack, Inventory
 from gameentities import initialiseEntities, Entity, Creature, Player, TestCreature
+from fovcalcs import FOVCalculator
 
 ASSETS = os.path.join("assets", "game")
 
@@ -180,66 +181,6 @@ BasicTile("void",
 TILE_SIZE = 64
 TILE_RESOLUTION = 16
 
-class Quadrant:
-    north = 0
-    east = 1
-    south = 2
-    west = 3
-    def __init__(self, cardinal, origin):
-        self.cardinal = cardinal
-        self.ox, self.oy = origin
-
-    def transform(self, tile):
-        row, col = tile
-        if self.cardinal == self.north:
-            return (self.ox + col, self.oy - row)
-
-        if self.cardinal == self.south:
-            return (self.ox - col, self.oy + row)
-
-        if self.cardinal == self.east:
-            return (self.ox + row, self.oy + col)
-
-        if self.cardinal == self.west:
-            return (self.ox - row, self.oy - col)
-
-    @staticmethod
-    def slope(tile):
-        row_depth, col = tile
-        return Fraction(2 * col - 1, 2 * row_depth)
-
-    @staticmethod
-    def is_symmetric(row, tile):
-        return (tile[1] >= row.depth * row.start_slope
-                and tile[1] <= row.depth * row.end_slope)
-
-    @staticmethod
-    def round_ties_up(n):
-        return int(n+0.5)
-
-    @staticmethod
-    def round_ties_down(n):
-        return int(-((n-0.5)//-1))
-
-class Row:
-    def __init__(self, depth, start_slope, end_slope):
-        self.depth = depth
-        self.start_slope = start_slope
-        self.end_slope = end_slope
-
-    def tiles(self):
-        min_col = Quadrant.round_ties_down(self.depth * self.start_slope)
-        max_col = Quadrant.round_ties_down(self.depth * self.end_slope)
-
-        for col in range(min_col, max_col+1):
-            yield (self.depth, col)
-
-
-    def next(self):
-        return Row(
-            self.depth + 1,
-            self.start_slope,
-            self.end_slope)
 
 class Map:
     MAX_BUFFER_SIZE = (2048, 2048)
@@ -255,7 +196,6 @@ class Map:
         self.map_size = map_size
         self.tile_size = tile_size
         self.total_size = (map_size[0]*tile_size[0], map_size[1]*tile_size[1])
-##        self.createBlankBuffers()
         self.initFOV()
         self.initBuffers()
 
@@ -265,17 +205,7 @@ class Map:
     def initFOV(self):
         self.shown_tiles = np.empty((self.map_size[1], self.map_size[0]), dtype="bool")
 
-    def getTileVisibility(self, tile):
-        return self.shown_tiles[tile[1]][tile[0]]
-    
-    def hideTile(self, tile):
-        self.shown_tiles[tile[1]][tile[0]] = False
-
-    def hideAllTiles(self):
-        self.shown_tiles.fill(False)
-
-    def showTile(self, tile):
-        self.shown_tiles[tile[1]][tile[0]] = True
+        self.fov_calc = FOVCalculator(self.map_size, self.shown_tiles)
 
     def initBuffers(self):
         self.FULL_SIZE_BUFFERS = (self.total_size[0]//self.MAX_BUFFER_SIZE[0],
@@ -387,10 +317,10 @@ class Map:
     def getRelevantTilesAsRect(self, rect):
         clamp = lambda x, mn, mx: mn if x < mn else mx if x > mx else x
         
-        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0]-1)
-        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]-1) # Ceil div
-        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1]-1)
-        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1]-1)
+        left_bound = clamp(rect.left//self.tile_size[0], 0, self.map_size[0])
+        right_bound = clamp(-(rect.right//-self.tile_size[0]), 0, self.map_size[0]) # Ceil div
+        top_bound = clamp(rect.top//self.tile_size[1], 0, self.map_size[1])
+        bottom_bound = clamp(-(rect.bottom//-self.tile_size[1]), 0, self.map_size[1])
 
         relevant_tiles = pygame.Rect(left_bound, top_bound, right_bound-left_bound, bottom_bound-top_bound)
         
@@ -413,8 +343,8 @@ class Map:
     def setWorld(self, world):
         self.world = world
 
-    def getMap(self):
-        return self.buffer
+##    def getMap(self):
+##        return self.buffer
 
     def bindTileAtlas(self, tile_class):
         tile_class.setAtlas(self.tileAtlas)
@@ -478,97 +408,8 @@ class Map:
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
 
     def calcFOV(self, origin):
-        self.hideAllTiles()
-
-        for i in range(4):
-            quadrant = Quadrant(i, origin)
-
-            def isTileOutOfBounds(tile):
-                x, y = quadrant.transform(tile)
-
-                if (origin[0]-x)**2 + (origin[1]-y)**2 > 144:
-                    return True
-                
-                if x < 0 or x >= self.map_size[0]:
-                    return True
-                if y < 0 or y >= self.map_size[1]:
-                    return True
-                
-                return False
-            
-            def reveal(tile):
-                x, y = quadrant.transform(tile)
-                self.showTile((x, y))
-
-            def is_wall(tile):
-                if tile is None:
-                    return False
-
-                x, y = quadrant.transform(tile)
-                return self.world.isTileOpaque((x, y))
-
-            def is_floor(tile):
-                if tile is None:
-                    return False
-
-                x, y = quadrant.transform(tile)
-                return not self.world.isTileOpaque((x, y))
-
-            def scan_recursive(row):
-                prev_tile = None
-                
-                for tile in row.tiles():
-                    if self.world.getPlayer().disp and quadrant.transform(tile) == (5, 3):
-                        print(tile, prev_tile, quadrant.transform(tile), row.start_slope, row.end_slope, Quadrant.slope(tile))
-
-                    if isTileOutOfBounds(tile):
-                        continue
-                    
-                    if is_wall(tile) or Quadrant.is_symmetric(row, tile):
-                        reveal(tile)
-
-                    if is_wall(prev_tile) and is_floor(tile):
-                        row.start_slope = Quadrant.slope(tile)
-
-                    if is_floor(prev_tile) and is_wall(tile):
-                        next_row = row.next()
-                        next_row.end_slope = Quadrant.slope(tile)
-                        scan(next_row)
-
-                    prev_tile = tile
-
-                if is_floor(prev_tile):
-                    scan(row.next())
-
-                return
-            
-            def scan(row):
-                rows = [row]
-                while rows:
-                    row = rows.pop()
-                    prev_tile = None
-                    for tile in row.tiles():
-                        if isTileOutOfBounds(tile):
-                            continue
-                        
-                        if is_wall(tile) or quadrant.is_symmetric(row, tile):
-                            reveal(tile)
-
-                        if is_wall(prev_tile) and is_floor(tile):
-                            row.start_slope = quadrant.slope(tile)
-
-                        if is_floor(prev_tile) and is_wall(tile):
-                            next_row = row.next()
-                            next_row.end_slope = quadrant.slope(tile)
-                            rows.append(next_row)
-
-                        prev_tile = tile
-
-                    if is_floor(prev_tile):
-                        rows.append(row.next())
-
-            first_row = Row(1, Fraction(-1), Fraction(1))
-            scan(first_row)
+        self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
+        self.fov_calc.calcFOV(origin)
 
     def draw(self, surface, visible_rect):
         self.startBufferGC()
@@ -608,6 +449,8 @@ class World(events.EventAcceptor):
     TILE_SIZE = (TILE_SIZE, TILE_SIZE)
 
     VOID_TILEID = "void"
+
+    OPAQUE_TILE_ELEV_DELTA = 3
     
     def __init__(self):
         self.size = (0, 0)
@@ -661,7 +504,10 @@ class World(events.EventAcceptor):
             tile_data_in_row = self.splitRowDataIntoTileData(row_data, self.size[0])
 
             for tile_index, tile_data in enumerate(tile_data_in_row):
-                tileid, elevation = self.splitTileDataIntoTileInfo(tile_data)
+                try:
+                    tileid, elevation = self.splitTileDataIntoTileInfo(tile_data)
+                except ValueError:
+                    print("Problem tile", row_index, tile_index, tile_data)
                 
                 self.world_tile_ids[row_index][tile_index] = tileid
                 self.world_tile_elevations[row_index][tile_index] = int(elevation)
@@ -700,7 +546,7 @@ class World(events.EventAcceptor):
         self.world_tile_elevations[tile_pos[1]][tile_pos[0]] = elevation
 
     def isTileOpaque(self, tile_pos):
-        return self.getTileElevation(tile_pos) > 3
+        return self.getTileElevation(tile_pos) > self.OPAQUE_TILE_ELEV_DELTA
 
     def isTileValidForWalking(self, tile_pos):
         return not self.isTileOpaque(tile_pos)
