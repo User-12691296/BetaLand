@@ -16,7 +16,10 @@ IGNORE_TILE_VAL = None
 RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (0, 255):"grass",
            (255, 0):"barrier",
-           (255, 21):"bloodstone"}
+           (255, 21):"bloodstone",
+           (255,245): "sand",
+           (255, 255): "kr1stal"}
+
 
 with open(LEVELS_PATH, "r") as levels_file:
     levels = json.load(levels_file)
