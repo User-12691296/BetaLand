@@ -106,10 +106,10 @@ class FOVCalculator:
     def isTileOpaque(self, tile):
         return self.opaques[tile[1]][tile[0]]
 
-    def calcFOVb(self, origin):
+    def calcFOV(self, origin):
         C_FOV_CALC(origin[0], origin[1], self.opaques, self.map_size[0], self.map_size[1], self.shown_tiles)
 
-    def calcFOV(self, origin):
+    def calcFOVb(self, origin):
         self.hideAllTiles()
 
         for i in range(4):

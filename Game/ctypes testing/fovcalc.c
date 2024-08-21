@@ -89,7 +89,7 @@ Rational slope(int depth, int col) {
 }
 
 bool is_symmetric(Row row, int col) {
-	return ((col >= multiply(row.start_slope, row.depth)) && (col >= multiply(row.end_slope, row.depth)));
+	return ((col >= multiply(row.start_slope, row.depth)) && (col <= multiply(row.end_slope, row.depth)));
 }
 
 int round_ties_up(float n) {
@@ -201,8 +201,7 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 	vec2 cur;
 	
 	Row nr;
-	
-	for (int col=minc; col<=maxc; col++) {
+	for (int col=minc; col<maxc; col++) {
 		cur = transform_quadrant(quadrant, row.depth, col);
 		index = array_index(cur.x, cur.y, max_width);
 		pindex = array_index(pretx, prety, max_width);
@@ -215,8 +214,7 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 		
 		//printf("Tileinbounds\n");
 		
-		if (obstacles[index] || is_symmetric(row, col)) {
-			printf("Tilevisible\n");
+		if (is_wall(index, obstacles) || is_symmetric(row, col)) {
 			shown_tiles[index] = true;
 		}
 		
@@ -235,14 +233,12 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 	}
 	
 	pindex = array_index(pretx, prety, max_width);
-	printf("%d, %d, %d, %d, %d\n", pretx, prety, pindex, obstacles[pindex], is_floor(pindex, obstacles));
-	printf("START %d/%d, END %d/%d", row.start_slope.numerator, row.start_slope.denominator, row.end_slope.numerator, row.end_slope.denominator);
 	if (is_floor (pindex, obstacles)) {
 		scan(quadrant, next_row(row), obstacles, max_width, max_height, shown_tiles);
 	}
 }
 
-void print_array(const bool* shown_tiles, int max_width, int max_height) {
+/* void print_array(const bool* shown_tiles, int max_width, int max_height) {
 	for (int row=0; row<max_height; row++) {
 		for (int col=0; col<max_width; col++) {
 			printf("%d, ", ((int) shown_tiles[array_index(col, row, max_width)]));
@@ -260,6 +256,7 @@ void main() {
 	for (int i=0; i<length; i++) {
 		obstacles[i] = 0;
 	}
+	obstacles[46] = true;
 	
 	print_array(obstacles, max_width, max_height);
 	
@@ -268,4 +265,4 @@ void main() {
 	calcFOV(ox, oy, obstacles, max_width, max_height, shown_tiles);
 	
 	print_array(shown_tiles, max_width, max_height);
-}
+}*/
