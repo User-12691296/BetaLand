@@ -174,6 +174,7 @@ OVERWORLD_TILES = []
 GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
+BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("kr1stal", "kr1stal").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
