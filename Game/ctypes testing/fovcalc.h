@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 void reduce(Rational *inrat, Rational *outrat);
-float multiply(Rational a, int b);
+Rational multiply(Rational a, int b);
 vec2 transform_quadrant(Quadrant q, int depth, int col);
 Rational slope(int depth, int col);
 bool is_symmetric(Row row, int col);

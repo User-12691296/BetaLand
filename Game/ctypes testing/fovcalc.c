@@ -54,8 +54,25 @@ void reduce(Rational *inrat, Rational *outrat) {
   outrat->denominator = inrat->denominator / a;
 }
 
-float multiply(Rational a, int b) {
-	return (a.numerator * b / a.denominator);
+Rational multiply(Rational a, int b) {
+	Rational out = {a.numerator * b, a.denominator};
+	return (out);
+}
+
+int int_larger_than_rational(int b, Rational a) {
+	int num = b*a.denominator;
+	
+	if (num > a.numerator) {
+		return 1;
+	} else if (num == a.numerator) {
+		return 0;
+	} else {
+		return -1;
+	}
+}
+
+float numerize(Rational a) {
+	return (1.0f * a.numerator/a.denominator);
 }
 
 vec2 transform_quadrant(Quadrant q, int depth, int col) {
@@ -89,7 +106,8 @@ Rational slope(int depth, int col) {
 }
 
 bool is_symmetric(Row row, int col) {
-	return ((col >= multiply(row.start_slope, row.depth)) && (col <= multiply(row.end_slope, row.depth)));
+	return ((int_larger_than_rational(col, multiply(row.start_slope, row.depth)) >= 0)
+		&& (int_larger_than_rational(col, multiply(row.end_slope, row.depth)) <= 0));
 }
 
 int round_ties_up(float n) {
@@ -113,10 +131,10 @@ Row next_row(Row row) {
 }
 
 int min_col(Row row) {
-	return (round_ties_down(multiply(row.start_slope, row.depth)));
+	return (round_ties_up(numerize(multiply(row.start_slope, row.depth))));
 }
 int max_col(Row row) {
-	return (round_ties_down(multiply(row.end_slope, row.depth)));
+	return (round_ties_down(numerize(multiply(row.end_slope, row.depth))));
 }
 
 int array_index (int x, int y, int max_width) {
@@ -190,7 +208,7 @@ bool is_floor(int index, const bool* obstacles) {
 	return (!obstacles[index]);
 }
 
-void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int max_height, bool* shown_tiles) {
+void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int max_height, bool* shown_tiles) {	
 	int pretx = -1;
 	int prety = -1;
 	
@@ -200,8 +218,10 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 	int index, pindex;
 	vec2 cur;
 	
+	printf("Scanning Q%d MX%d to MN%d with depth %d\n", quadrant.cardinal, maxc, minc, row.depth);
+	
 	Row nr;
-	for (int col=minc; col<maxc; col++) {
+	for (int col=minc; col <= maxc; col++) {
 		cur = transform_quadrant(quadrant, row.depth, col);
 		index = array_index(cur.x, cur.y, max_width);
 		pindex = array_index(pretx, prety, max_width);
@@ -238,10 +258,24 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 	}
 }
 
-/* void print_array(const bool* shown_tiles, int max_width, int max_height) {
+void print_array(const bool* shown_tiles, bool*obstacles, int max_width, int max_height, int x, int y) {
 	for (int row=0; row<max_height; row++) {
 		for (int col=0; col<max_width; col++) {
-			printf("%d, ", ((int) shown_tiles[array_index(col, row, max_width)]));
+			if ((col == x) && (row == y)) {
+				printf("O");
+			}
+			else if (shown_tiles[array_index(col, row, max_width)]) {
+				if (is_wall(array_index(col, row, max_width), obstacles)) {
+					printf("#");
+				}
+				else {
+					printf("+");
+				}
+			} else {
+				printf("H");
+			}
+			
+			printf(", ");
 		}
 		printf("\n");
 	}
@@ -256,13 +290,13 @@ void main() {
 	for (int i=0; i<length; i++) {
 		obstacles[i] = 0;
 	}
-	obstacles[46] = true;
-	
-	print_array(obstacles, max_width, max_height);
+	obstacles[37] = true;
+	obstacles[57] = true;
+	obstacles[53] = true;
 	
 	int ox = 5, oy = 3;
 	
 	calcFOV(ox, oy, obstacles, max_width, max_height, shown_tiles);
 	
-	print_array(shown_tiles, max_width, max_height);
-}*/
+	print_array(shown_tiles, obstacles, max_width, max_height, ox, oy);
+}
