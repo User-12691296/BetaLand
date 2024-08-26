@@ -6,7 +6,7 @@ def getAllXFilesInFolder(folder, ext):
     files = os.listdir(folder)
     for file in files:
         if file.endswith(ext):
-            yield file.rstrip(ext)
+            yield file.removesuffix(ext)
 
 
 class TextureAtlas:

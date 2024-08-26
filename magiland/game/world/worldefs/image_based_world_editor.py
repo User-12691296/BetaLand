@@ -3,7 +3,7 @@ import pygame
 import numpy
 import json
 
-IMAGE_PATH = "small_world.png"
+IMAGE_PATH = "overworld.png"
 WORLD_NAME = "overworld"
 LEVELS_PATH = "levels.json"
 
@@ -17,9 +17,10 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (0, 255):"grass",
            (255, 0):"barrier",
            (255, 21):"bloodstone",
-           (255,245): "sand",
+           (255, 245): "sand",
            (255, 255): "kr1stal",
-           (255, 100): "snow"}
+           (255, 100): "snow",
+           (100, 150): "swamp"}
 
 
 with open(LEVELS_PATH, "r") as levels_file:
@@ -61,6 +62,9 @@ for tile_y in range(size[1]):
             tile_data = createTile(tileid, elevation)
 
             row += tile_data
+
+        else:
+            row += createTile("grass", 0)
 
     rows[tile_y] = row
 
