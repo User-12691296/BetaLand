@@ -11,13 +11,15 @@ magiland
 |  |- __init__.py
 |  |- main.py
 |  |- settings.py
-|- helpers
+|- misc
 |  |- __init__.py
 |  |- events.py
 |  |- textures.py
+|  |- screen.py
 |- accelerants
 |  |- __init__.py
 |  |- load.py
+|  |- fovcalc.c
 |- game
 |  |- __init__.py
 |  |- main.py
