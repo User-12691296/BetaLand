@@ -36,6 +36,6 @@ while running:
     SCREEN.update()
 
     # FPS control
-    clock.tick(50)
+    clock.tick(60)
 
 pygame.quit()
