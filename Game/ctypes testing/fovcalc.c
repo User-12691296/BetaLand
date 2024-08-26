@@ -114,6 +114,25 @@ int round_ties_up(float n) {
 	return ((int) n + 0.5f);
 }
 
+int round_rational_down(Rational inrat) {
+	Rational b;
+	
+	reduce(&inrat, &b);
+	
+	// Tie
+	if (((b.numerator%2) == 1) && (b.denominator == 2)) {
+		return (b.numerator / b.denominator);
+	}
+	// Above half
+	else if (((b.numerator % b.denominator) * 2) > b.denominator) {
+		return (b.numerator / b.denominator);
+	}
+	// Below half
+	else if (((b.numerator % b.denominator) * 2) < b.denominator) {
+		return (b.numerator / b.denominator);
+	}
+}
+
 int round_ties_down(float n) {
 	if (n <= 0.5f) {
 		return ((int) n);
@@ -131,10 +150,10 @@ Row next_row(Row row) {
 }
 
 int min_col(Row row) {
-	return (round_ties_up(numerize(multiply(row.start_slope, row.depth))));
+	return (round_rational_down(multiply(row.start_slope, row.depth)));
 }
 int max_col(Row row) {
-	return (round_ties_down(numerize(multiply(row.end_slope, row.depth))));
+	return (round_rational_down(multiply(row.end_slope, row.depth)));
 }
 
 int array_index (int x, int y, int max_width) {
@@ -212,14 +231,15 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 	int pretx = -1;
 	int prety = -1;
 	
+	printf("Slopes start %d/%d - end %d/%d\n", row.start_slope.numerator, row.start_slope.denominator, row.end_slope.numerator, row.end_slope.denominator);
+	
 	int minc = min_col(row);
 	int maxc = max_col(row);
 	
 	int index, pindex;
 	vec2 cur;
 	
-	printf("Scanning Q%d MX%d to MN%d with depth %d\n", quadrant.cardinal, maxc, minc, row.depth);
-	
+	printf("Scanning Q%d MN%d to MX%d with depth %d\n", quadrant.cardinal, minc, maxc, row.depth);
 	Row nr;
 	for (int col=minc; col <= maxc; col++) {
 		cur = transform_quadrant(quadrant, row.depth, col);
@@ -231,8 +251,6 @@ void scan(Quadrant quadrant, Row row, const bool* obstacles, int max_width, int 
 		if (tileOOB(quadrant, cur.x, cur.y, max_width, max_height)) {
 			continue;
 		}
-		
-		//printf("Tileinbounds\n");
 		
 		if (is_wall(index, obstacles) || is_symmetric(row, col)) {
 			shown_tiles[index] = true;
@@ -290,9 +308,14 @@ void main() {
 	for (int i=0; i<length; i++) {
 		obstacles[i] = 0;
 	}
-	obstacles[37] = true;
-	obstacles[57] = true;
-	obstacles[53] = true;
+	obstacles[24] = true;
+	obstacles[34] = true;
+	obstacles[44] = true;
+	obstacles[54] = true;
+	obstacles[64] = true;
+	obstacles[74] = true;
+	obstacles[84] = true;
+	obstacles[94] = true;
 	
 	int ox = 5, oy = 3;
 	

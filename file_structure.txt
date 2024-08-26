@@ -1,0 +1,41 @@
+magiland
+|- __init__.py
+|- main.py
+|- managers.py
+|- constants
+|  |- __init__.py
+|  |- game.py
+|  |- display.py
+|  |- misc.py
+|- menus
+|  |- __init__.py
+|  |- main.py
+|  |- settings.py
+|- helpers
+|  |- __init__.py
+|  |- events.py
+|  |- textures.py
+|- accelerants
+|  |- __init__.py
+|  |- load.py
+|- game
+|  |- __init__.py
+|  |- main.py
+|  |- world
+|  |  |- __init__.py
+|  |  |- main.py
+|  |  |- registry.py
+|  |- items
+|  |  |- __init__.py
+|  |  |- main.py
+|  |  |- registry.py
+|  |- entities
+|  |  |- __init__.py
+|  |  |- main.py
+|  |  |- registry.py
+|  |- client
+|  |  |- __init__.py
+|  |  |- gui.py
+|  |- misc
+|  |  |- fov.py
+|  |  |
