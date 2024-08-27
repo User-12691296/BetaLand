@@ -3,18 +3,15 @@ import os
 
 from misc.textures import TextureAtlas
 
+from .classes import Item
+from .defs import ALL_ITEM_CLASSES
+
 ASSETS = "assets/game"
 
-
-def initialiseItems():
-    REGISTRY.loadAtlas()
-    registerAllItems()
     
-def registerAllItems():
-    REGISTRY.addItem(Item("debug_sword", "sword"))
-    REGISTRY.addItem(Item("epic_sword", "emerald_studded_sword"))
-    REGISTRY.addItem(Item("cool_sword", "ruby_studded_sword"))
-    REGISTRY.addItem(Item("lil_sword", "sapphire_studded_sword"))
+def registerAllItems(registry):
+    for itemClass in ALL_ITEM_CLASSES:
+        itemClass.register(registry)
 
 class ITEM_TEXTURE_PRESETS:
     FOLDER       = os.path.join(ASSETS, "items")
@@ -22,38 +19,6 @@ class ITEM_TEXTURE_PRESETS:
     EXT          = ".png"
     RESCALE      = True
     TRANSPARENCY = True
-
-class Item:
-    def __init__(self, itemid, tex_name, stackable=True):
-        self.itemid = itemid
-        self.tex_name = tex_name
-        self.stackable = stackable
-
-        self._atlas_given = False
-
-    def setAtlas(self, atlas):
-        self.atlas = atlas
-
-        self.tex_loc = self.atlas.getTextureLoc(self.tex_name)
-
-        self._atlas_given = True
-
-    def isStackable(self):
-        return self.stackable
-
-    def getItemID(self):
-        return self.itemid
-    
-    def onLeft(self, player, world, tile, tile_pos): pass
-    def onRight(self, player, world, tile, tile_pos): pass
-    def onMiddle(self, player, world, tile, tile_pos): pass
-
-    def draw(self, surface, center):
-        if self._atlas_given:
-            item_drawing_bounds = pygame.Rect((0, 0), self.atlas.getTextureSize())
-            item_drawing_bounds.center = center
-
-            self.atlas.drawTextureAtLoc(surface, item_drawing_bounds.topleft, self.tex_loc)
 
 class ItemRegistry:
     def __init__(self):
@@ -81,4 +46,3 @@ class ItemRegistry:
     def getItem(self, itemid):
         return self.items.get(itemid)
 
-REGISTRY = ItemRegistry()

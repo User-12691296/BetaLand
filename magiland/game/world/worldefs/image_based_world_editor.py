@@ -12,7 +12,7 @@ TILE_DATA_SEP = ","
 SIZE_STORAGE = "size"
 ROWS_STORAGE = "tiles"
 
-IGNORE_TILE_VAL = None
+IGNORE_TILE_VAL = "error"
 RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (0, 255):"grass",
            (255, 0):"barrier",

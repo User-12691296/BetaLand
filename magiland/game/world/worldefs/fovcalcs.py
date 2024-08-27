@@ -68,12 +68,16 @@ class Row:
 
 
 class FOVCalculator:
-    def __init__(self, map_size, shown_tiles):
+    def __init__(self, map_size, shown_tiles, range=12):
         self.map_size = map_size
         self.shown_tiles = shown_tiles
+        self.range = range**2
 
     def setOpaques(self, array):
         self.opaques = array
+
+    def setRange(self, range):
+        self.range = range**2
 
     def genOpaquesFromElevCutoff(self, elevs, cutoff):
         self.setOpaques(elevs > cutoff)
@@ -95,7 +99,7 @@ class FOVCalculator:
             self.calcFOVstd(origin)
 
     def calcFOVaccel(self, origin):
-        ACCEL.calcFOV(origin[0], origin[1], self.opaques, self.map_size[0], self.map_size[1], self.shown_tiles)
+        ACCEL.calcFOV(origin[0], origin[1], self.opaques, self.map_size[0], self.map_size[1], self.shown_tiles, self.range)
 
     def calcFOVstd(self, origin):
         self.hideAllTiles()
@@ -106,7 +110,7 @@ class FOVCalculator:
             def isTileOutOfBounds(tile):
                 x, y = quadrant.transform(tile)
 
-                if (origin[0]-x)**2 + (origin[1]-y)**2 > 144:
+                if (origin[0]-x)**2 + (origin[1]-y)**2 >= self.range:
                     return True
                 
                 if x < 0 or x >= self.map_size[0]:

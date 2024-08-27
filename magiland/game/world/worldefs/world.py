@@ -274,6 +274,7 @@ class World(events.EventAcceptor):
     TILE_SIZE = (GAME.TILE_SIZE, GAME.TILE_SIZE)
 
     VOID_TILEID = "void"
+    ERROR_TILEID = "error"
 
     OPAQUE_TILE_ELEV_DELTA = GAME.OPAQUE_TILE_ELEV_DELTA
     
@@ -326,10 +327,10 @@ class World(events.EventAcceptor):
             tile_data_in_row = self.splitRowDataIntoTileData(row_data, self.size[0])
 
             for tile_index, tile_data in enumerate(tile_data_in_row):
-                try:
-                    tileid, elevation = self.splitTileDataIntoTileInfo(tile_data)
-                except ValueError:
-                    print("Problem tile", row_index, tile_index, tile_data)
+                tileid, elevation = self.splitTileDataIntoTileInfo(tile_data)
+
+                if tileid == self.ERROR_TILEID:
+                    print("Error tile loaded at: ", (tile_index, row_index))
                 
                 self.world_tile_ids[row_index][tile_index] = tileid
                 self.world_tile_elevations[row_index][tile_index] = int(elevation)

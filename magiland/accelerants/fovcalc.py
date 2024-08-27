@@ -13,6 +13,7 @@ if LIB != None:
                            ndpointer(ctypes.c_bool, flags="C_CONTIGUOUS"),
                            ctypes.c_int,
                            ctypes.c_int,
-                           ndpointer(ctypes.c_bool, flags="C_CONTIGUOUS")]
+                           ndpointer(ctypes.c_bool, flags="C_CONTIGUOUS"),
+                           ctypes.c_int]
 else:
     calcFOV = None

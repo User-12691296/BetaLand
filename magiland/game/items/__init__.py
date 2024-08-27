@@ -1,5 +1,3 @@
-from .registry import REGISTRY, initialiseItems
+from .main import *
 
 initialiseItems()
-
-from .main import Item, ItemStack, Inventory
