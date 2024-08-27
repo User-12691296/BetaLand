@@ -136,7 +136,7 @@ class Player(Creature):
         # If anything uses the button, player will hog mouse input
         used = 0
         
-        used += int(self.HUD.onMouseDown(pos, button))
+        used += int(self.hud.onMouseDown(pos, button))
         
         return bool(used)
 

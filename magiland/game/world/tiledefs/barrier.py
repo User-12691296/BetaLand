@@ -2,7 +2,7 @@ from .basic import BasicTile
 
 class BarrierTile(BasicTile):
     def __init__(self):
-        super().__init__("barrier", "barrier")
+        super().__init__("barrier", "barrier", False)
 
     def onLeft(self, world, tile_pos):
         player = world.getPlayer()

@@ -2,6 +2,7 @@ import pygame
 import numpy as np
 import os
 import json
+import math
 
 from constants import ASSETS, GAME
 from misc import events
@@ -181,6 +182,15 @@ class Map:
         tile = getTile(0, 0)
 
         tbd = tile.getDrawable().copy()
+
+        if tile.shouldRotationScatter():
+            flip_key = (math.cos(((math.sin(tile_pos[0]*12.9898 + tile_pos[1]*78.233)*6.71432)**2)//1)*1.97+2)//1
+            if flip_key == 1:
+                tbd = pygame.transform.rotate(tbd, 90)
+            if flip_key == 2:
+                tbd = pygame.transform.rotate(tbd, 180)
+            if flip_key == 3:
+                tbd = pygame.transform.rotate(tbd, 270)
         
         shading = pygame.Surface(tbd.get_rect().size, pygame.SRCALPHA)
         shading.fill(255)

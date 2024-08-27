@@ -1,7 +1,8 @@
 class BasicTile:
-    def __init__(self, tileid, tex_name):
+    def __init__(self, tileid, tex_name, rscat=True):
         self.tileid = tileid
         self.tex_name = tex_name
+        self.rscat = rscat
 
         self._atlas_given = False
 
@@ -14,6 +15,9 @@ class BasicTile:
         self.tex_loc = self.atlas.getTextureLoc(self.tex_name)
 
         self._atlas_given = True
+
+    def shouldRotationScatter(self):
+        return self.rscat
 
     def getTileID(self):
         return self.tileid
