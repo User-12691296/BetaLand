@@ -4,7 +4,7 @@ import os
 
 from misc import events
 from misc.textures import TextureAtlas, getAllXFilesInFolder
-from ..items import Inventory, ItemStack
+from ..items import PlayerInventory, Inventory, ItemStack
 
 ASSETS = os.path.join("assets", "game")
 
@@ -78,10 +78,10 @@ class Player(Creature):
         self.disp = False
 
     def loadHUD(self):
-        self.HUD = PlayerHUD(self)
+        self.hud = PlayerHUD(self)
 
     def loadInventory(self):
-        self.inventory = Inventory(27, 8, (100, 100))
+        self.inventory = PlayerInventory()
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
@@ -121,6 +121,17 @@ class Player(Creature):
 
         self.registerCooldown("movement_input", 1)
 
+    def onKeyDown(self, key, unicode, mod):
+        if key == pygame.K_e:
+            self.inventory.changeSelectedStack(1)
+        if key == pygame.K_q:
+            self.inventory.changeSelectedStack(-1)
+
+        if key == pygame.K_z:
+            self.hud.rot += 10
+        if key == pygame.K_c:
+            self.hud.rot -= 10
+
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input
         used = 0
@@ -159,7 +170,7 @@ class Player(Creature):
         self.atlas.drawTexture(surface, pos, "player1")
 
         # Draw GUI
-        self.HUD.draw(surface)
+        self.hud.draw(surface)
 
 class PlayerHUD(events.EventAcceptor):
     HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
@@ -168,8 +179,13 @@ class PlayerHUD(events.EventAcceptor):
     def __init__(self, player):
         self.player = player
 
+        self.rot = 0
+
     def onMouseDown(self, pos, button):
         used = 0
+
+        if pos[0] == 0 and pos[1] == 0:
+            self.rot += 10
         
         # Inventory
         ipos = [pos[0], pos[1]]
@@ -193,7 +209,20 @@ class PlayerHUD(events.EventAcceptor):
         mouse_pos = pygame.mouse.get_pos()
 
         self.player.inventory.draw(surface, self.INVENTORY_POS)
-        self.player.inventory.drawActiveStack(surface, mouse_pos)        
+        self.player.inventory.drawActiveStack(surface, mouse_pos)
+
+        self.drawHandHeld(surface)
+
+    def drawHandHeld(self, surface):
+        stack = self.player.inventory.getSelectedStack()
+
+        if stack:
+            pos = self.player.manager.bufferPosToScreenPos(self.player.getBufferPos())
+            stack.item.drawInWorld(surface,
+                                   (pos[0]+self.player.world.TILE_SIZE[0]//2,
+                                    pos[1]+self.player.world.TILE_SIZE[1]//2),
+                                   self.rot,
+                                   (64, -64))
         
     def draw(self, surface):
         self.drawHealthBar(surface)

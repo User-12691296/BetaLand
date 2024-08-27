@@ -1,6 +1,7 @@
 import pygame
 from misc.textures import TextureAtlas
 from misc import events
+from constants import GAME
 
 class Item:
     def __init__(self, itemid, tex_name, stackable=True):
@@ -33,12 +34,26 @@ class Item:
     def onRight(self, player, world, tile, tile_pos): pass
     def onMiddle(self, player, world, tile, tile_pos): pass
 
-    def draw(self, surface, center):
+    def drawAsStack(self, surface, center):
         if self._atlas_given:
             item_drawing_bounds = pygame.Rect((0, 0), self.atlas.getTextureSize())
             item_drawing_bounds.center = center
 
             self.atlas.drawTextureAtLoc(surface, item_drawing_bounds.topleft, self.tex_loc)
+
+    def drawInWorld(self, surface, pivot_pos, rot, pivot_tc=None):
+        if pivot_tc == None:
+            pivot_tc = (0, 0)
+        
+        tex = self.atlas.getTextureAtLoc(self.tex_loc)
+        
+        tex_rect = tex.get_rect(center=pivot_pos)
+        rot_pivot_tc = pygame.math.Vector2(pivot_tc).rotate(-rot)
+        
+        tbd = pygame.transform.rotate(tex, rot)
+        tbd_rect = tbd.get_rect(center=(tex_rect.center[0]+rot_pivot_tc[0], tex_rect.center[1]+rot_pivot_tc[1]))
+        
+        surface.blit(tbd, tbd_rect.topleft)
 
 class ItemStack:
     REGISTRY = None
@@ -93,7 +108,7 @@ class ItemStack:
         return new_stack
 
     def draw(self, surface, center):
-        self.item.draw(surface, center)
+        self.item.drawAsStack(surface, center)
         
         stack_amount = self.ITEM_COUNTER_FONT.render(str(self.count), True, (255, 255, 255))
         surface.blit(stack_amount, center)
@@ -243,3 +258,29 @@ class Inventory(events.EventAcceptor):
     def drawActiveStack(self, surface, pos):
         if self.getActiveStack() != None:
             self.getActiveStack().draw(surface, pos)
+
+
+class PlayerInventory(Inventory):
+    def __init__(self):
+        super().__init__(GAME.PLAYER_INVENTORY_SIZE, GAME.PLAYER_INVENTORY_WIDTH, (100, 100))
+
+        self.selected_slot = 0
+
+    def changeSelectedStack(self, ds):
+        self.selected_slot += ds
+        self.selected_slot %= self.size
+
+    def draw(self, surface, topleft):
+        for stack_loc in range(self.size):
+            pos = self.getPosOfStack(stack_loc, topleft)
+
+            color = ((100, 50, 50) if stack_loc != self.selected_slot else (150, 250, 80))
+            
+            pygame.draw.circle(surface, color, pos, 40)
+
+            stack = self.getItemStack(stack_loc)
+            if stack:
+                stack.draw(surface, pos)
+
+    def getSelectedStack(self):
+        return self.getItemStack(self.selected_slot)
