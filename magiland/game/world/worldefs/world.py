@@ -277,6 +277,7 @@ class World(events.EventAcceptor):
     ERROR_TILEID = "error"
 
     OPAQUE_TILE_ELEV_DELTA = GAME.OPAQUE_TILE_ELEV_DELTA
+    WALKING_TILE_ELEV_DELTA = GAME.WALKING_TILE_ELEV_DELTA
     
     def __init__(self, tileClasses):
         self.size = (0, 0)
@@ -356,14 +357,14 @@ class World(events.EventAcceptor):
 
         return self.tiles[tileid]
     
-    def getTileElevation(self, tile_pos):
+    def getTileElevation(self, tile_pos, elev=0):
         # If out of bounds, assume 0 elevation. This gives a raised bevel effect to borders
         if tile_pos[0] < 0 or tile_pos[1] < 0:
             return 0
         if tile_pos[0] >= self.size[0] or tile_pos[1] >= self.size[1]:
             return 0
         
-        return self.world_tile_elevations[tile_pos[1]][tile_pos[0]]
+        return self.world_tile_elevations[tile_pos[1]][tile_pos[0]] - elev
 
     def setTileElevation(self, tile_pos, elevation):
         self.world_tile_elevations[tile_pos[1]][tile_pos[0]] = elevation
@@ -372,7 +373,7 @@ class World(events.EventAcceptor):
         return self.getTileElevation(tile_pos) > self.OPAQUE_TILE_ELEV_DELTA
 
     def isTileValidForWalking(self, tile_pos):
-        return not self.isTileOpaque(tile_pos)
+        return self.getTileElevation(tile_pos) <= self.WALKING_TILE_ELEV_DELTA
 
     def getTileRect(self, tile_pos):
         rect = pygame.Rect(self.tilePosToBufferPos(tile_pos),
