@@ -65,7 +65,7 @@ for tile_y in range(size[1]):
             row += tile_data
 
         else:
-            row += createTile("grass", 0)
+            row += createTile(IGNORE_TILE_VAL, 0)
 
     rows[tile_y] = row
 

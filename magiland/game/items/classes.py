@@ -3,7 +3,7 @@ from misc.textures import TextureAtlas
 from misc import events
 from constants import GAME
 
-class Item:
+class Item(events.EventAcceptor):
     def __init__(self, itemid, tex_name, stackable=True):
         self.itemid = itemid
         self.tex_name = tex_name
@@ -30,9 +30,9 @@ class Item:
     def getItemID(self):
         return self.itemid
     
-    def onLeft(self, player, world, tile, tile_pos): pass
-    def onRight(self, player, world, tile, tile_pos): pass
-    def onMiddle(self, player, world, tile, tile_pos): pass
+    def onLeft(self, player, world, tile, tile_pos): return False
+    def onRight(self, player, world, tile, tile_pos): return False
+    def onMiddle(self, player, world, tile, tile_pos): return False
 
     def drawAsStack(self, surface, center):
         if self._atlas_given:
@@ -266,9 +266,40 @@ class PlayerInventory(Inventory):
 
         self.selected_slot = 0
 
+    def setPlayer(self, player):
+        self.player = player
+
     def changeSelectedStack(self, ds):
         self.selected_slot += ds
         self.selected_slot %= self.size
+
+    def onMouseDown(self, pos, button, inv_pos):
+        ipos = [pos[0], pos[1]]
+        ipos[0] -= inv_pos[0]
+        ipos[1] -= inv_pos[1]
+
+        if super().onMouseDown(ipos, button):
+            return True
+
+        sstack = self.getSelectedStack()
+        if sstack:
+            bpos = self.player.manager.screenPosToBufferPos(pos)
+            tpos = self.player.world.bufferPosToTilePos(bpos)
+
+            click_used = False
+            if button == pygame.BUTTON_LEFT:
+                click_used = sstack.item.onLeft(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+                
+            elif button == pygame.BUTTON_RIGHT:
+                click_used = sstack.item.onRight(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+
+            elif button == pygame.BUTTON_MIDDLE:
+                click_used = sstack.item.onMiddle(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+
+
+            if click_used:
+                return True
+        return False
 
     def draw(self, surface, topleft):
         for stack_loc in range(self.size):

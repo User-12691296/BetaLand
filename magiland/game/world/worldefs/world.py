@@ -432,7 +432,7 @@ class World(events.EventAcceptor):
         self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
         
     def onMouseDown(self, mouse_pos, button):
-        world_pos = self.bufferPosToWorldPos(mouse_pos)
+        world_pos = self.bufferPosToTilePos(mouse_pos)
 
         clicked_tile = self.getTile(world_pos)
 
@@ -443,7 +443,7 @@ class World(events.EventAcceptor):
             elif button == pygame.BUTTON_RIGHT:
                 clicked_tile.onRight(self, world_pos)
 
-    def bufferPosToWorldPos(self, bpos):
+    def bufferPosToTilePos(self, bpos):
         return (int(bpos[0]//self.TILE_SIZE[0]), int(bpos[1]//self.TILE_SIZE[1]))
     
     def tilePosToBufferPos(self, wpos):

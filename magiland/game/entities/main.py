@@ -82,6 +82,7 @@ class Player(Creature):
 
     def loadInventory(self):
         self.inventory = PlayerInventory()
+        self.inventory.setPlayer(self)
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
@@ -128,9 +129,9 @@ class Player(Creature):
             self.inventory.changeSelectedStack(-1)
 
         if key == pygame.K_z:
-            self.hud.rot += 10
+            self.hud.item_rot += 10
         if key == pygame.K_c:
-            self.hud.rot -= 10
+            self.hud.item_rot -= 10
 
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input
@@ -179,20 +180,13 @@ class PlayerHUD(events.EventAcceptor):
     def __init__(self, player):
         self.player = player
 
-        self.rot = 0
+        self.item_rot = 0
 
     def onMouseDown(self, pos, button):
         used = 0
-
-        if pos[0] == 0 and pos[1] == 0:
-            self.rot += 10
         
         # Inventory
-        ipos = [pos[0], pos[1]]
-        ipos[0] -= self.INVENTORY_POS[0]
-        ipos[1] -= self.INVENTORY_POS[1]
-
-        used += int(self.player.inventory.onMouseDown(ipos, button))
+        used += int(self.player.inventory.onMouseDown(pos, button, self.INVENTORY_POS))
 
         return bool(used)
 
@@ -221,7 +215,7 @@ class PlayerHUD(events.EventAcceptor):
             stack.item.drawInWorld(surface,
                                    (pos[0]+self.player.world.TILE_SIZE[0]//2,
                                     pos[1]+self.player.world.TILE_SIZE[1]//2),
-                                   self.rot,
+                                   self.item_rot,
                                    (64, -64))
         
     def draw(self, surface):
