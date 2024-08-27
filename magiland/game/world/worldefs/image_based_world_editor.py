@@ -22,6 +22,7 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (100, 100): "kr1stal",
            (160, 250): "snow",
            (160, 200): "snow2",
+           (5, 5): "deepdark",
            (100, 150): "swamp"}
 
 
