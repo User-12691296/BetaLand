@@ -1,6 +1,7 @@
 import pygame
 from misc.textures import TextureAtlas
 from misc import events
+from misc import animations
 from constants import GAME
 
 class Item(events.EventAcceptor):
@@ -9,7 +10,15 @@ class Item(events.EventAcceptor):
         self.tex_name = tex_name
         self.stackable = stackable
 
+        self.pivot_tc = (0, 0)
+
         self._atlas_given = False
+
+    def initData(self):
+        data = {"rot": 0,
+                "animations": animations.Animated()}
+        
+        return data
 
     def addToGroup(self, group):
         group.append(self)
@@ -22,6 +31,8 @@ class Item(events.EventAcceptor):
 
         self.tex_loc = self.atlas.getTextureLoc(self.tex_name)
 
+        self.pivot_tc = (self.atlas.getTextureWidth(), -self.atlas.getTextureHeight())
+
         self._atlas_given = True
 
     def isStackable(self):
@@ -29,31 +40,63 @@ class Item(events.EventAcceptor):
 
     def getItemID(self):
         return self.itemid
-    
-    def onLeft(self, player, world, tile, tile_pos): return False
-    def onRight(self, player, world, tile, tile_pos): return False
-    def onMiddle(self, player, world, tile, tile_pos): return False
 
-    def drawAsStack(self, surface, center):
+    def tick(self, data): pass
+    def select(self, data): pass
+    def deSelect(self, data):
+        data["animations"].clear()
+    
+    def onLeft(self, data, player, world, tile, tile_pos): return False
+    def onRight(self, data, player, world, tile, tile_pos): return False
+    def onMiddle(self, data, player, world, tile, tile_pos): return False
+
+    def draw(self, surface, center):
         if self._atlas_given:
             item_drawing_bounds = pygame.Rect((0, 0), self.atlas.getTextureSize())
             item_drawing_bounds.center = center
 
             self.atlas.drawTextureAtLoc(surface, item_drawing_bounds.topleft, self.tex_loc)
 
-    def drawInWorld(self, surface, pivot_pos, rot, pivot_tc=None):
-        if pivot_tc == None:
-            pivot_tc = (0, 0)
-        
+    def drawRotated(self, surface, rot, center):
         tex = self.atlas.getTextureAtLoc(self.tex_loc)
         
-        tex_rect = tex.get_rect(center=pivot_pos)
-        rot_pivot_tc = pygame.math.Vector2(pivot_tc).rotate(-rot)
+        tex_rect = tex.get_rect(center=center)
+        rot_pivot_tc = pygame.math.Vector2(self.pivot_tc).rotate(-rot)
         
         tbd = pygame.transform.rotate(tex, rot)
         tbd_rect = tbd.get_rect(center=(tex_rect.center[0]+rot_pivot_tc[0], tex_rect.center[1]+rot_pivot_tc[1]))
         
         surface.blit(tbd, tbd_rect.topleft)
+
+    def drawInWorld(self, data, surface, center):
+        self.drawRotated(surface, data.get("rot", 0), center)
+
+##class RotatableItem(Item):
+##    def __init__(self, itemid, tex_name, stackable=True):
+##        super().__init__(itemid, tex_name, stackable, True)
+##
+##    def initData(self):
+##        data = super().initData()
+##
+##        data["rot"] = 0
+##
+##        data[]
+##
+##        return data
+##
+##    def drawInWorld(self, data, surface, pivot_pos, pivot_tc=None):
+##        if pivot_tc == None:
+##            pivot_tc = (0, 0)
+##        
+##        tex = self.atlas.getTextureAtLoc(self.tex_loc)
+##        
+##        tex_rect = tex.get_rect(center=pivot_pos)
+##        rot_pivot_tc = pygame.math.Vector2(pivot_tc).rotate(-data["rot"])
+##        
+##        tbd = pygame.transform.rotate(tex, data["rot"])
+##        tbd_rect = tbd.get_rect(center=(tex_rect.center[0]+rot_pivot_tc[0], tex_rect.center[1]+rot_pivot_tc[1]))
+##        
+##        surface.blit(tbd, tbd_rect.topleft)
 
 class ItemStack:
     REGISTRY = None
@@ -62,6 +105,11 @@ class ItemStack:
     def __init__(self, itemid, count):
         self.item = self.REGISTRY.getItem(itemid)
         self.count = count
+
+        self.initInstanceData()
+
+    def initInstanceData(self):
+        self.data = self.item.initData()
 
     @classmethod
     def setRegistry(self, registry):
@@ -78,6 +126,18 @@ class ItemStack:
 
     def setCount(self, count):
         self.count = count
+
+    def tick(self, player, world):
+        self.item.tick(self.data, player, world)
+
+    def select(self):
+        self.item.select(self.data)
+    def deSelect(self):
+        self.item.deSelect(self.data)
+
+    def onLeft(self, player, world, tile, tile_pos): return self.item.onLeft(self.data, player, world, tile, tile_pos)
+    def onRight(self, player, world, tile, tile_pos): return self.item.onRight(self.data, player, world, tile, tile_pos)
+    def onMiddle(self, player, world, tile, tile_pos): return self.item.onMiddle(self.data, player, world, tile, tile_pos)
 
     def isStackableWith(self, stack):
         if stack == None:
@@ -107,11 +167,14 @@ class ItemStack:
 
         return new_stack
 
-    def draw(self, surface, center):
-        self.item.drawAsStack(surface, center)
+    def drawAsStack(self, surface, center):
+        self.item.draw(surface, center)
         
         stack_amount = self.ITEM_COUNTER_FONT.render(str(self.count), True, (255, 255, 255))
         surface.blit(stack_amount, center)
+
+    def drawInWorld(self, surface, center):
+        self.item.drawInWorld(self.data, surface, center)
         
 
 class Inventory(events.EventAcceptor):
@@ -241,6 +304,11 @@ class Inventory(events.EventAcceptor):
         
         return True
 
+    def tick(self, player, world):
+        for stack in self.item_stacks:
+            if stack:
+                stack.tick(player, world)
+
     def close(self):
         self.addItemStack(self.active_stack)
         self.setActiveStack(None)
@@ -253,11 +321,11 @@ class Inventory(events.EventAcceptor):
 
             stack = self.getItemStack(stack_loc)
             if stack:
-                stack.draw(surface, pos)
+                stack.drawAsStack(surface, pos)
 
     def drawActiveStack(self, surface, pos):
         if self.getActiveStack() != None:
-            self.getActiveStack().draw(surface, pos)
+            self.getActiveStack().drawAsStack(surface, pos)
 
 
 class PlayerInventory(Inventory):
@@ -266,12 +334,24 @@ class PlayerInventory(Inventory):
 
         self.selected_slot = 0
 
+        sstack = self.getSelectedStack()
+        if sstack: sstack.select()
+
     def setPlayer(self, player):
         self.player = player
 
+    def getSelectedStack(self):
+        return self.getItemStack(self.selected_slot)
+    
     def changeSelectedStack(self, ds):
+        sstack = self.getSelectedStack()
+        if sstack: sstack.deSelect()
+        
         self.selected_slot += ds
         self.selected_slot %= self.size
+
+        sstack = self.getSelectedStack()
+        if sstack: sstack.select()
 
     def onMouseDown(self, pos, button, inv_pos):
         ipos = [pos[0], pos[1]]
@@ -288,13 +368,13 @@ class PlayerInventory(Inventory):
 
             click_used = False
             if button == pygame.BUTTON_LEFT:
-                click_used = sstack.item.onLeft(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+                click_used = sstack.onLeft(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
                 
             elif button == pygame.BUTTON_RIGHT:
-                click_used = sstack.item.onRight(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+                click_used = sstack.onRight(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
 
             elif button == pygame.BUTTON_MIDDLE:
-                click_used = sstack.item.onMiddle(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
+                click_used = sstack.onMiddle(self.player, self.player.world, tpos, self.player.world.getTile(tpos))
 
 
             if click_used:
@@ -311,7 +391,4 @@ class PlayerInventory(Inventory):
 
             stack = self.getItemStack(stack_loc)
             if stack:
-                stack.draw(surface, pos)
-
-    def getSelectedStack(self):
-        return self.getItemStack(self.selected_slot)
+                stack.drawAsStack(surface, pos)

@@ -15,6 +15,8 @@ class Entity(events.EventAcceptor):
 
         self.cooldowns = {}
 
+        self.movable = True
+
     def setWorld(self, world):
         self.world = world
 
@@ -23,6 +25,14 @@ class Entity(events.EventAcceptor):
 
     def setPos(self, pos):
         self.pos = pos
+
+    def move(self, delta):
+        if self.movable:
+            self.pos[0] += delta[0]
+            self.pos[1] += delta[1]
+
+    def setMovable(self, val):
+        self.movable = val
 
     @staticmethod
     def getNeededAssets():
@@ -99,6 +109,8 @@ class Player(Creature):
         
         self.handleMotion()
 
+        self.inventory.tick(self, self.world)
+
     def handleMotion(self):
         if self.isCooldownActive("movement_input"):
             return
@@ -107,13 +119,13 @@ class Player(Creature):
         
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_w]:
-            self.pos[1] -= 1
+            self.move(( 0, -1))
         if pressed[pygame.K_a]:
-            self.pos[0] -= 1
+            self.move((-1,  0))
         if pressed[pygame.K_s]:
-            self.pos[1] += 1
+            self.move(( 0,  1))
         if pressed[pygame.K_d]:
-            self.pos[0] += 1
+            self.move(( 1,  0))
 
         self.disp = pressed[pygame.K_ESCAPE]
 
@@ -127,11 +139,6 @@ class Player(Creature):
             self.inventory.changeSelectedStack(1)
         if key == pygame.K_q:
             self.inventory.changeSelectedStack(-1)
-
-        if key == pygame.K_z:
-            self.hud.item_rot += 10
-        if key == pygame.K_c:
-            self.hud.item_rot -= 10
 
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input
@@ -212,11 +219,9 @@ class PlayerHUD(events.EventAcceptor):
 
         if stack:
             pos = self.player.manager.bufferPosToScreenPos(self.player.getBufferPos())
-            stack.item.drawInWorld(surface,
+            stack.drawInWorld(surface,
                                    (pos[0]+self.player.world.TILE_SIZE[0]//2,
-                                    pos[1]+self.player.world.TILE_SIZE[1]//2),
-                                   self.item_rot,
-                                   (64, -64))
+                                    pos[1]+self.player.world.TILE_SIZE[1]//2))
         
     def draw(self, surface):
         self.drawHealthBar(surface)
