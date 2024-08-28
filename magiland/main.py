@@ -45,5 +45,5 @@ while running:
 pygame.quit()
 
 
-if False:#clean_close == False:
+if clean_close == False:
     from misc import closer
