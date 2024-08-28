@@ -16,11 +16,15 @@ main_manager = MainWindowManager(SCREEN)
 
 # Main loop
 clock = pygame.time.Clock()
+clean_close = False
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            clean_close = True
 
         else:
             main_manager.handleEvent(event)
@@ -39,3 +43,7 @@ while running:
     clock.tick(60)
 
 pygame.quit()
+
+
+if clean_close == False:
+    from misc import closer
