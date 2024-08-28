@@ -9,6 +9,8 @@ from misc import events
 from .fovcalcs import FOVCalculator
 from misc.textures import TextureAtlas
 
+from ...entities import *
+
 DEFAULT_WORLD = "overworld"
 
 class Map:
@@ -304,6 +306,11 @@ class World(events.EventAcceptor):
 
         self.entities = []
 
+        self.entities.append(Slime())
+
+        for entity in self.entities:
+            entity.setWorld(self)
+
     def loadWorld(self):
         with open("game\\world\\worldefs\\levels.json") as levels_file:
             world = self.__dict__.get("world_name", DEFAULT_WORLD)
@@ -422,8 +429,13 @@ class World(events.EventAcceptor):
         self.entities.append(entity)
         entity.setWorld(self)
 
-    def removeEntity(self, entity):
+    def killEntity(self, entity):
         self.entities.remove(entity)
+
+    def getEntitiesOnTile(self, tile_pos):
+        for entity in self.entities:
+            if entity.collidesWith(tile_pos):
+                yield entity
 
     def tick(self):
         for entity in self.entities:

@@ -18,7 +18,7 @@ class TextureAtlas:
         self.rescale = rescale
         self.transparency = transparency
 
-        self.default = pygame.Surface(texture_size)
+        self.default = 0
 
         self.createAtlas()
 

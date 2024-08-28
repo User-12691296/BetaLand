@@ -1,12 +1,13 @@
 import pygame
 import numpy as np
+import math
 import os
 
 from misc import events
 from misc.textures import TextureAtlas, getAllXFilesInFolder
 from ..items import PlayerInventory, Inventory, ItemStack
 
-ASSETS = os.path.join("assets", "game")
+#ASSETS = os.path.join("assets", "game")
 
 
 class Entity(events.EventAcceptor):
@@ -62,14 +63,40 @@ class Entity(events.EventAcceptor):
     def draw(self, surface): pass
 
 class Creature(Entity):
-    def __init__(self, health):
+    def __init__(self, health, size=(1, 1)):
         super().__init__()
         
         self.max_health = health
         self.health = health
 
+        self.size = size
+
+        self.hitbox = pygame.Rect((0, 0), size)
+
     def changeHealth(self, delta):
         self.health += delta
+
+    def updateHitbox(self):
+        self.hitbox.center = self.getPos()
+
+    def collidesWith(self, point):
+        return self.hitbox.collidepoint(point)
+
+    def tick(self):
+        super().tick()
+
+        self.updateHitbox()
+
+    def damage(self, damage):
+        self.true_damage = self.calcDamageModifiers(damage)
+
+        self.changeHealth(-self.true_damage)
+
+        if self.health <= 0:
+            self.kill()
+
+    def kill(self):
+        self.world.killEntity(self)
 
     def calcDamageModifiers(self, damage):
         return damage # No changes to damage, can be overridden for entities with armor
@@ -109,6 +136,8 @@ class Player(Creature):
         
         self.handleMotion()
 
+        self.facing = self.getFacing()
+
         self.inventory.tick(self, self.world)
 
     def handleMotion(self):
@@ -134,6 +163,12 @@ class Player(Creature):
 
         self.registerCooldown("movement_input", 1)
 
+    def getFacing(self):
+        mouse_loc = self.world.bufferPosToTilePos(self.manager.screenPosToBufferPos(pygame.mouse.get_pos()))
+        angle = math.atan2(mouse_loc[1]-self.pos[1], mouse_loc[0]-self.pos[0])-45
+
+        return (math.degrees(angle)//90)
+
     def onKeyDown(self, key, unicode, mod):
         if key == pygame.K_e:
             self.inventory.changeSelectedStack(1)
@@ -157,14 +192,6 @@ class Player(Creature):
     def getMapDelta(self):
         bpos = self.getBufferPos()
         return (-bpos[0], -bpos[1])
-
-    def damage(self, damage):
-        self.true_damage = self.calcDamageModifiers(damage)
-
-        self.changeHealth(-self.true_damage)
-
-        if self.health <= 0:
-            self.kill()
 
     def getHealth(self):
         return self.health
@@ -239,3 +266,14 @@ class TestCreature(Creature):
     def draw(self, surface):
         self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "enemy1")
         
+
+class Slime(Creature):
+    def __init__(self):
+        super().__init__(5)
+
+    @staticmethod
+    def getNeededAssets():
+        return ["slime"]
+
+    def draw(self, surface):
+        self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "slime")

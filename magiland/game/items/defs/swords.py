@@ -10,7 +10,7 @@ class Sword(Item):
         data = super().initData()
 
         data["dps"] = 3
-        data["range"] = 2
+        data["range"] = 3
         
         return data
 
@@ -18,16 +18,20 @@ class Sword(Item):
         data["animations"].tick()
 
         # Handle Swing
-        data["rot"] = data["animations"].getFrame("sword_swing")*-3
+        data["rot"] = data["animations"].getFrame("sword_swing")*-6 - (player.facing+1)*90
 
         if data["animations"].get("sword_swing"):
-            real_angle = math.radians(-(45 + data["rot"]))
-            pos = [*player.pos]
-            pos[0] += round(data["range"]*math.cos(real_angle))
-            pos[1] += round(data["range"]*math.sin(real_angle))
+            real_angle = math.radians(-(45+data["rot"]))
+            for i in range(1, data["range"]):
+                pos = [*player.pos]
+                pos[0] += round(i*math.cos(real_angle))
+                pos[1] += round(i*math.sin(real_angle))
 
-            world.setTileID(pos, "grass")
+                for entity in world.getEntitiesOnTile(pos):
+                    entity.damage(1)
 
     def onLeft(self, data, player, world, tile_pos, tile):
         player.setMovable(False)
-        data["animations"].create("sword_swing", 120, lambda: player.setMovable(True))
+        data["animations"].create("sword_swing", 14, lambda: player.setMovable(True))
+
+        return True
