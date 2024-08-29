@@ -142,7 +142,7 @@ class Player(Creature):
         
         self.handleMotion()
 
-        self.facing = self.getFacing()
+        self.updateFacing()
 
         self.inventory.tick(self, self.world)
 
@@ -169,11 +169,15 @@ class Player(Creature):
 
         self.registerCooldown("movement_input", 1)
 
-    def getFacing(self):
-        mouse_loc = self.world.bufferPosToTilePos(self.manager.screenPosToBufferPos(pygame.mouse.get_pos()))
-        angle = math.atan2(mouse_loc[1]-self.pos[1], mouse_loc[0]-self.pos[0])-45
+    def updateFacing(self):
+        if self.movable:
+            mouse_loc = self.world.bufferPosToTilePos(self.manager.screenPosToBufferPos(pygame.mouse.get_pos()))
+            angle = math.atan2(mouse_loc[1]-self.pos[1], mouse_loc[0]-self.pos[0])-45
 
-        return (math.degrees(angle))
+            self.facing = math.degrees(angle)
+
+    def getFacing(self):
+        return self.facing
 
     def onKeyDown(self, key, unicode, mod):
         if key == pygame.K_e:

@@ -30,7 +30,7 @@ class Sword(Item):
         angle = data["animations"].getPercentage("sword_swing")*self.swing_angle+15
         delta = data["animations"].getDelta("sword_swing")*self.swing_angle
         
-        data["rot"] = -round(angle) + (self.swing_angle//2) - (player.facing+90)
+        data["rot"] = -round(angle) + (self.swing_angle//2) - (player.getFacing()+90)
 
 
         for shift in range(0, round(delta), 5):
