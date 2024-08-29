@@ -16,6 +16,12 @@ class Animation:
     def getFrame(self):
         return self.frame
 
+    def getPercentage(self):
+        return self.frame/self.max_frames
+
+    def getDelta(self):
+        return 1/self.max_frames
+
     def kill(self):
         if self.callback: self.callback()
 
@@ -52,6 +58,22 @@ class Animated:
         
         if anim:
             return anim.getFrame()
+        
+        return 0
+
+    def getPercentage(self, name):
+        anim = self.get(name)
+
+        if anim:
+            return anim.getPercentage()
+
+        return 0
+
+    def getDelta(self, name):
+        anim = self.get(name)
+        
+        if anim:
+            return anim.getDelta()
         
         return 0
 

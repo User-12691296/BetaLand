@@ -5,12 +5,14 @@ from misc import animations
 from constants import GAME
 
 class Item(events.EventAcceptor):
-    def __init__(self, itemid, tex_name, stackable=True):
+    def __init__(self, itemid, tex_name, stackable=True, size=0):
         self.itemid = itemid
         self.tex_name = tex_name
+        self.tex_size = size
+        self.size = size
         self.stackable = stackable
 
-        self.pivot_tc = (0, 0)
+        self.pivot_tc = GAME.ITEM_LOCATION_AROUND_PLAYER
 
         self._atlas_given = False
 
@@ -31,7 +33,9 @@ class Item(events.EventAcceptor):
 
         self.tex_loc = self.atlas.getTextureLoc(self.tex_name)
 
-        self.pivot_tc = (self.atlas.getTextureWidth(), -self.atlas.getTextureHeight())
+        self.pivot_tc = list(self.pivot_tc)
+        self.pivot_tc[0] += self.atlas.getTextureWidth()//4
+        self.pivot_tc[1] -= self.atlas.getTextureHeight()//4
 
         self._atlas_given = True
 

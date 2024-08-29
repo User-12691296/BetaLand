@@ -21,6 +21,9 @@ class Entity(events.EventAcceptor):
     def setWorld(self, world):
         self.world = world
 
+    def onSpawn(self):
+        pass
+
     def getPos(self):
         return self.pos
 
@@ -72,6 +75,9 @@ class Creature(Entity):
         self.size = size
 
         self.hitbox = pygame.Rect((0, 0), size)
+
+    def onSpawn(self):
+        super().onSpawn()
 
     def changeHealth(self, delta):
         self.health += delta
@@ -167,7 +173,7 @@ class Player(Creature):
         mouse_loc = self.world.bufferPosToTilePos(self.manager.screenPosToBufferPos(pygame.mouse.get_pos()))
         angle = math.atan2(mouse_loc[1]-self.pos[1], mouse_loc[0]-self.pos[0])-45
 
-        return (math.degrees(angle)//90)
+        return (math.degrees(angle))
 
     def onKeyDown(self, key, unicode, mod):
         if key == pygame.K_e:
@@ -267,7 +273,15 @@ class TestCreature(Creature):
         self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "enemy1")
         
 
-class Slime(Creature):
+class Enemy(Creature):
+    def __init__(self, health):
+        super().__init__(health)
+
+    def onSpawn(self):
+        super().onSpawn()
+        pass
+        
+class Slime(Enemy):
     def __init__(self):
         super().__init__(5)
 

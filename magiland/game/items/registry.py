@@ -13,9 +13,23 @@ def registerAllItems(registry):
     for itemClass in ALL_ITEM_CLASSES:
         itemClass.register(registry)
 
-class ITEM_TEXTURE_PRESETS:
-    FOLDER       = os.path.join(ASSETS, "items")
+class SMALL_ITEM_TEXTURE_PRESETS:
+    FOLDER       = os.path.join(ASSETS, "items", "small")
     SIZE         = 64
+    EXT          = ".png"
+    RESCALE      = True
+    TRANSPARENCY = True
+
+class MEDIUM_ITEM_TEXTURE_PRESETS:
+    FOLDER       = os.path.join(ASSETS, "items", "medium")
+    SIZE         = 96
+    EXT          = ".png"
+    RESCALE      = True
+    TRANSPARENCY = True
+
+class LARGE_ITEM_TEXTURE_PRESETS:
+    FOLDER       = os.path.join(ASSETS, "items", "large")
+    SIZE         = 128
     EXT          = ".png"
     RESCALE      = True
     TRANSPARENCY = True
@@ -27,7 +41,9 @@ class ItemRegistry:
         self._atlas_loaded = False
 
     def loadAtlas(self):
-        self.atlas = TextureAtlas.fromPreset(ITEM_TEXTURE_PRESETS)
+        self.atlasses = [TextureAtlas.fromPreset(SMALL_ITEM_TEXTURE_PRESETS),
+                         TextureAtlas.fromPreset(MEDIUM_ITEM_TEXTURE_PRESETS),
+                         TextureAtlas.fromPreset(LARGE_ITEM_TEXTURE_PRESETS)]
 
         self._atlas_loaded = True
 
@@ -37,7 +53,7 @@ class ItemRegistry:
         
         self.items[item.getItemID()] = item
 
-        item.setAtlas(self.atlas)
+        item.setAtlas(self.atlasses[item.tex_size])
 
     def addItems(self, items):
         for item in items:
