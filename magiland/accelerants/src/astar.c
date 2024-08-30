@@ -77,6 +77,8 @@ int returnPath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_wid
 	pathNodesY[length] = current.y;
 	length ++;
 	
+	free(nodes);
+	
 	return (length);
 }
 
@@ -155,6 +157,8 @@ int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width
 		//}
 		
 		if (isDestination(col, row, dCol, dRow)) {
+			free(openList);
+			free(closedList);
 			found = 1;
 			return returnPath(nodes, dCol, dRow, sCol, sRow, max_width, pathNodesX, pathNodesY);
 		}
@@ -190,14 +194,14 @@ int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width
 		}
 	}
 	
+	free(nodes);
+	free(openList);
+	free(closedList);
+	
 	if (!found) {
 		// Not found
 		return (-1);
 	}
-	
-	free(nodes);
-	free(openList);
-	free(closedList);
 }
 
 int main() {
