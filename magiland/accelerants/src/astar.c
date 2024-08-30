@@ -81,7 +81,6 @@ int returnPath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_wid
 }
 
 int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width, int max_height, int* pathNodesX, int* pathNodesY) {
-	printf("Checkpoint 0");
 	// If the source or destination is out of range
     if (!isValid(sCol, sRow, max_width, max_height) || !isValid(dCol, dRow, max_width, max_height)) {
         return (-1);

@@ -358,6 +358,8 @@ class Enemy(Creature):
     def __init__(self, health):
         super().__init__(health)
 
+        self.movement_speed = 10
+
     def setWorld(self, world):
         super().setWorld(world)
 
@@ -382,13 +384,21 @@ class Enemy(Creature):
         if self.world.changes_this_tick:
             self.calcPath()
 
-        node = self.pathfinder.getNode()
+        if self.isCooldownActive("movement"):
+            return
+        
+        node = self.pathfinder.getNode()    
         if node:
             self.setPos(node)
+
+        self.registerCooldown("movement", self.movement_speed)
+        
         
 class Slime(Enemy):
     def __init__(self):
         super().__init__(5)
+
+        self.movement_speed = 30
 
     @staticmethod
     def getNeededAssets():
