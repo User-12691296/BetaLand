@@ -57,5 +57,8 @@ class MainWindowManager(events.EventAcceptor):
     def draw(self, surface):
         self.alphas[self.active_alpha].draw(self.screen.get())
 
-    def tick(self):
-        self.alphas[self.active_alpha].tick()
+    def first_tick(self):
+        self.alphas[self.active_alpha].first_tick()
+
+    def main_tick(self):
+        self.alphas[self.active_alpha].main_tick()

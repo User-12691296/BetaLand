@@ -19,6 +19,9 @@ clock = pygame.time.Clock()
 clean_close = False
 running = True
 while running:
+    # Tick before input
+    main_manager.first_tick()
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -29,8 +32,8 @@ while running:
         else:
             main_manager.handleEvent(event)
 
-    # Tick the loop
-    main_manager.tick()
+    # Tick after input
+    main_manager.main_tick()
 
     # Draw to screen
     SCREEN.get().fill((0, 0, 0))
@@ -45,5 +48,5 @@ while running:
 pygame.quit()
 
 
-if False:#clean_close == False:
+if clean_close == False:
     from misc import closer

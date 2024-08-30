@@ -6,8 +6,9 @@ import os
 from misc import events
 from misc.textures import TextureAtlas, getAllXFilesInFolder
 from ..items import PlayerInventory, Inventory, ItemStack
+from .pathfinding import PathFinder
 
-#ASSETS = os.path.join("assets", "game")
+from constants import GAME
 
 
 class Entity(events.EventAcceptor):
@@ -17,9 +18,13 @@ class Entity(events.EventAcceptor):
         self.cooldowns = {}
 
         self.movable = True
+        self.alive = True
 
     def setWorld(self, world):
         self.world = world
+
+    def setOpaques(self, opaques):
+        pass
 
     def onSpawn(self):
         pass
@@ -47,8 +52,11 @@ class Entity(events.EventAcceptor):
     def setAtlas(cls, atlas):
         cls.atlas = atlas
 
+    def isAlive(self):
+        return self.alive
+    
     def kill(self):
-        self.world.removeEntity(self)
+        self.alive = False
 
     def getBufferPos(self):
         return self.world.tilePosToBufferPos(self.pos)
@@ -62,7 +70,11 @@ class Entity(events.EventAcceptor):
     def tick(self):
         for cooldown in self.cooldowns.keys():
             self.cooldowns[cooldown] -= 1
-        
+
+    def movementTick(self): pass
+    def damageTick(self): pass
+    def finalTick(self): pass
+    
     def draw(self, surface): pass
 
 class Creature(Entity):
@@ -76,11 +88,23 @@ class Creature(Entity):
 
         self.hitbox = pygame.Rect((0, 0), size)
 
+        self.damages_this_tick = []
+
     def onSpawn(self):
         super().onSpawn()
 
+    def getHealth(self):
+        return self.health
+
+    def getHealthPercentage(self):
+        return self.health/self.max_health
+
     def changeHealth(self, delta):
         self.health += delta
+        self.health = min(self.max_health, self.health)
+
+        if self.health <= 0:
+            self.alive = False
 
     def updateHitbox(self):
         self.hitbox.center = self.getPos()
@@ -91,22 +115,62 @@ class Creature(Entity):
     def tick(self):
         super().tick()
 
+        self.damages_this_tick = []
+
+    def movementTick(self):
+        super().movementTick()
+        
         self.updateHitbox()
 
-    def damage(self, damage):
-        self.true_damage = self.calcDamageModifiers(damage)
+    def damageTick(self):
+        super().damageTick()
 
-        self.changeHealth(-self.true_damage)
+    def finalTick(self):
+        super().finalTick()
 
-        if self.health <= 0:
-            self.kill()
+        self.sumDamage()
 
-    def kill(self):
-        self.world.killEntity(self)
+    def damage(self, damage, source=None):
+        self.damages_this_tick.append((damage, source))
 
-    def calcDamageModifiers(self, damage):
-        return damage # No changes to damage, can be overridden for entities with armor
+    def sumDamage(self):
+        total_damage = 0
 
+        dtt = 0
+
+        while self.damages_this_tick:
+            damage = max(self.damages_this_tick, key=lambda d: d[0])
+            self.damages_this_tick.remove(damage)
+
+            damage, source = damage
+            true_damage = self.calcDamageModifiers(damage, dtt)
+            total_damage += true_damage
+
+            dtt += 1
+        
+        self.changeHealth(-total_damage)
+
+    def calcDamageModifiers(self, damage, dtt=0):
+        return (damage/(2**dtt))
+
+    def draw(self, surface):
+        self.drawHealthBar(surface)
+
+    def drawHealthBar(self, surface):
+        width = GAME.TILE_SIZE
+        health_bar = pygame.Rect((0, 0), (width, 10))
+
+        bpos = self.world.tilePosToBufferPos(self.getPos())
+
+        health_bar.left = bpos[0]
+        health_bar.top = bpos[1] - 20
+
+        # Background
+        pygame.draw.rect(surface, (255, 0, 0), health_bar)
+
+        # Foreground
+        health_bar.width = round(width*self.getHealthPercentage())
+        pygame.draw.rect(surface, (0, 255, 0), health_bar)
 
 
 INITIAL_PLAYER_HEALTH = 10
@@ -139,19 +203,36 @@ class Player(Creature):
 
     def tick(self):
         super().tick()
-        
-        self.handleMotion()
-
-        self.updateFacing()
 
         self.inventory.tick(self, self.world)
+
+    def movementTick(self):
+        super().movementTick()
+        
+        self.handleMotion()
+        self.updateFacing()
+        
+    def damageTick(self):
+        super().damageTick()
+
+        self.inventory.damageTick(self, self.world)
+        
+    def finalTick(self):
+        super().finalTick()
+
+        self.inventory.damageTick(self, self.world)
+
+    def move(self, delta):
+        super().move(delta)
+        
+        self.world.registerChange()
 
     def handleMotion(self):
         if self.isCooldownActive("movement_input"):
             return
 
         self.prev_pos = [self.pos[0], self.pos[1]]
-        
+
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_w]:
             self.move(( 0, -1))
@@ -202,12 +283,6 @@ class Player(Creature):
     def getMapDelta(self):
         bpos = self.getBufferPos()
         return (-bpos[0], -bpos[1])
-
-    def getHealth(self):
-        return self.health
-
-    def getHealthPercentage(self):
-        return self.health/self.max_health
 
     def draw(self, surface):
         # Draw player sprite
@@ -274,6 +349,8 @@ class TestCreature(Creature):
         return ["enemy1"]
 
     def draw(self, surface):
+        super().draw(surface)
+        
         self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "enemy1")
         
 
@@ -281,9 +358,33 @@ class Enemy(Creature):
     def __init__(self, health):
         super().__init__(health)
 
+    def setWorld(self, world):
+        super().setWorld(world)
+
+        self.pathfinder = PathFinder(self.world.size)
+
+    def setOpaques(self, opaques):
+        super().setOpaques(opaques)
+
+        self.pathfinder.setOpaques(opaques)
+
     def onSpawn(self):
         super().onSpawn()
-        pass
+
+        self.calcPath()
+
+    def calcPath(self):
+        self.pathfinder.calcPath(self.getPos(), self.world.getPlayer().getPos())
+
+    def movementTick(self):
+        super().movementTick()
+
+        if self.world.changes_this_tick:
+            self.calcPath()
+
+        node = self.pathfinder.getNode()
+        if node:
+            self.setPos(node)
         
 class Slime(Enemy):
     def __init__(self):
@@ -294,4 +395,6 @@ class Slime(Enemy):
         return ["slime"]
 
     def draw(self, surface):
+        super().draw(surface)
+        
         self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "slime")

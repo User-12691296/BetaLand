@@ -65,14 +65,24 @@ class GameManager(events.Alpha):
         return (bpos[0]+delta[0], bpos[1]+delta[1])
 
     ## TICK
-    def tick(self):
+    def first_tick(self):
         self.player.tick()
         self.getWorld().tick()
     
+    def main_tick(self):
+        self.player.movementTick()
+        self.getWorld().movementTick()
+
+        self.player.damageTick()
+        self.getWorld().damageTick()
+
+        self.player.finalTick()
+        self.getWorld().finalTick()
+    
     ## EVENTS
     def start(self):
-        self.player.health = self.player.max_health
         print("Game starting!")
+        self.first_tick()
 
     def onKeyDown(self, key, unicode, mod):
         if key == pygame.K_SPACE:

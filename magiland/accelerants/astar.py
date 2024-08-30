@@ -7,14 +7,16 @@ LIB = load_lib(os.path.join(os.path.dirname(__file__), "astar"))
 
 if LIB != None:
     aStarSearch = LIB.aStarSearch
-    aStarSearch.restype = None
-    aStarSearch.argtypes = [ndpointer(ctypes.c_int, flags="C_CONTIGUOUS"),
+    aStarSearch.restype = ctypes.c_int
+    aStarSearch.argtypes = [ndpointer(ctypes.c_int16, flags="C_CONTIGUOUS"),
                             ctypes.c_int,
                             ctypes.c_int,
                             ctypes.c_int,
                             ctypes.c_int,
                             ctypes.c_int,
-                            ctypes.c_int]
+                            ctypes.c_int,
+                            ndpointer(ctypes.c_int32, flags="C_CONTIGUOUS"),
+                            ndpointer(ctypes.c_int32, flags="C_CONTIGUOUS")]
 
 else:
     aStarSearch = None

@@ -306,10 +306,7 @@ class World(events.EventAcceptor):
 
         self.entities = []
 
-        self.entities.append(Slime())
-
-        for entity in self.entities:
-            entity.setWorld(self)
+        self.changes_this_tick = False
 
     def loadWorld(self):
         with open("game\\world\\worldefs\\levels.json") as levels_file:
@@ -353,6 +350,8 @@ class World(events.EventAcceptor):
                 self.world_tile_ids[row_index][tile_index] = tileid
                 self.world_tile_elevations[row_index][tile_index] = int(elevation)
                 
+        self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
+                
         
     def setPlayer(self, player):
         self.player = player
@@ -382,6 +381,12 @@ class World(events.EventAcceptor):
             return 0
         
         return self.world_tile_elevations[tile_pos[1]][tile_pos[0]] - elev
+
+    def genOpaquesFromElevCutoff(self, cutoff):
+        self.opaques = np.array(self.world_tile_elevations > cutoff, dtype=np.int16)
+
+    def getOpaques(self):
+        return self.opaques
 
     def setTileElevation(self, tile_pos, elevation):
         self.world_tile_elevations[tile_pos[1]][tile_pos[0]] = elevation
@@ -422,12 +427,16 @@ class World(events.EventAcceptor):
         try:
             self.world_tile_ids[tile_pos[1]][tile_pos[0]] = tile_id
             self.updateTilesAroundTile(tile_pos)
+            self.registerChange()
+            
         except IndexError:
             return None
 
     def addEntity(self, entity):
         self.entities.append(entity)
         entity.setWorld(self)
+        entity.setOpaques(self.opaques)
+        entity.onSpawn()
 
     def killEntity(self, entity):
         self.entities.remove(entity)
@@ -437,11 +446,36 @@ class World(events.EventAcceptor):
             if entity.collidesWith(tile_pos):
                 yield entity
 
+    def registerChange(self):
+        self.changes_this_tick = True
+
     def tick(self):
+        self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
+        
         for entity in self.entities:
+            entity.setOpaques(self.opaques)
             entity.tick()
 
+        self.changes_this_tick = False
+
+    def movementTick(self):
+        for entity in self.entities:
+            entity.movementTick()
+
         self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
+
+    def damageTick(self):
+        for entity in self.entities:
+            entity.damageTick()
+    
+    def finalTick(self):
+        for entity in self.entities:
+            entity.finalTick()
+
+        self.cullDead()
+
+    def cullDead(self):
+        self.entities = [entity for entity in self.entities if entity.isAlive()]
         
     def onMouseDown(self, mouse_pos, button):
         world_pos = self.bufferPosToTilePos(mouse_pos)

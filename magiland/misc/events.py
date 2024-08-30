@@ -15,10 +15,10 @@ class EventAcceptor:
 
 
 class Alpha(EventAcceptor):
-    def tick(self): pass
+    def first_tick(self): pass
+    def main_tick(self): pass
     def start(self): pass
     def close(self): pass
-
 
 
 class ButtonShell:

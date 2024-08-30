@@ -1,5 +1,4 @@
 from fractions import Fraction
-from numpy.ctypeslib import ndpointer
 import numpy as np
 
 import accelerants as ACCEL
