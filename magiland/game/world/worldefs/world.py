@@ -250,11 +250,15 @@ class Map:
         self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
         self.fov_calc.calcFOV(origin)
 
-    def draw(self, surface, visible_rect):
+    def draw(self, surface, visible_rect, screen_rect=None):
         self.startBufferGC()
-        
+
         area_visible = pygame.Rect((-visible_rect.left, -visible_rect.top),
                                                                visible_rect.size)
+        if screen_rect:
+            area_visible.left = -screen_rect.left
+            area_visible.top = -screen_rect.top
+            
         relevant_buffers = self.getRelevantBuffers(area_visible)
         relevant_tiles = self.getRelevantTilesAsRect(area_visible)
 
@@ -528,7 +532,7 @@ class World(events.EventAcceptor):
         map_visible = pygame.Rect(visible_rect)
         map_visible.left += self.moving_anim_delta[0]
         map_visible.top += self.moving_anim_delta[1]
-        self.map.draw(surface, map_visible)
+        self.map.draw(surface, map_visible, visible_rect)
         
         visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)
 

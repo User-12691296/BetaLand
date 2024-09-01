@@ -279,6 +279,7 @@ class Player(Creature):
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
+            return
 
         if moved:
             self.registerCooldown("movement_input", GAME.PLAYER_WALKING_SPEED)
