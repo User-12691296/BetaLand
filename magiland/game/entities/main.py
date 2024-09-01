@@ -415,7 +415,7 @@ class Enemy(Creature):
         
 class Slime(Enemy):
     def __init__(self):
-        super().__init__(5, 4, 30)
+        super().__init__(5, 0, 30)
 
     @staticmethod
     def getNeededAssets():
