@@ -37,17 +37,17 @@ class PathFinder:
             return None
 
     def extendPathFromXY(self, pathx, pathy, x, y, length):
-        path = [] 
+        #path = [] 
         # Back to front add nodes
         for i in range(length):
             index = length - i - 1
 
             node = (pathx[index]+x, pathy[index]+y)
-            path.append(node)
+            #path.append(node)
 
             self.addPathNode(node)
 
-        print(path)
+        #print(path)
 
     def calcPath(self, start, end):
         left = min(start[0], end[0])
