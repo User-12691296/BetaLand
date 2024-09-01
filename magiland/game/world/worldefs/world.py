@@ -247,9 +247,8 @@ class Map:
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
 
     def calcFOV(self, origin):
-        if self.world.changes_this_tick:
-            self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
-            self.fov_calc.calcFOV(origin)
+        self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
+        self.fov_calc.calcFOV(origin)
 
     def draw(self, surface, visible_rect):
         self.startBufferGC()
@@ -300,6 +299,10 @@ class World(events.EventAcceptor):
         self.map = Map(self.size, self.TILE_SIZE)
         self.map.setWorld(self)
 
+        self.moving_anim_direction = [0, 0]
+        self.moving_anim_delta = [0, 0]
+        self.moving_anim_frame_getter = lambda:0
+
         self.tiles = {}
         for tileClass in tileClasses:
             self.map.bindTileAtlas(tileClass)
@@ -307,6 +310,7 @@ class World(events.EventAcceptor):
 
         self.entities = []
 
+        self.first_tick = True
         self.changes_this_tick = False
 
     def loadWorld(self):
@@ -463,13 +467,16 @@ class World(events.EventAcceptor):
             entity.setOpaques(self.opaques)
             entity.tick()
 
-        self.changes_this_tick = False
+        self.changes_this_tick = self.first_tick
+
+        self.moving_anim_delta = [0, 0]
 
     def movementTick(self):
         for entity in self.entities:
             entity.movementTick()
 
-        self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
+        if self.changes_this_tick:
+            self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
 
     def damageTick(self):
         for entity in self.entities:
@@ -479,9 +486,14 @@ class World(events.EventAcceptor):
         for entity in self.entities:
             entity.finalTick()
 
-        self.cullDead()
+        self.cullDeadEntities()
 
-    def cullDead(self):
+        if GAME.SMOOTH_PLAYER_MOTION:
+            self.updateMovingAnimation()
+
+        self.first_tick = False
+
+    def cullDeadEntities(self):
         self.entities = [entity for entity in self.entities if entity.isAlive()]
         
     def onMouseDown(self, mouse_pos, button):
@@ -502,12 +514,25 @@ class World(events.EventAcceptor):
     def tilePosToBufferPos(self, wpos):
         return (wpos[0]*self.TILE_SIZE[0], wpos[1]*self.TILE_SIZE[1])
 
+    def setMovingAnimation(self, direction, get_frame):
+        self.moving_anim_direction = direction
+        self.moving_anim_frame_getter = get_frame
+
+    def updateMovingAnimation(self):
+        frame = self.moving_anim_frame_getter()
+        
+        self.moving_anim_delta[0] += (self.moving_anim_direction[0]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
+        self.moving_anim_delta[1] += (self.moving_anim_direction[1]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
+
     def draw(self, surface, visible_rect):
-        self.map.draw(surface, visible_rect)
+        map_visible = pygame.Rect(visible_rect)
+        map_visible.left += self.moving_anim_delta[0]
+        map_visible.top += self.moving_anim_delta[1]
+        self.map.draw(surface, map_visible)
         
         visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)
 
         for entity in self.entities:
             entity.draw(visible_world)
 
-        surface.blit(visible_world, visible_rect.topleft)
+        surface.blit(visible_world, map_visible.topleft)

@@ -18,6 +18,8 @@ class Entity(events.EventAcceptor):
         self.cooldowns = {}
 
         self.movable = True
+        self.movement_this_tick = [0, 0]
+        
         self.alive = True
 
     def setWorld(self, world):
@@ -46,6 +48,9 @@ class Entity(events.EventAcceptor):
             self.pos[0] += delta[0]
             self.pos[1] += delta[1]
 
+            self.movement_this_tick[0] += delta[0]
+            self.movement_this_tick[1] += delta[1]
+
     def setMovable(self, val):
         self.movable = val
 
@@ -73,6 +78,9 @@ class Entity(events.EventAcceptor):
     def registerCooldown(self, cooldown, frames):
         self.cooldowns[cooldown] = frames
 
+    def getCooldownFrame(self, cooldown):
+        return self.cooldowns.get(cooldown, 0)
+
     def isCooldownActive(self, cooldown):
         return self.cooldowns.get(cooldown, 0) > 0
 
@@ -81,6 +89,8 @@ class Entity(events.EventAcceptor):
             self.cooldowns[cooldown] -= 1
             if self.cooldowns[cooldown] <= 0:
                 del self.cooldowns[cooldown]
+
+        self.movement_this_tick = [0, 0]
 
     def movementTick(self): pass
     def damageTick(self): pass
@@ -251,20 +261,28 @@ class Player(Creature):
 
         self.prev_pos = [self.pos[0], self.pos[1]]
 
+        moved = False
+
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_w]:
             self.move(( 0, -1))
+            moved = True
         if pressed[pygame.K_a]:
             self.move((-1,  0))
+            moved = True
         if pressed[pygame.K_s]:
             self.move(( 0,  1))
+            moved = True
         if pressed[pygame.K_d]:
             self.move(( 1,  0))
+            moved = True
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
 
-        self.registerCooldown("movement_input", 1)
+        if moved:
+            self.registerCooldown("movement_input", GAME.PLAYER_WALKING_SPEED)
+            self.world.setMovingAnimation(self.movement_this_tick, lambda:self.getCooldownFrame("movement_input"))
 
     def updateFacing(self):
         if self.movable:
@@ -415,7 +433,7 @@ class Enemy(Creature):
         
 class Slime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 3)
+        super().__init__(5, 0, 30)
 
     @staticmethod
     def getNeededAssets():
