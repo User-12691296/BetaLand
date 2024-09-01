@@ -35,6 +35,12 @@ class Entity(events.EventAcceptor):
     def setPos(self, pos):
         self.pos = pos
 
+    def distanceTo2(self, pos):
+        return (self.pos[0]-pos[0])**2 + (self.pos[1]-pos[1])**2
+
+    def diagonalTo(self, pos):
+        return max(abs(self.pos[0]-pos[0]), abs(self.pos[1]-pos[1]))
+
     def move(self, delta):
         if self.movable:
             self.pos[0] += delta[0]
@@ -54,6 +60,9 @@ class Entity(events.EventAcceptor):
 
     def isAlive(self):
         return self.alive
+
+    def isEnemy(self):
+        return False
     
     def kill(self):
         self.alive = False
@@ -65,11 +74,13 @@ class Entity(events.EventAcceptor):
         self.cooldowns[cooldown] = frames
 
     def isCooldownActive(self, cooldown):
-        return self.cooldowns.get(cooldown, False)
+        return self.cooldowns.get(cooldown, 0) > 0
 
     def tick(self):
-        for cooldown in self.cooldowns.keys():
+        for cooldown in (*self.cooldowns.keys(),):
             self.cooldowns[cooldown] -= 1
+            if self.cooldowns[cooldown] <= 0:
+                del self.cooldowns[cooldown]
 
     def movementTick(self): pass
     def damageTick(self): pass
@@ -104,13 +115,20 @@ class Creature(Entity):
         self.health = min(self.max_health, self.health)
 
         if self.health <= 0:
-            self.alive = False
+            self.kill()
 
     def updateHitbox(self):
         self.hitbox.center = self.getPos()
+        self.radius = self.hitbox.width//2
 
     def collidesWith(self, point):
         return self.hitbox.collidepoint(point)
+
+    def distanceTo2(self, pos):
+        dx = abs(self.pos[0]-pos[0])
+        dy = abs(self.pos[1]-pos[1])
+
+        return dx**2 - (self.radius * 2*dx) + dy**2 - (self.radius * 2*dy)
 
     def tick(self):
         super().tick()
@@ -243,8 +261,6 @@ class Player(Creature):
         if pressed[pygame.K_d]:
             self.move(( 1,  0))
 
-        self.disp = pressed[pygame.K_ESCAPE]
-
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
 
@@ -278,6 +294,8 @@ class Player(Creature):
         self.inventory.close()
         
     def kill(self):
+        self.alive = False
+        
         pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
             
     def getMapDelta(self):
@@ -355,15 +373,16 @@ class TestCreature(Creature):
         
 
 class Enemy(Creature):
-    def __init__(self, health):
+    def __init__(self, health, stop_range=1, movement_speed=10):
         super().__init__(health)
 
-        self.movement_speed = 10
+        self.stop_range = stop_range
+        self.movement_speed = movement_speed
 
     def setWorld(self, world):
         super().setWorld(world)
 
-        self.pathfinder = PathFinder(self.world.size)
+        self.pathfinder = PathFinder(self.world.size, self.stop_range)
 
     def setOpaques(self, opaques):
         super().setOpaques(opaques)
@@ -396,13 +415,19 @@ class Enemy(Creature):
         
 class Slime(Enemy):
     def __init__(self):
-        super().__init__(5)
-
-        self.movement_speed = 30
+        super().__init__(5, 4, 30)
 
     @staticmethod
     def getNeededAssets():
         return ["slime"]
+
+    def isEnemy(self):
+        return True
+
+    def damageTick(self):
+        for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
+            if not entity.isEnemy():
+                entity.damage(0.1)
 
     def draw(self, surface):
         super().draw(surface)

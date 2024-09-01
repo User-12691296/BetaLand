@@ -82,6 +82,8 @@ class GameManager(events.Alpha):
     ## EVENTS
     def start(self):
         print("Game starting!")
+        self.player.health = self.player.max_health
+        self.player.alive = True
         self.first_tick()
 
     def onKeyDown(self, key, unicode, mod):

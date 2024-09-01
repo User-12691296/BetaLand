@@ -48,6 +48,7 @@ class Sword(Item):
                             entity.damage(self.damage)
                             world.setTileID(entity.getPos(), "grass")
                             data["entities_hit"].append(entity)
+        
 
     def startSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(False)

@@ -29,6 +29,10 @@ int isUnblocked(int grid[], int col, int row, int max_width) {
     return grid[array_index(col, row, max_width)] == 0;
 }
 
+int getUnblocked(int grid[], int col, int row, int max_width) {
+    return grid[array_index(col, row, max_width)];
+}
+
 int isDestination(int col, int row, int dCol, int dRow) {
     return row == dRow && col == dCol;
 }
@@ -37,8 +41,12 @@ int square(int n) {
 	return n*n;
 }
 
+int diagonalDist(int col, int row, int dCol, int dRow) {
+	return (square(max(abs(row - dRow), abs(col - dCol))));
+}
+
 int calculateHValue(int col, int row, int dCol, int dRow) {
-    return (square(max(abs(row - dRow), abs(col - dCol))));
+    return diagonalDist(col, row, dCol, dRow);
 }
 
 void tracePath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_width) {
@@ -59,7 +67,7 @@ void tracePath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_wid
 	printf(" <- (%d, %d)\n", current.x, current.y);
 }
 
-int returnPath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_width, int* pathNodesX, int* pathNodesY) {
+int returnPath(Node nodes[], int sCol, int sRow, int dCol, int dRow, int max_width, int stop_range, int* pathNodesX, int* pathNodesY) {
 	int length = 0;
 	
 	Node current = nodes[array_index(dCol, dRow, max_width)];
@@ -71,29 +79,27 @@ int returnPath(Node nodes[], int dCol, int dRow, int sCol, int sRow, int max_wid
 		current = nodes[array_index(current.px, current.py, max_width)];
 		
 		length ++;
+		
+		if (diagonalDist(current.x, current.y, sCol, sRow) <= stop_range) {
+			return (length);
+		}
 	}
-	
-	pathNodesX[length] = current.x;
-	pathNodesY[length] = current.y;
-	length ++;
-	
-	free(nodes);
 	
 	return (length);
 }
 
-int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width, int max_height, int* pathNodesX, int* pathNodesY) {
+int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width, int max_height, int stop_range, int* pathNodesX, int* pathNodesY) {
 	// If the source or destination is out of range
     if (!isValid(sCol, sRow, max_width, max_height) || !isValid(dCol, dRow, max_width, max_height)) {
-        return (-1);
+        return (-2);
     }
     // If the source or destination cell is blocked
     if (!isUnblocked(grid, sCol, sRow, max_width) || !isUnblocked(grid, dCol, dRow, max_width)) {
-        return (-1);
+        return (-3);
     }
     // If the destination cell is the same as source cell
     if (isDestination(sCol, sRow, dCol, dRow)) {
-        return (-1);
+        return (-4);
     }
 	
 	int map_size = max_height*max_width;
@@ -160,7 +166,7 @@ int aStarSearch(int* grid, int sCol, int sRow, int dCol, int dRow, int max_width
 			free(openList);
 			free(closedList);
 			found = 1;
-			return returnPath(nodes, dCol, dRow, sCol, sRow, max_width, pathNodesX, pathNodesY);
+			return returnPath(nodes, sCol, sRow, dCol, dRow, max_width, stop_range, pathNodesX, pathNodesY);
 		}
 		
 		// Loop through all neighbors
@@ -222,7 +228,7 @@ int main() {
 	int pathX[1000];
 	int pathY[1000];
 	
-    int length = aStarSearch(grid, sCol, sRow, dCol, dRow, 799, 500, pathX, pathY);
+    int length = aStarSearch(grid, sCol, sRow, dCol, dRow, 799, 500, 0, pathX, pathY);
 	
 	for (int i=0; i<length; i++) {
 		printf("(%d, %d)-", pathX[i], pathY[i]);

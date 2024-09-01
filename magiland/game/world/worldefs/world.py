@@ -247,8 +247,9 @@ class Map:
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
 
     def calcFOV(self, origin):
-        self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
-        self.fov_calc.calcFOV(origin)
+        if self.world.changes_this_tick:
+            self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
+            self.fov_calc.calcFOV(origin)
 
     def draw(self, surface, visible_rect):
         self.startBufferGC()
@@ -383,7 +384,7 @@ class World(events.EventAcceptor):
         return self.world_tile_elevations[tile_pos[1]][tile_pos[0]] - elev
 
     def genOpaquesFromElevCutoff(self, cutoff):
-        self.opaques = np.array(self.world_tile_elevations > cutoff, dtype=np.int16)
+        self.opaques = np.array(self.world_tile_elevations > cutoff, dtype=np.int32)
 
     def getOpaques(self):
         return self.opaques
@@ -432,6 +433,9 @@ class World(events.EventAcceptor):
         except IndexError:
             return None
 
+    def getAllEntities(self):
+        return self.entities + [self.player]
+
     def addEntity(self, entity):
         self.entities.append(entity)
         entity.setWorld(self)
@@ -442,9 +446,12 @@ class World(events.EventAcceptor):
         self.entities.remove(entity)
 
     def getEntitiesOnTile(self, tile_pos):
-        for entity in self.entities:
-            if entity.collidesWith(tile_pos):
-                yield entity
+        return [entity for entity in self.getAllEntities() if entity.collidesWith(tile_pos)]
+
+    def getEntitiesInRangeOfTile(self, tile_pos, range):
+        r = int(range**2)
+        
+        return [entity for entity in self.getAllEntities() if entity.distanceTo2(tile_pos) <= r]
 
     def registerChange(self):
         self.changes_this_tick = True

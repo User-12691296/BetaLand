@@ -7,16 +7,16 @@ ASPECT_RATIO = 8/5
 RESOLUTION = 1600
 SCREEN = Screen(ASPECT_RATIO, RESOLUTION)
 
-
 from managers import MainWindowManager
 from misc import events
+
+clean_close = False
 
 # Reroutes events and drawing commands through a manager to clean the main code
 main_manager = MainWindowManager(SCREEN)
 
 # Main loop
 clock = pygame.time.Clock()
-clean_close = False
 running = True
 while running:
     # Tick before input
@@ -48,5 +48,5 @@ while running:
 pygame.quit()
 
 
-if clean_close == False:
+if False:#clean_close == False:
     from misc import closer
