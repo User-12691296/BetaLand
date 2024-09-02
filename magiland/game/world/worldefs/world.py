@@ -403,9 +403,14 @@ class World(events.EventAcceptor):
     def isTileOpaque(self, tile_pos):
         return self.getTileElevation(tile_pos) > self.OPAQUE_TILE_ELEV_DELTA
 
-    def isTileValidForWalking(self, tile_pos):
-        elev_check = self.getTileElevation(tile_pos) <= self.WALKING_TILE_ELEV_DELTA
-        #entity_check = not 
+    def isTileValidForWalking(self, tile_pos, curelev=0):
+        # Inside map
+        border_check = (tile_pos[0] >= 0 and tile_pos[1] >= 0) and \
+                       (tile_pos[0] < self.size[0] and tile_pos[1] < self.size[1])
+        # If elevations are valid
+        elev_check = (self.getTileElevation(tile_pos) - curelev) <= self.WALKING_TILE_ELEV_DELTA
+
+        # Can't walk over entities
         return elev_check
 
     def getTileRect(self, tile_pos):

@@ -1,6 +1,6 @@
 import os
 
-from .main import *
+from .defs import ALL_ENTITY_CLASSES
 from misc.textures import TextureAtlas
 
 ASSETS = os.path.join("assets", "game")
@@ -10,9 +10,8 @@ def initialiseEntities():
     REGISTRY.loadAtlas()
 
 def registerAllEntities():
-    REGISTRY.registerEntityClass(Player)
-    REGISTRY.registerEntityClass(TestCreature)
-    REGISTRY.registerEntityClass(Slime)
+    for entity_class in ALL_ENTITY_CLASSES:
+        REGISTRY.registerEntityClass(entity_class)
 
 class EntityRegistry:
     def __init__(self):

@@ -5,7 +5,7 @@ import json
 from .world import LOADABLE_WORLDS
 from misc import events
 from .items import initialiseItems
-from .entities import initialiseEntities, Player
+from .entities import initialiseEntities, ENTITY_CLASSES
 
 ASSETS = os.path.join("assets", "game")
 
@@ -35,7 +35,7 @@ class GameManager(events.Alpha):
         self.bg.fill((0, 0, 0))
 
     def loadPlayer(self):
-        self.player = Player()
+        self.player = ENTITY_CLASSES.Player()
         self.player.setManager(self)
         self.player.setWorld(self.getWorld())
 
