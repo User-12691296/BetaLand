@@ -29,26 +29,26 @@ class Sword(Item):
 
     def damageTick(self, data, player, world):
         # Handle Swing
-        angle = data["animations"].getPercentage("sword_swing")*self.swing_angle+12
+        angle = data["animations"].getPercentage("sword_swing")*self.swing_angle
         delta = data["animations"].getDelta("sword_swing")*self.swing_angle
         
-        data["rot"] = -round(angle) + (self.swing_angle//2) - (player.getFacing()+90)
+        data["rot"] = -round(angle) + (self.swing_angle//2) - (player.getFacing()+90) - 12
+        data["rot"] = data["rot"] % 360
 
-        for shift in range(0, round(delta), 5):
-            if data["animations"].get("sword_swing"):
-                real_angle = math.radians(-(45 + data["rot"] - shift))
+
+        if data["animations"].exists("sword_swing"):
+            for entity in world.getEntitiesInRangeOfTile(player.pos, self.swing_range):
+                if entity == player:
+                    continue
                 
-                for i in range(1, self.swing_range):
-                    pos = [*player.pos]
-                    pos[0] += round(i*math.cos(real_angle))
-                    pos[1] += round(i*math.sin(real_angle))
+                if entity in data["entities_hit"]:
+                    continue
+                    
+                angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
-                    for entity in world.getEntitiesOnTile(pos):
-                        if not entity in data["entities_hit"]:
-                            entity.damage(self.damage)
-                            world.setTileID(entity.getPos(), "grass")
-                            data["entities_hit"].append(entity)
-        
+                if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
+                    entity.damage(self.damage)
+                    data["entities_hit"].append(entity)
 
     def startSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(False)
@@ -58,7 +58,6 @@ class Sword(Item):
 
     def endSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(True)
-        data["entities_hit"] = []
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)

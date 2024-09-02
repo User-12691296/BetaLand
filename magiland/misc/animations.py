@@ -38,6 +38,9 @@ class Animated:
     def create(self, name, max_frames, callback=None):
         self.animations[name] = Animation(max_frames, callback)
 
+    def exists(self, name):
+        return bool(self.animations.get(name, False))
+
     def clear(self):
         for animation in self.animations.values():
             animation.kill()

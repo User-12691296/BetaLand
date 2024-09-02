@@ -404,7 +404,9 @@ class World(events.EventAcceptor):
         return self.getTileElevation(tile_pos) > self.OPAQUE_TILE_ELEV_DELTA
 
     def isTileValidForWalking(self, tile_pos):
-        return self.getTileElevation(tile_pos) <= self.WALKING_TILE_ELEV_DELTA
+        elev_check = self.getTileElevation(tile_pos) <= self.WALKING_TILE_ELEV_DELTA
+        #entity_check = not 
+        return elev_check
 
     def getTileRect(self, tile_pos):
         rect = pygame.Rect(self.tilePosToBufferPos(tile_pos),
@@ -460,6 +462,9 @@ class World(events.EventAcceptor):
         r = int(range**2)
         
         return [entity for entity in self.getAllEntities() if entity.distanceTo2(tile_pos) <= r]
+
+    def getEntitiesInDiagToTile(self, tile_pos, range):
+        return [entity for entity in self.getAllEntities() if entity.diagonalTo(tile_pos) <= range]
 
     def registerChange(self):
         self.changes_this_tick = True
