@@ -3,7 +3,7 @@ pygame.init()
 
 from screen import Screen
 # Create the screen
-ASPECT_RATIO = 2
+ASPECT_RATIO = 8/5
 RESOLUTION = 1600
 SCREEN = Screen(ASPECT_RATIO, RESOLUTION)
 
@@ -48,5 +48,5 @@ while running:
 pygame.quit()
 
 
-if False:#clean_close == False:
+if clean_close == False:
     from misc import closer
