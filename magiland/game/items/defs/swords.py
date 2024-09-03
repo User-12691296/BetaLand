@@ -46,7 +46,6 @@ class Sword(Item):
                     continue
                 
                 if entity in data["entities_hit"]:
-
                     continue
                     
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
@@ -56,30 +55,28 @@ class Sword(Item):
                     data["entities_hit"].append(entity)
                     # this sets do to false so it only hits once and then do to true so never again (till startSwing)
                     if self.recoil_once==False:
-                        player.damage(self.recoil)
-                        
+                        player.damage(self.recoil)                      
                         self.recoil_once=True
 
     def startSwing(self, data, player, world, tile_pos, tile):
-        player.setMovable(False)
-        # this resets it every time type shi
-        self.recoil_once=False
+        player.setMovable(False)    
         data["animations"].create("sword_swing", SWING_FRAMES, lambda: self.endSwing(data, player, world, tile_pos, tile))
-
         data["entities_hit"] = []
+
+         # this resets it every time type shi  
+        self.recoil_once=False
 
     def endSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(True)
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
-
         return True
 
 
 SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
-Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5, 0).addToGroup(SWORDS)
-Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3, 0).addToGroup(SWORDS)
-Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2, 0).addToGroup(SWORDS)
+Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
+Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
+Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
 Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
