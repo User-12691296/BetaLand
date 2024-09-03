@@ -39,13 +39,14 @@ class Map:
 
     def initBuffers(self):
         self.FULL_SIZE_BUFFERS = (self.total_size[0]//GAME.MAX_BUFFER_SIZE[0],
-                       self.total_size[1]//GAME.MAX_BUFFER_SIZE[1])
+                                self.total_size[1]//GAME.MAX_BUFFER_SIZE[1])
 
         right_edge_buffer_width = self.total_size[0]%GAME.MAX_BUFFER_SIZE[0]
         bottom_edge_buffer_height = self.total_size[1]%GAME.MAX_BUFFER_SIZE[1]
 
-        self.MAX_BUFFERS = (self.FULL_SIZE_BUFFERS[0] + 1 if right_edge_buffer_width else 0,
-                            self.FULL_SIZE_BUFFERS[1] + 1 if bottom_edge_buffer_height else 0)
+        # Put > 0 for buffer loading just in case the dimensions are multiples of 16 
+        self.MAX_BUFFERS = (self.FULL_SIZE_BUFFERS[0] + (1 if right_edge_buffer_width > 0 else 0),
+                            self.FULL_SIZE_BUFFERS[1] + (1 if bottom_edge_buffer_height > 0 else 0))
         
         self.loaded_buffers = np.empty((self.MAX_BUFFERS[1], self.MAX_BUFFERS[0]), dtype="bool")
 
@@ -57,16 +58,16 @@ class Map:
         right_edge_buffer_width = self.total_size[0]%GAME.MAX_BUFFER_SIZE[0]
         bottom_edge_buffer_height = self.total_size[1]%GAME.MAX_BUFFER_SIZE[1]
         
-        if buffer_loc[0] < self.MAX_BUFFERS[0]-1:
+        if buffer_loc[0] < self.MAX_BUFFERS[0]:
             width = GAME.MAX_BUFFER_SIZE[0]
 
-        if buffer_loc[0] == self.MAX_BUFFERS[0]-1:
+        if buffer_loc[0] == self.MAX_BUFFERS[0]:
             width = right_edge_buffer_width
 
-        if buffer_loc[1] < self.MAX_BUFFERS[1]-1:
+        if buffer_loc[1] < self.MAX_BUFFERS[1]:
             height = GAME.MAX_BUFFER_SIZE[1]
 
-        if buffer_loc[1] == self.MAX_BUFFERS[1]-1:
+        if buffer_loc[1] == self.MAX_BUFFERS[1]:
             height = bottom_edge_buffer_height
 
         return (width, height)
