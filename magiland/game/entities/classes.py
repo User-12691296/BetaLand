@@ -84,6 +84,9 @@ class Entity(events.EventAcceptor):
     
     def isEnemy(self):
         return False
+
+    def isEnemyTarget(self):
+        return False
     
     def kill(self):
         self.alive = False
@@ -131,6 +134,9 @@ class Creature(Entity):
         super().onSpawn()
 
     def isCreature(self):
+        return True
+
+    def isEnemyTarget(self):
         return True
 
     def getHealth(self):
@@ -247,6 +253,9 @@ class Enemy(Creature):
 
     def isEnemy(self):
         return True
+
+    def isEnemyTarget(self):
+        return False
     
     def movementTick(self):
         super().movementTick()

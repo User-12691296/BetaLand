@@ -28,8 +28,8 @@ class ItemEntity(Entity):
     def draw(self, surface):
         super().draw(surface)
 
-        pos = [*self.world.tilePosToBufferPos(self.pos)]
-        pos[0] -= GAME.TILE_SIZE//2
-        pos[1] -= GAME.TILE_SIZE//2
+        center = [*self.world.tilePosToBufferPos(self.pos)]
+
+        topleft = [coord + GAME.TILE_SIZE//2 for coord in center]
         
-        self.stack.drawAsStack(surface, pos)
+        self.stack.drawAsStack(surface, topleft)
