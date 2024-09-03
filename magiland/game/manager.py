@@ -15,7 +15,7 @@ class GameManager(events.Alpha):
     def __init__(self, screen_size):
         self.screen_size = screen_size
 
-        initialiseItems()
+        initialiseItems(ENTITY_CLASSES.ItemEntity)
         initialiseEntities()
         
         self.loadBgs()

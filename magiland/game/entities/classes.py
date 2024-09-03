@@ -37,6 +37,9 @@ class Entity(events.EventAcceptor):
     def setPos(self, pos):
         self.pos = pos
 
+    def collidesWith(self, pos):
+        return (self.pos[0] == pos[0] and self.pos[1] == pos[1])
+
     def distanceTo2(self, pos):
         return (self.pos[0]-pos[0])**2 + (self.pos[1]-pos[1])**2
 
@@ -70,6 +73,15 @@ class Entity(events.EventAcceptor):
     def isAlive(self):
         return self.alive
 
+    def isItemEntity(self):
+        return False
+
+    def isCreature(self):
+        return False
+
+    def isPlayer(self):
+        return False
+    
     def isEnemy(self):
         return False
     
@@ -117,6 +129,9 @@ class Creature(Entity):
 
     def onSpawn(self):
         super().onSpawn()
+
+    def isCreature(self):
+        return True
 
     def getHealth(self):
         return self.health

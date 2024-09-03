@@ -9,10 +9,11 @@ from . import registry
 from .classes import *
 
         
-def initialiseItems():
+def initialiseItems(item_entity_class):
     REGISTRY = registry.ItemRegistry()
     REGISTRY.loadAtlas()
 
     ItemStack.setRegistry(REGISTRY)
+    Inventory.setItemEntityClass(item_entity_class)
     
     registry.registerAllItems(REGISTRY)
