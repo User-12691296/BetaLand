@@ -16,6 +16,7 @@ IGNORE_TILE_VAL = "error"
 RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (0, 255):"grass",
            (255, 0):"barrier",
+           (15,15):"darkwall",
            (255, 21):"bloodstone",
            (255, 245): "sand",
            (255, 200): "sand2",

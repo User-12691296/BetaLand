@@ -55,7 +55,7 @@ class Sword(Item):
                     data["entities_hit"].append(entity)
                     # this sets do to false so it only hits once and then do to true so never again (till startSwing)
                     if self.player_damage_on_hit_once==False:
-                        player.damage(self.player_damage_on_hit)                      
+                        player.damage(self.player_damage_on_hit)                        
                         self.player_damage_on_hit_once=True
 
     def startSwing(self, data, player, world, tile_pos, tile):
@@ -80,3 +80,6 @@ Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
 Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
 Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
 Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
+Sword ("knightmare_scythe", "knightmare_scythe", 15,2,360,6,0.2).addToGroup(SWORDS)
+Sword ("ice_blade", "ice_blade", 5,2,75,4).addToGroup(SWORDS)
+Sword ("nature_cure", "nature_cure",3,0,90,3,-0.2).addToGroup(SWORDS)

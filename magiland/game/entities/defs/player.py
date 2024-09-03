@@ -28,7 +28,11 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
+        self.inventory.setItemStack(ItemStack("golf_club",1),1)
+        self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
+        self.inventory.setItemStack(ItemStack("ice_blade",1),3)
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
+        self.inventory.setItemStack(ItemStack("nature_cure",1),4)
 
     @staticmethod
     def getNeededAssets():
