@@ -179,6 +179,8 @@ class Inventory(events.EventAcceptor):
 
         self.item_stacks = [None] * self.size
 
+        self.thrown_stacks = []
+
     def setItemStack(self, stack, loc):
         self.item_stacks[loc] = stack
 
@@ -188,6 +190,10 @@ class Inventory(events.EventAcceptor):
         for stack_loc in range(self.size):
             if self.getItemStack(stack_loc) == None:
                 self.setItemStack(stack, stack_loc)
+                added = True
+                break
+
+            elif stack.stackWith(self.getItemStack(stack_loc)):
                 added = True
                 break
 
