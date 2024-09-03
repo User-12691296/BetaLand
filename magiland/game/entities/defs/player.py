@@ -28,7 +28,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
-        self.inventory.setItemStack(ItemStack("golf_club",1),1)
+        self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
 
     @staticmethod
     def getNeededAssets():
@@ -51,6 +51,11 @@ class Player(Creature):
     def damageTick(self):
         super().damageTick()
 
+        for entity in self.world.getEntitiesInRangeOfTile(self.pos, 2):
+            if entity.isItemEntity():
+                self.inventory.addItemStack(entity.stack)
+                entity.kill()
+            
         self.inventory.damageTick(self, self.world)
         
     def finalTick(self):
@@ -108,6 +113,8 @@ class Player(Creature):
             self.inventory.changeSelectedStack(1)
         if key == pygame.K_q:
             self.inventory.changeSelectedStack(-1)
+        if key == pygame.K_t:
+            self.inventory.throwSelectedStack(self.world, self.pos)
 
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input

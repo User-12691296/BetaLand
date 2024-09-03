@@ -1,7 +1,9 @@
 import pygame
+
 from misc.textures import TextureAtlas
 from misc import events
 from misc import animations
+
 from constants import GAME
 
 class Item(events.EventAcceptor):
@@ -169,6 +171,8 @@ class ItemStack:
         
 
 class Inventory(events.EventAcceptor):
+    ItemEntityClass = None
+    
     def __init__(self, size, width, grid_size):
         self.size = size
         self.width = width
@@ -181,10 +185,17 @@ class Inventory(events.EventAcceptor):
 
         self.thrown_stacks = []
 
+    @classmethod
+    def setItemEntityClass(cls, iecls):
+        cls.ItemEntityClass = iecls
+
     def setItemStack(self, stack, loc):
         self.item_stacks[loc] = stack
 
     def addItemStack(self, stack):
+        if stack == None:
+            return True
+        
         added = False
         
         for stack_loc in range(self.size):
@@ -197,8 +208,11 @@ class Inventory(events.EventAcceptor):
                 added = True
                 break
 
-        if not added:
-            self.active_stack = stack
+        if added:
+            return True
+        else:
+            self.thrown_stacks.append(stack)
+            return False
 
     def getItemStack(self, loc):
         return self.item_stacks[loc]
@@ -307,6 +321,9 @@ class Inventory(events.EventAcceptor):
                 stack.tick(player, world)
 
     def damageTick(self, player, world):
+        while self.thrown_stacks:
+            self.throwStack(world, player.pos, self.thrown_stacks.pop())
+            
         for stack in self.item_stacks:
             if stack:
                 stack.damageTick(player, world)
@@ -319,6 +336,17 @@ class Inventory(events.EventAcceptor):
     def close(self):
         self.addItemStack(self.active_stack)
         self.setActiveStack(None)
+
+    def throwStack(self, world, pos, stack):
+        stack_entity = self.ItemEntityClass(stack)
+        stack_entity.placeInWorld(world, pos, 5)
+
+    def throwStackInLoc(self, world, pos, stack_loc):
+        stack = self.getItemStack(stack_loc)
+        
+        if stack:
+            self.throwStack(world, pos, stack)
+            self.setItemStack(None, stack_loc)
 
     def draw(self, surface, topleft):
         for stack_loc in range(self.size):
@@ -359,6 +387,9 @@ class PlayerInventory(Inventory):
 
         sstack = self.getSelectedStack()
         if sstack: sstack.select()
+
+    def throwSelectedStack(self, world, pos):
+        self.throwStackInLoc(world, pos, self.selected_slot)
 
     def onMouseDown(self, pos, button, inv_pos):
         ipos = [pos[0], pos[1]]

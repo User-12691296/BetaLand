@@ -109,7 +109,6 @@ class Map:
         del self.buffers[buffer_loc]
 
     def getBufferAtLoc(self, buffer_loc):
-##            return self.buffers[buffer_loc[1]][buffer_loc[0]]
         return self.buffers.get(buffer_loc, None)
 
     def getBufferLoadIfUnloaded(self, buffer_loc):
