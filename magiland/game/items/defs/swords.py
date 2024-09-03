@@ -5,15 +5,15 @@ import math
 SWING_FRAMES = 10
 
 class Sword(Item):
-    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, recoil=0):
-        #recoil can be postive/negative for healing effect
+    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0):
+        #player_damage_on_hit can be postive/negative for healing effect
         super().__init__(itemid, tex_name, False, size)
 
         self.damage = damage
         self.swing_angle = swing_angle
-        # recoil stuff
-        self.recoil = recoil
-        self.recoil_once = False
+        # player_damage_on_hit stuff
+        self.player_damage_on_hit = player_damage_on_hit
+        self.player_damage_on_hit_once = False
         
         if not swing_range:
             self.swing_range = self.size + 2
@@ -54,9 +54,9 @@ class Sword(Item):
                     entity.damage(self.damage)
                     data["entities_hit"].append(entity)
                     # this sets do to false so it only hits once and then do to true so never again (till startSwing)
-                    if self.recoil_once==False:
-                        player.damage(self.recoil)                      
-                        self.recoil_once=True
+                    if self.player_damage_on_hit_once==False:
+                        player.damage(self.player_damage_on_hit)                      
+                        self.player_damage_on_hit_once=True
 
     def startSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(False)    
@@ -64,7 +64,7 @@ class Sword(Item):
         data["entities_hit"] = []
 
          # this resets it every time type shi  
-        self.recoil_once=False
+        self.player_damage_on_hit_once=False
 
     def endSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(True)
