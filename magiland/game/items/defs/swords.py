@@ -5,11 +5,13 @@ import math
 SWING_FRAMES = 10
 
 class Sword(Item):
-    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None):
+    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, recoil=0):
+        #recoil can be postive/negative for healing effect
         super().__init__(itemid, tex_name, False, size)
 
         self.damage = damage
         self.swing_angle = swing_angle
+        self.recoil = recoil
         
         if not swing_range:
             self.swing_range = self.size + 2
@@ -56,8 +58,15 @@ class Sword(Item):
 
         data["entities_hit"] = []
 
+        player.damage(self.recoil)
+
     def endSwing(self, data, player, world, tile_pos, tile):
         player.setMovable(True)
+
+        if data["entities_hit"]:
+            player.damage(0)
+        else:
+            player.damage(self.recoil * -1)
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
@@ -67,6 +76,7 @@ class Sword(Item):
 
 SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
-Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
-Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
-Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
+Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5, 0).addToGroup(SWORDS)
+Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3, 0).addToGroup(SWORDS)
+Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2, 0).addToGroup(SWORDS)
+Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
