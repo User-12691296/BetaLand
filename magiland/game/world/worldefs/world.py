@@ -250,7 +250,7 @@ class Map:
         self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
         self.fov_calc.calcFOV(origin)
 
-    def draw(self, surface, visible_rect, screen_rect=None):
+    def drawMap(self, surface, visible_rect, screen_rect=None):
         self.startBufferGC()
 
         area_visible = pygame.Rect((-visible_rect.left, -visible_rect.top),
@@ -260,15 +260,6 @@ class Map:
             area_visible.top = -screen_rect.top
             
         relevant_buffers = self.getRelevantBuffers(area_visible)
-        relevant_tiles = self.getRelevantTilesAsRect(area_visible)
-
-        visible_darkness = self.shown_tiles.T[relevant_tiles.left:relevant_tiles.right,
-                                            relevant_tiles.top:relevant_tiles.bottom]
-        black_darkness = np.array(visible_darkness, dtype=np.int16)*255
-        
-        view_blocking = pygame.surfarray.make_surface(black_darkness)
-        view_blocking = pygame.transform.scale_by(view_blocking, self.tile_size)
-        view_blocking.set_colorkey(255)
                     
         for buffer_loc in relevant_buffers:
             v_pos = self.bufferLocToVirtualPos(buffer_loc)
@@ -279,12 +270,29 @@ class Map:
                 surface.blit(self.getBufferLoadIfUnloaded(buffer_loc),
                                  (visible_rect.left+v_pos[0], visible_rect.top+v_pos[1]))
 
+        self.bufferGC()
+
+    def occlude(self, surface, visible_rect, screen_rect=None):
+        area_visible = pygame.Rect((-visible_rect.left, -visible_rect.top),
+                                                               visible_rect.size)
+        if screen_rect:
+            area_visible.left = -screen_rect.left
+            area_visible.top = -screen_rect.top
+
+        relevant_tiles = self.getRelevantTilesAsRect(area_visible)
+
+        visible_darkness = self.shown_tiles.T[relevant_tiles.left:relevant_tiles.right,
+                                            relevant_tiles.top:relevant_tiles.bottom]
+        black_darkness = np.array(visible_darkness, dtype=np.int16)*255
+
+        view_blocking = pygame.surfarray.make_surface(black_darkness)
+        view_blocking = pygame.transform.scale_by(view_blocking, self.tile_size)
+        view_blocking.set_colorkey(255)
+
         tile_topleft = self.world.tilePosToBufferPos(relevant_tiles.topleft)
         pos_delta = (-area_visible.left+tile_topleft[0], -area_visible.top+tile_topleft[1])
         surface.blit(view_blocking, (pos_delta))
 
-        self.bufferGC()
-            
 
 class World(events.EventAcceptor):
     TILE_SIZE = (GAME.TILE_SIZE, GAME.TILE_SIZE)
@@ -407,11 +415,14 @@ class World(events.EventAcceptor):
         # Inside map
         border_check = (tile_pos[0] >= 0 and tile_pos[1] >= 0) and \
                        (tile_pos[0] < self.size[0] and tile_pos[1] < self.size[1])
+        
         # If elevations are valid
         elev_check = (self.getTileElevation(tile_pos) - curelev) <= self.WALKING_TILE_ELEV_DELTA
 
         # Can't walk over entities
-        return elev_check
+        entity_check = len(self.getEntitiesOnTile(tile_pos)) == 0
+        
+        return border_check and elev_check and entity_check
 
     def getTileRect(self, tile_pos):
         rect = pygame.Rect(self.tilePosToBufferPos(tile_pos),
@@ -542,11 +553,13 @@ class World(events.EventAcceptor):
         map_visible = pygame.Rect(visible_rect)
         map_visible.left += self.moving_anim_delta[0]
         map_visible.top += self.moving_anim_delta[1]
-        self.map.draw(surface, map_visible, visible_rect)
+        self.map.drawMap(surface, map_visible, visible_rect)
         
         visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)
 
         for entity in self.entities:
-            entity.draw(visible_world)
+            entity.draw(visible_world)        
 
         surface.blit(visible_world, map_visible.topleft)
+
+        self.map.occlude(surface, map_visible, visible_rect)

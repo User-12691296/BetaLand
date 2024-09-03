@@ -56,7 +56,7 @@ class Entity(events.EventAcceptor):
 
     @staticmethod
     def getNeededAssets():
-        return tuple()
+        return []
 
     # All entities of the same class share the same textures, but are loaded in different places
     @classmethod
@@ -230,6 +230,9 @@ class Enemy(Creature):
     def calcPath(self):
         self.pathfinder.calcPath(self.getPos(), self.world.getPlayer().getPos())
 
+    def isEnemy(self):
+        return True
+    
     def movementTick(self):
         super().movementTick()
 
