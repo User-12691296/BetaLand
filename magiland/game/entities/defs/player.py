@@ -41,6 +41,9 @@ class Player(Creature):
     def setManager(self, manager):
         self.manager = manager
 
+    def isPlayer(self):
+        return True
+
     def tick(self):
         super().tick()
 
@@ -140,13 +143,13 @@ class Player(Creature):
         bpos = self.getBufferPos()
         return (-bpos[0], -bpos[1])
 
-    def draw(self, surface):
+    def draw(self, display):
         # Draw player sprite
         pos = self.manager.bufferPosToScreenPos(self.getBufferPos())
-        self.atlas.drawTexture(surface, pos, "player1")
+        self.atlas.drawTexture(display, pos, "player1")
 
         # Draw GUI
-        self.hud.draw(surface)
+        self.hud.draw(display)
 
 class PlayerHUD(events.EventAcceptor):
     HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))

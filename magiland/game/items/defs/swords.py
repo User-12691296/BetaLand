@@ -23,8 +23,6 @@ class Sword(Item):
 
     def initData(self):
         data = super().initData()
-
-        data["dps"] = 3
         
         return data
 
@@ -53,17 +51,17 @@ class Sword(Item):
                 if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
                     entity.damage(self.damage)
                     data["entities_hit"].append(entity)
-                    # this sets do to false so it only hits once and then do to true so never again (till startSwing)
+
                     if self.player_damage_on_hit_once==False:
-                        player.damage(self.player_damage_on_hit)                        
+                        player.damage(self.player_damage_on_hit)
                         self.player_damage_on_hit_once=True
 
     def startSwing(self, data, player, world, tile_pos, tile):
-        player.setMovable(False)    
+        player.setMovable(False)
+        
         data["animations"].create("sword_swing", SWING_FRAMES, lambda: self.endSwing(data, player, world, tile_pos, tile))
         data["entities_hit"] = []
 
-         # this resets it every time type shi  
         self.player_damage_on_hit_once=False
 
     def endSwing(self, data, player, world, tile_pos, tile):

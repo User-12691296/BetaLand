@@ -549,17 +549,19 @@ class World(events.EventAcceptor):
         self.moving_anim_delta[0] += (self.moving_anim_direction[0]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
         self.moving_anim_delta[1] += (self.moving_anim_direction[1]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
 
-    def draw(self, surface, visible_rect):
-        map_visible = pygame.Rect(visible_rect)
-        map_visible.left += self.moving_anim_delta[0]
-        map_visible.top += self.moving_anim_delta[1]
-        self.map.drawMap(surface, map_visible, visible_rect)
-        
-        visible_world = pygame.Surface(visible_rect.size, pygame.SRCALPHA)
+    def draw(self, display, visible_rect):
+        # Adjust for smooth motion animation
+        world_visible = pygame.Rect(visible_rect)
+        world_visible.left += self.moving_anim_delta[0]
+        world_visible.top += self.moving_anim_delta[1]
 
-        for entity in self.entities:
-            entity.draw(visible_world)        
+        # Map
+        self.map.drawMap(display, world_visible, visible_rect)
 
-        surface.blit(visible_world, map_visible.topleft)
+        # Entities
+        for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 12):
+            if not entity.isPlayer():
+                entity.draw(display, world_visible.topleft)
 
-        self.map.occlude(surface, map_visible, visible_rect)
+        # FOV
+        self.map.occlude(display, world_visible, visible_rect)
