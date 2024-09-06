@@ -33,4 +33,5 @@ class DeepDarkLevel(World):
         
         super().__init__(ALL_TILES) """
 
-LOADABLE_WORLDS = (Overworld, Level1, DeepDarkLevel)
+# LOADABLE_WORLDS = (Overworld, Level1, CrystalLevel, DeepDarkLevel)
+LOADABLE_WORLDS = (Overworld, Level1)
