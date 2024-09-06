@@ -17,4 +17,20 @@ class Level1(World):
         
         super().__init__(ALL_TILES)
 
-LOADABLE_WORLDS = (Overworld, Level1)
+""" class CrystalLevel(World):
+    world_name = "crystal_level"
+    
+    def __init__(self):
+        self.world_name = "crystal_level"
+        
+        super().__init__(ALL_TILES) 
+        
+class DeepDarkLevel(World):
+    world_name = "deep_dark_level"
+    
+    def __init__(self):
+        self.world_name = "deep_dark_level"
+        
+        super().__init__(ALL_TILES) """
+
+LOADABLE_WORLDS = (Overworld, Level1, DeepDarkLevel)
