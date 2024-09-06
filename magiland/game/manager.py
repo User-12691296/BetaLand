@@ -90,6 +90,8 @@ class GameManager(events.Alpha):
         self.first_tick()
 
     def onKeyDown(self, key, unicode, mod):
+        global WORLD_SET, WORLD_COUNTER
+
         if key == pygame.K_SPACE:
             WORLD_SET[WORLD_COUNTER].pop(1)
             WORLD_SET[WORLD_COUNTER].append(self.player.getPos())
@@ -98,8 +100,8 @@ class GameManager(events.Alpha):
             self.changeWorld(WORLD_SET[WORLD_COUNTER][0])
             self.player.setPos(WORLD_SET[WORLD_COUNTER][1])
             
-            if WORLD_COUNTER == len(WORLD_SET):
-                WORLD_COUNTER = 0 # Reset the counter
+            if WORLD_COUNTER == len(WORLD_SET)-1:
+                WORLD_COUNTER = -1 # Reset the counter
 
             return
         
