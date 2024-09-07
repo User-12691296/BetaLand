@@ -25,11 +25,12 @@ class ItemEntity(Entity):
 
         world.addEntity(self)
 
-    def draw(self, surface):
-        super().draw(surface)
+    def draw(self, display, display_topleft=(0, 0)):
+        super().draw(display, display_topleft)
 
-        center = [*self.world.tilePosToBufferPos(self.pos)]
+        bcenter = self.world.tilePosToBufferPos(self.pos)
+        dcenter = self.bufferPosToDisplayPos(bcenter, display_topleft)
 
-        topleft = [coord + GAME.TILE_SIZE//2 for coord in center]
+        dtopleft = [coord + GAME.TILE_SIZE//2 for coord in dcenter]
         
-        self.stack.drawAsStack(surface, topleft)
+        self.stack.drawAsStack(display, dtopleft)

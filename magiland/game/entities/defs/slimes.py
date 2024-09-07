@@ -14,10 +14,13 @@ class Slime(Enemy):
             if entity.isEnemyTarget():
                 entity.damage(0.1)
 
-    def draw(self, surface):
-        super().draw(surface)
+    def draw(self, display, display_topleft=(0, 0)):
+        super().draw(display, display_topleft)
+
+        bpos = self.world.tilePosToBufferPos(self.pos)
+        spos = self.bufferPosToDisplayPos(bpos, display_topleft)
         
-        self.atlas.drawTexture(surface, self.world.tilePosToBufferPos(self.pos), "slime")
+        self.atlas.drawTexture(display, spos, "slime")
 
 
 SLIMES = []

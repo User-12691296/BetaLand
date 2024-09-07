@@ -15,6 +15,7 @@ BasicTile("snow", "snow").addTileToList(OVERWORLD_TILES)
 BasicTile("snow2", "snow2", False).addTileToList(OVERWORLD_TILES)
 BasicTile("swamp", "swamp").addTileToList(OVERWORLD_TILES)
 BasicTile("deepdark", "deepdark", False).addTileToList(OVERWORLD_TILES)
+BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
 

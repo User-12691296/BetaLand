@@ -114,8 +114,12 @@ class Entity(events.EventAcceptor):
     def movementTick(self): pass
     def damageTick(self): pass
     def finalTick(self): pass
+
+    @staticmethod
+    def bufferPosToDisplayPos(bpos, display_topleft):
+        return (bpos[0] + display_topleft[0], bpos[1] + display_topleft[1])
     
-    def draw(self, surface): pass
+    def draw(self, display, display_topleft=(0, 0)): pass
 
 class Creature(Entity):
     def __init__(self, health, size=(1, 1)):
@@ -206,24 +210,27 @@ class Creature(Entity):
     def calcDamageModifiers(self, damage, dtt=0):
         return (damage/(2**dtt))
 
-    def draw(self, surface):
-        self.drawHealthBar(surface)
+    def draw(self, display, display_topleft=(0, 0)):
+        super().draw(display)
+        
+        self.drawHealthBar(display, display_topleft)
 
-    def drawHealthBar(self, surface):
+    def drawHealthBar(self, display, display_topleft=(0, 0)):
         width = GAME.TILE_SIZE
         health_bar = pygame.Rect((0, 0), (width, 10))
 
         bpos = self.world.tilePosToBufferPos(self.getPos())
+        spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        health_bar.left = bpos[0]
-        health_bar.top = bpos[1] - 20
+        health_bar.left = spos[0]
+        health_bar.top = spos[1] - 20
 
         # Background
-        pygame.draw.rect(surface, (255, 0, 0), health_bar)
+        pygame.draw.rect(display, (255, 0, 0), health_bar)
 
         # Foreground
         health_bar.width = round(width*self.getHealthPercentage())
-        pygame.draw.rect(surface, (0, 255, 0), health_bar)
+        pygame.draw.rect(display, (0, 255, 0), health_bar)
 
 
 class Enemy(Creature):
