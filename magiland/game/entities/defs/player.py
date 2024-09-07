@@ -33,6 +33,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("ice_blade",1),3)
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
         self.inventory.setItemStack(ItemStack("nature_cure",1),4)
+        self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
 
     @staticmethod
     def getNeededAssets():
