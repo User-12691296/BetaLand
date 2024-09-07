@@ -5,6 +5,7 @@ from .crystalenemies import CRYSTALGOLEMS, CrystalGolem, CRYSTALKNIGHTS, Crystal
 from .swampenemies import SWAMPANACONDAS, SwampAnaconda, SWAMPOTTERS, SwampOtter, SWAMPTANGLERS, SwampTangler, SWAMPSLIMES, SwampSlime
 from .dessertenemies import DESSERTKNIGHTS, DessertKnight, DESSERTSLIMES, DessertSlime, DESSERTSANDWURMS, DessertSandWurm, DESSERTRAIDERS, DessertRaider
 from .frozenenemies import FROZENKNIGHTS, FrozenKnight, FROZENSLIMES, FrozenSlime, FROZENTROLLS, FrozenTroll, FROZENPUFFERS, FrozenPuffer
+from .mountainenemies import MOUNTAINGOLEMS, MountainGolem, MOUNTAINSLIMES, MountainSlime, MOUNTAINEAGLES, MountainEagle, MOUNTAINGOATS, MountainGoat, MOUNTAINTROLLS, MountainTroll
 from .item import ItemEntity
 
 ALL_ENTITY_CLASSES = []
@@ -39,3 +40,10 @@ ALL_ENTITY_CLASSES += FROZENKNIGHTS
 ALL_ENTITY_CLASSES += FROZENSLIMES
 ALL_ENTITY_CLASSES += FROZENTROLLS
 ALL_ENTITY_CLASSES += FROZENPUFFERS
+
+# Add mountain enemies to a group of enemies
+ALL_ENTITY_CLASSES += MOUNTAINGOLEMS
+ALL_ENTITY_CLASSES += MOUNTAINSLIMES
+ALL_ENTITY_CLASSES += MOUNTAINEAGLES
+ALL_ENTITY_CLASSES += MOUNTAINGOATS
+ALL_ENTITY_CLASSES += MOUNTAINTROLLS
