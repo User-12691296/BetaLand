@@ -4,6 +4,7 @@ from .blob import BLOBS, Blob
 from .crystalenemies import CRYSTALGOLEMS, CrystalGolem, CRYSTALKNIGHTS, CrystalKnight, CRYSTALSCORPIONS, CrystalScorpion, CRYSTALSIMES, CrystalSlime
 from .swampenemies import SWAMPANACONDAS, SwampAnaconda, SWAMPOTTERS, SwampOtter, SWAMPTANGLERS, SwampTangler, SWAMPSLIMES, SwampSlime
 from .dessertenemies import DESSERTKNIGHTS, DessertKnight, DESSERTSLIMES, DessertSlime, DESSERTSANDWURMS, DessertSandWurm, DESSERTRAIDERS, DessertRaider
+from .frozenenemies import FROZENKNIGHTS, FrozenKnight, FROZENSLIMES, FrozenSlime, FROZENTROLLS, FrozenTroll, FROZENPUFFERS, FrozenPuffer
 from .item import ItemEntity
 
 ALL_ENTITY_CLASSES = []
@@ -32,3 +33,9 @@ ALL_ENTITY_CLASSES += DESSERTKNIGHTS
 ALL_ENTITY_CLASSES += DESSERTSLIMES
 ALL_ENTITY_CLASSES += DESSERTSANDWURMS
 ALL_ENTITY_CLASSES += DESSERTRAIDERS
+
+# Add frozen enemies to a group of enemies
+ALL_ENTITY_CLASSES += FROZENKNIGHTS
+ALL_ENTITY_CLASSES += FROZENSLIMES
+ALL_ENTITY_CLASSES += FROZENTROLLS
+ALL_ENTITY_CLASSES += FROZENPUFFERS
