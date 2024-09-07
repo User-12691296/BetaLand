@@ -9,9 +9,12 @@ class Slime(Enemy):
     def getNeededAssets():
         return ["slime"]
 
+    def isEnemy(self):
+        return True
+
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
-            if entity.isEnemyTarget():
+            if not entity.isEnemy():
                 entity.damage(0.1)
 
     def draw(self, surface):
