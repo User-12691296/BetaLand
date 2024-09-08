@@ -6,6 +6,6 @@ class DarkSandTile(BasicTile):
         super().__init__("sand2", "darksand", False)
 
     def onRight(self, world, tile_pos):
-        blob = ENTITY_CLASSES.Blob()
-        blob.setPos(tile_pos)
-        world.addEntity(blob)
+        FrozenKnight = ENTITY_CLASSES.FrozenKnight()
+        FrozenKnight.setPos(tile_pos)
+        world.addEntity(FrozenKnight)
