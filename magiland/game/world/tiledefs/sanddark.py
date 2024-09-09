@@ -1,9 +1,9 @@
 from .basic import BasicTile
 from ...entities import ENTITY_CLASSES
 
-class DarkSandTile(BasicTile):
+class SandDarkTile(BasicTile):
     def __init__(self):
-        super().__init__("sand2", "darksand", False)
+        super().__init__("sanddark", "sanddark", False)
 
     def onRight(self, world, tile_pos):
         FrozenKnight = ENTITY_CLASSES.FrozenKnight()
