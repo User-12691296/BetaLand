@@ -29,7 +29,8 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (160, 200): "snow2",
            (150, 150): "swamp",
            (150, 0): "swampaccent",
-           (0, 150): "swampwater"}
+           (0, 150): "swampwater",
+           (50, 50): "mountain"}
 
 
 with open(LEVELS_PATH, "r") as levels_file:

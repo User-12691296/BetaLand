@@ -22,6 +22,7 @@ BasicTile("swampaccent", "swampaccent").addTileToList(OVERWORLD_TILES)
 BasicTile("swampwater", "swampwater").addTileToList(OVERWORLD_TILES)
 BasicTile("deepdark", "deepdark", False).addTileToList(OVERWORLD_TILES)
 BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
+BasicTile("mountain", "mountain").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
 
