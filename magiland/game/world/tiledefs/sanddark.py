@@ -1,7 +1,7 @@
 from .basic import BasicTile
 from ...entities import ENTITY_CLASSES
 
-class DarkSandTile(BasicTile):
+class SandDarkTile(BasicTile):
     def __init__(self):
         super().__init__("sanddark", "sanddark", False)
 
