@@ -98,6 +98,22 @@ class Player(Creature):
             self.move(( 1,  0))
             moved = True
 
+
+        ##DEBUG
+        if pressed[pygame.K_i]:
+            self.move(( 0, -10))
+            moved = True
+        if pressed[pygame.K_j]:
+            self.move((-10,  0))
+            moved = True
+        if pressed[pygame.K_k]:
+            self.move(( 0,  10))
+            moved = True
+        if pressed[pygame.K_l]:
+            self.move(( 10,  0))
+            moved = True
+        ##
+
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
             return

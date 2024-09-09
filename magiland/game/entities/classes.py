@@ -4,7 +4,6 @@ import math
 import os
 
 from misc import events
-from misc.textures import TextureAtlas, getAllXFilesInFolder
 from ..items import PlayerInventory, Inventory, ItemStack
 from .pathfinding import PathFinder
 
