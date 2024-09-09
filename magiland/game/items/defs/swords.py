@@ -38,42 +38,26 @@ class Sword(Item):
         data["rot"] = data["rot"] % 360
 
 
-##        if data["animations"].exists("sword_swing"):
-##            for entity in world.getEntitiesInRangeOfTile(player.pos, self.swing_range):
-##                if entity == player:
-##                    continue
-##                
-##                if entity in data["entities_hit"]:
-##                    continue
-##                    
-##                angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
-##
-##                if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
-##                    entity.damage(self.damage)
-##                    data["entities_hit"].append(entity)
-        
         if data["animations"].exists("sword_swing"):
             for entity in world.getEntitiesInRangeOfTile(player.pos, self.swing_range):
                 if entity == player:
                     continue
-            
+                
                 if entity in data["entities_hit"]:
                     continue
+                    
+                angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
-                angle_to = math.degrees(math.atan2(entity.pos[1] - player.pos[1], entity.pos[0] - player.pos[0])) % 360
+                if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
+                    entity.damage(self.damage)
+                    data["entities_hit"].append(entity)
 
-                swing_start = (data["rot"] - delta + 45) % 360
-                swing_end = (data["rot"] + 45) % 360
-
-                if swing_start <= swing_end:
-                    if swing_start <= angle_to < swing_end:
-                        entity.damage(self.damage)
-                        data["entities_hit"].append(entity)
                 else:
-                    if angle_to >= swing_start or angle_to < swing_end:
+                    if (angle_to >= data["rot"] - delta + 45) or (angle_to < data["rot"] + 45):
+                        print("Hit detected!")
                         entity.damage(self.damage)
                         data["entities_hit"].append(entity)
-
+                            
 
 
     def startSwing(self, data, player, world, tile_pos, tile):
