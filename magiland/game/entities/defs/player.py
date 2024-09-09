@@ -34,6 +34,12 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
         self.inventory.setItemStack(ItemStack("nature_cure",1),4)
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
+        self.inventory.setItemStack(ItemStack("wood_mace",1),18)
+        self.inventory.setItemStack(ItemStack("stone_mace",1),19)
+        self.inventory.setItemStack(ItemStack("cosmic_mace",1),20)
+        self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
+        self.inventory.setItemStack(ItemStack("lava_mace",1),22)
+        self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
 
     @staticmethod
     def getNeededAssets():

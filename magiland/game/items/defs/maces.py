@@ -1,20 +1,18 @@
-## old test file
+from .swords import Sword
+from misc import animations
+import math
 
-##from .swords import Sword
-##from misc import animations
-##import math
-##
-##SWING_FRAMES = 10
-##
-##class Board(Sword):
-##
+SWING_FRAMES = 10
+
+class Mace(Sword):pass
+
 ##        #the only problem here is if you spam then it kills you lol
 ##    def startSwing(self, data, player, world, tile_pos, tile):
 ##        super().startSwing(data, player, world, tile_pos, tile)
 ##        #if data entity is hit (anything is hit), if statement runs
 ##        player.damage(1)
 ##
-####    #this is logic error, runs for the whole swing so it does 10x damage (every tick)
+####    this is logic error, runs for the whole swing so it does 10x damage (every tick)
 ####    def damageTick(self, data, player, world):
 ####        super().damageTick(data, player, world)
 ####        if data["entities_hit"]:
@@ -28,11 +26,17 @@
 ##            player.damage(0)
 ##        else:
 ##            player.damage(-1)
-##
-## 
-##
-##
-##BOARDS = []
-##Board("debug_sword", "sword", 1000, 2).addToGroup(BOARDS)
-##Board("golf_club", "golf_club", 20, 0, 300, 5).addToGroup(BOARDS)
-##
+
+ 
+
+
+MACES = []
+Mace("debug_sword", "sword", 1000, 2).addToGroup(MACES)
+Mace("wood_mace", "wood_mace", 20, 0, 300, 5).addToGroup(MACES)
+Mace("stone_mace", "stone_mace", 20, 0, 300, 5).addToGroup(MACES)
+Mace("kr1stal_mace", "kr1stal_mace", 20, 1, 300, 5).addToGroup(MACES)
+Mace("lava_mace", "lava_mace", 20, 1, 300, 5).addToGroup(MACES)
+Mace("celestial_mace", "celestial_mace", 20, 2, 300, 5).addToGroup(MACES)
+Mace("cosmic_mace", "cosmic_mace", 20, 2, 300, 5).addToGroup(MACES)
+
+
