@@ -1,13 +1,13 @@
 from .basic import BasicTile
 from .grass import GrassTile
 from .barrier import BarrierTile
-from .darksand import DarkSandTile
+from .sanddark import SandDarkTile
 
 
 OVERWORLD_TILES = []
 GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
-DarkSandTile().addTileToList(OVERWORLD_TILES)
+SandDark().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("sandlight", "sandlight").addTileToList(OVERWORLD_TILES)
