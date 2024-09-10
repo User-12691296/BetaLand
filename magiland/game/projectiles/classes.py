@@ -13,6 +13,8 @@ class Projectile(events.EventAcceptor):
         self.angle = angle
         self.speed = speed
 
+        self.pos = start
+
     @classmethod
     def fromStartEnd(self, start, end, speed):
         tx = end[0] - start[0]
@@ -21,11 +23,26 @@ class Projectile(events.EventAcceptor):
 
         return cls(start, angle, speed)
 
-    def getMovement(self):
+    def setWorld(self, world):
+        self.world = world
+
+    def move(self, delta):
+        self.pos[0] += delta[0]
+        self.pos[1] += delta[1]
+
+    def getMovementDelta(self):
         dx = self.speed * math.cos(self.angle)
         dy = self.speed * math.sin(self.angle)
 
         return (dx, dy)
 
-    def draw(self):
-        
+    def tick(self): pass
+
+    def movementTick(self):
+        delta = self.getMovementDelta()
+        self.move(delta)
+
+    def damageTick(self): pass
+    def finalTick(self): pass
+
+    def draw(self, surface): pass
