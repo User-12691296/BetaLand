@@ -1,0 +1,5 @@
+from .lasershots import *
+
+ALL_PROJECTILE_CLASSES = []
+
+ALL_PROJECTILE_CLASSES += LASERSHOTS

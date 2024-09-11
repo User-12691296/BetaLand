@@ -1,12 +1,12 @@
 from .player import Player
-from .slimes import SLIMES, Slime
-from .blob import BLOBS, Blob
-from .crystalenemies import CRYSTALGOLEMS, CrystalGolem, CRYSTALKNIGHTS, CrystalKnight, CRYSTALSCORPIONS, CrystalScorpion, CRYSTALSIMES, CrystalSlime
-from .swampenemies import SWAMPANACONDAS, SwampAnaconda, SWAMPOTTERS, SwampOtter, SWAMPTANGLERS, SwampTangler, SWAMPSLIMES, SwampSlime
-from .dessertenemies import DESSERTKNIGHTS, DessertKnight, DESSERTSLIMES, DessertSlime, DESSERTSANDWURMS, DessertSandWurm, DESSERTRAIDERS, DessertRaider
-from .frozenenemies import FROZENKNIGHTS, FrozenKnight, FROZENSLIMES, FrozenSlime, FROZENTROLLS, FrozenTroll, FROZENPUFFERS, FrozenPuffer
-from .mountainenemies import MOUNTAINGOLEMS, MountainGolem, MOUNTAINSLIMES, MountainSlime, MOUNTAINEAGLES, MountainEagle, MOUNTAINGOATS, MountainGoat, MOUNTAINTROLLS, MountainTroll
-from .darknessenemies import DARKNESSGHOSTS, DarknessGhost, DARKNESSGRAVETRAPPERS, DarknessGraveTrapper, DARKNESSJUMPSCARES, DarknessJumpscare, DARKNESSKNIGHTMARE1, DarknessKnightmare1, DARKNESSKNIGHTMARE2, DarknessKnightmare2, DARKNESSSPREADERS, DarknessSpreader
+from .slimes import *
+from .blob import *
+from .crystalenemies import *
+from .swampenemies import *
+from .dessertenemies import *
+from .frozenenemies import *
+from .mountainenemies import *
+from .darknessenemies import *
 from .item import ItemEntity
 
 ALL_ENTITY_CLASSES = []

@@ -322,6 +322,8 @@ class World(events.EventAcceptor):
 
         self.entities = []
 
+        self.projectiles = []
+
         self.first_tick = True
         self.changes_this_tick = False
 
@@ -482,6 +484,13 @@ class World(events.EventAcceptor):
     def getEntitiesInDiagToTile(self, tile_pos, range):
         return [entity for entity in self.getAllEntities() if entity.diagonalTo(tile_pos) <= range]
 
+    def addProjectile(self, projectile):
+        self.projectiles.append(projectile)
+        projectile.setWorld(self)
+
+    def killProjectile(self, projectile):
+        self.projectiles.remove(projectile)
+        
     def registerChange(self):
         self.changes_this_tick = True
 
@@ -492,6 +501,9 @@ class World(events.EventAcceptor):
             entity.setOpaques(self.opaques)
             entity.tick()
 
+        for projectile in self.projectiles:
+            projectile.tick()
+
         self.changes_this_tick = self.first_tick
 
         self.moving_anim_delta = [0, 0]
@@ -500,18 +512,28 @@ class World(events.EventAcceptor):
         for entity in self.entities:
             entity.movementTick()
 
+        for projectile in self.projectiles:
+            projectile.movementTick()
+
         if self.changes_this_tick:
             self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
 
     def damageTick(self):
         for entity in self.entities:
             entity.damageTick()
+
+        for projectile in self.projectiles:
+            projectile.damageTick()
     
     def finalTick(self):
         for entity in self.entities:
             entity.finalTick()
 
+        for projectile in self.projectiles:
+            projectile.finalTick()
+
         self.cullDeadEntities()
+        self.cullDeadProjectiles()
 
         if GAME.SMOOTH_PLAYER_MOTION:
             self.updateMovingAnimation()
@@ -520,6 +542,9 @@ class World(events.EventAcceptor):
 
     def cullDeadEntities(self):
         self.entities = [entity for entity in self.entities if entity.isAlive()]
+
+    def cullDeadProjectiles(self):
+        self.projectiles = [projectile for projectile in self.projectiles if projectile.exists(self.player.getPos())]
         
     def onMouseDown(self, mouse_pos, button):
         world_pos = self.bufferPosToTilePos(mouse_pos)
@@ -536,8 +561,11 @@ class World(events.EventAcceptor):
     def bufferPosToTilePos(self, bpos):
         return (int(bpos[0]//self.TILE_SIZE[0]), int(bpos[1]//self.TILE_SIZE[1]))
     
-    def tilePosToBufferPos(self, wpos):
-        return (wpos[0]*self.TILE_SIZE[0], wpos[1]*self.TILE_SIZE[1])
+    def tilePosToBufferPos(self, tpos):
+        return (tpos[0]*self.TILE_SIZE[0], tpos[1]*self.TILE_SIZE[1])
+
+    def tilePosToBufferPosOfCenter(self, tpos):
+        return (tpos[0]*self.TILE_SIZE[0] + self.TILE_SIZE[0]//2, tpos[1]*self.TILE_SIZE[1] + self.TILE_SIZE[1]//2)
 
     def setMovingAnimation(self, direction, get_frame):
         self.moving_anim_direction = direction
@@ -557,6 +585,10 @@ class World(events.EventAcceptor):
 
         # Map
         self.map.drawMap(display, world_visible, visible_rect)
+
+        # Projectiles
+        for projectile in self.projectiles:
+            projectile.draw(display, world_visible.topleft)
 
         # Entities
         for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 12):

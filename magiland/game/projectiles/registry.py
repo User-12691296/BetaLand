@@ -10,8 +10,8 @@ def initialiseProjectiles():
     REGISTRY.loadAtlas()
 
 def registerAllProjectiles():
-    for projectile_class in ALL_PROJECTILES_CLASSES:
-        REGISTERY.registerProjectileClass(projectile_class)
+    for projectile_class in ALL_PROJECTILE_CLASSES:
+        REGISTRY.registerProjectileClass(projectile_class)
 
 class ProjectileRegistry:
     def __init__(self):
@@ -37,11 +37,11 @@ class ProjectileRegistry:
         if not self._atlas_loaded:
             raise RuntimeError("Entity registry texture atlas not loaded yet")
         
-        for entity in self.projectile_classes:
-            entity.setAtlas(self.atlas)
+        for projectile_class in self.projectile_classes:
+            projectile_class.setAtlas(self.atlas)
 
     def registerProjectileClass(self, projectile):
-        self.projectile_classes.append(entity)
+        self.projectile_classes.append(projectile)
         
         assets = projectile.getNeededAssets()
         self.assets_needed += assets
