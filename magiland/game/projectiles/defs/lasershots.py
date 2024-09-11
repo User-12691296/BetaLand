@@ -4,7 +4,7 @@ class CrystalLaserShot(Projectile):
     def __init__(self, start, angle):
         super().__init__(start, angle)
 
-        self.speed = 0.2
+        self.speed = 0.4
 
     @classmethod
     def fromStartEnd(cls, start, end):
@@ -19,7 +19,7 @@ class CrystalLaserShot(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(0.4)
+                entity.damage(1)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):

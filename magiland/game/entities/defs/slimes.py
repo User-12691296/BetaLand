@@ -11,7 +11,7 @@ class Slime(Enemy):
         return ["slime"]
 
     def damageTick(self):
-        if self.world.player.diagonalTo(self.pos) <= 6 and not self.isCooldownActive("lasershot"):
+        if self.world.player.diagonalTo(self.pos) <= 8 and not self.isCooldownActive("lasershot"):
             lasershot = PROJECTILE_CLASSES.CrystalLaserShot.fromStartEnd(self.pos, self.world.player.getPos())
             lasershot.giveImmunity(self)
             self.world.addProjectile(lasershot)
