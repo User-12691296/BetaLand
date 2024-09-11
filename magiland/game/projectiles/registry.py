@@ -24,7 +24,7 @@ class ProjectileRegistry:
     def loadAtlas(self):
         self.atlas = TextureAtlas(os.path.join(ASSETS, "projectiles"),
                                   ".png",
-                                  (32, 32),
+                                  (48, 48),
                                   self.assets_needed,
                                   True,
                                   True)

@@ -46,6 +46,4 @@ class EntityRegistry:
         assets = entity.getNeededAssets()
         self.assets_needed += assets
 
-        print("Registering", entity, self.entity_classes, assets)
-
 REGISTRY = EntityRegistry()
