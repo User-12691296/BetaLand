@@ -51,12 +51,6 @@ class Sword(Item):
                 if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
                     entity.damage(self.damage)
                     data["entities_hit"].append(entity)
-
-                else:
-                    if (angle_to >= data["rot"] - delta + 45) or (angle_to < data["rot"] + 45):
-                        print("Hit detected!")
-                        entity.damage(self.damage)
-                        data["entities_hit"].append(entity)
                             
 
 
@@ -82,7 +76,7 @@ Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
 Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
 Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
 Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
-Sword ("knightmare_scythe", "knightmare_scythe", 15,2,360,6,0.2).addToGroup(SWORDS)
+Sword ("knightmare_scythe", "knightmare_scythe", 15, 2, 360, 6, 0.2).addToGroup(SWORDS)
 Sword ("ice_blade", "ice_blade", 5, 2, 75, 4).addToGroup(SWORDS)
 Sword ("nature_cure", "nature_cure", 3, 0, 90, 3, -0.2).addToGroup(SWORDS)
 Sword("sanguine_slasher","sanguine_slasher", 30, 1, 120, 4, 2).addToGroup(SWORDS)
