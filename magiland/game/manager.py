@@ -12,7 +12,7 @@ ASSETS = os.path.join("assets", "game")
 
 DEFAULT_WORLD = "overworld"
 # WORLD_SET = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["maze_level", [1,1]], ["level_3", [1,1]]]
-WORLD_SET = [["overworld", [1,1]], ["level_1", [1,1]]]
+WORLD_SET = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["level_3", [100,10]]]
 WORLD_COUNTER = 0 # 0 is overworld, 1 is level_1, 2 is crystal_level, 3 is deep_dark_level, 4 is maze_level, 5 is level_3
 
 class GameManager(events.Alpha):
