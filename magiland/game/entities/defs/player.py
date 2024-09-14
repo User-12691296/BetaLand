@@ -102,16 +102,16 @@ class Player(Creature):
         moved = False
 
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
+        if pressed[GAME.CONTROLS_KEYS["up"]]:
             self.move(( 0, -1))
             moved = True
-        if pressed[pygame.K_a]:
+        if pressed[GAME.CONTROLS_KEYS["left"]]:
             self.move((-1,  0))
             moved = True
-        if pressed[pygame.K_s]:
+        if pressed[GAME.CONTROLS_KEYS["down"]]:
             self.move(( 0,  1))
             moved = True
-        if pressed[pygame.K_d]:
+        if pressed[GAME.CONTROLS_KEYS["right"]]:
             self.move(( 1,  0))
             moved = True
 
