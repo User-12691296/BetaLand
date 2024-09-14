@@ -25,6 +25,7 @@ BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
 BasicTile("mountain", "mountain").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
+BasicTile("black","black").addTileToList(OVERWORLD_TILES)
 
 
 ALL_TILES = []

@@ -41,6 +41,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
+        self.inventory.setItemStack(ItemStack("pizza_gun",1),17)
 
     def initAttributes(self):
         self.defineAttribute("movement_speed", 0)
