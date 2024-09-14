@@ -574,8 +574,8 @@ class World(events.EventAcceptor):
     def updateMovingAnimation(self):
         frame = self.moving_anim_frame_getter()
         
-        self.moving_anim_delta[0] += (self.moving_anim_direction[0]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
-        self.moving_anim_delta[1] += (self.moving_anim_direction[1]*GAME.TILE_SIZE*frame)//GAME.PLAYER_WALKING_SPEED
+        self.moving_anim_delta[0] += (self.moving_anim_direction[0]*GAME.TILE_SIZE*frame)//self.player.getMovementSpeed()
+        self.moving_anim_delta[1] += (self.moving_anim_direction[1]*GAME.TILE_SIZE*frame)//self.player.getMovementSpeed()
 
     def draw(self, display, visible_rect):
         # Adjust for smooth motion animation
