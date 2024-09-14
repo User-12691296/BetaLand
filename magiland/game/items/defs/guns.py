@@ -52,6 +52,10 @@ class Gun(Item):
                     entity.damage(self.damage)
                     data["entities_hit"].append(entity)
                             
+    def addProjectile(self,data,player,world):
+        pizza = PROJECTILE_CLASSES.Pizza.fromStartEnd(player.pos, player.pos)
+        pizza.giveImmunity(self)
+        self.world.addProjectile(pizza)
 
 
     def startSwing(self, data, player, world, tile_pos, tile):
@@ -59,6 +63,7 @@ class Gun(Item):
         
         data["animations"].create("sword_swing", SWING_FRAMES, lambda: self.endSwing(data, player, world, tile_pos, tile))
         data["entities_hit"] = []
+        self.addProjectile
 
         self.player_damage_on_hit_once=False
 
