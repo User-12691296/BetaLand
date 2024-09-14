@@ -410,8 +410,8 @@ class World(events.EventAcceptor):
     def setTileElevation(self, tile_pos, elevation):
         self.world_tile_elevations[tile_pos[1]][tile_pos[0]] = elevation
 
-    def isTileOpaque(self, tile_pos):
-        return self.getTileElevation(tile_pos) > self.OPAQUE_TILE_ELEV_DELTA
+    def isTileOpaque(self, tile_pos, curelev=0):
+        return self.getTileElevation(tile_pos)-curelev > self.OPAQUE_TILE_ELEV_DELTA
 
     def isTileValidForWalking(self, tile_pos, curelev=0):
         # Inside map

@@ -16,6 +16,7 @@ class Player(Creature):
 
         self.loadHUD()
         self.loadInventory()
+        self.initAttributes()
 
         self.disp = False
 
@@ -40,6 +41,10 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
+
+    def initAttributes(self):
+        self.defineAttribute("movement_speed", 0)
+        self.setAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
 
     @staticmethod
     def getNeededAssets():
@@ -81,6 +86,12 @@ class Player(Creature):
         super().move(delta)
         
         self.world.registerChange()
+
+    def getMovementSpeed(self):
+        return self.getAttribute("movement_speed")
+
+    def setMovementSpeed(self, speed):
+        self.setAttribute("movement_speed", speed)
 
     def handleMotion(self):
         if self.isCooldownActive("movement_input"):
@@ -125,7 +136,7 @@ class Player(Creature):
             return
 
         if moved:
-            self.registerCooldown("movement_input", GAME.PLAYER_WALKING_SPEED)
+            self.registerCooldown("movement_input", self.getMovementSpeed())
             self.world.setMovingAnimation(self.movement_this_tick, lambda:self.getCooldownFrame("movement_input"))
 
     def updateFacing(self):

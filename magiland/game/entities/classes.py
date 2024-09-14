@@ -16,6 +16,8 @@ class Entity(events.EventAcceptor):
 
         self.cooldowns = {}
 
+        self.attributes = {}
+
         self.movable = True
         self.movement_this_tick = [0, 0]
         
@@ -102,6 +104,33 @@ class Entity(events.EventAcceptor):
     def isCooldownActive(self, cooldown):
         return self.cooldowns.get(cooldown, 0) > 0
 
+    def defineAttribute(self, attribute, default):
+        self.attributes[attribute] = [None, default]
+
+    # Attributes - for values meant to change at runtime
+    def setAttribute(self, attribute, value):
+        attr = self.attributes.get(attribute)
+
+        if attr:
+            self.attributes[attribute][0] = value
+            return value
+
+        else:
+            return None
+
+    def getAttribute(self, attribute):
+        attr = self.attributes.get(attribute)
+
+        if not attr:
+            return None
+
+        value, default = attr
+
+        if not value:
+            return default
+        else:
+            return value
+
     def tick(self):
         for cooldown in (*self.cooldowns.keys(),):
             self.cooldowns[cooldown] -= 1
@@ -123,9 +152,12 @@ class Entity(events.EventAcceptor):
 class Creature(Entity):
     def __init__(self, health, size=(1, 1)):
         super().__init__()
-        
-        self.max_health = health
-        self.health = health
+
+        self.defineAttribute("max_health", 0)
+        self.setAttribute("max_health", health)
+
+        self.defineAttribute("health", 0)
+        self.setAttribute("health", health)
 
         self.size = size
 
@@ -143,16 +175,21 @@ class Creature(Entity):
         return True
 
     def getHealth(self):
-        return self.health
+        return self.getAttribute("health")
 
     def getHealthPercentage(self):
-        return self.health/self.max_health
+        return self.getAttribute("health")/self.getAttribute("max_health")
 
     def changeHealth(self, delta):
-        self.health += delta
-        self.health = min(self.max_health, self.health)
+        health = self.getAttribute("health")
+        max_health = self.getAttribute("max_health")
+        
+        health += delta
+        health = min(health, max_health)
 
-        if self.health <= 0:
+        self.setAttribute("health", health)
+
+        if health <= 0:
             self.kill()
 
     def updateHitbox(self):
@@ -236,13 +273,16 @@ class Enemy(Creature):
     def __init__(self, health, stop_range=1, movement_speed=10):
         super().__init__(health)
 
-        self.stop_range = stop_range
-        self.movement_speed = movement_speed
+        self.defineAttribute("stopping_range", 0)
+        self.setAttribute("stopping_range", stop_range)
+        
+        self.defineAttribute("movement_speed", 100)
+        self.setAttribute("movement_speed", movement_speed)
 
     def setWorld(self, world):
         super().setWorld(world)
 
-        self.pathfinder = PathFinder(self.world.size, self.stop_range)
+        self.pathfinder = PathFinder(self.world.size, self.getAttribute("stopping_range"))
 
     def setOpaques(self, opaques):
         super().setOpaques(opaques)
@@ -276,7 +316,7 @@ class Enemy(Creature):
         if node:
             self.setPos(node)
 
-        self.registerCooldown("movement", self.movement_speed)
+        self.registerCooldown("movement", self.getAttribute("movement_speed"))
         
         
 

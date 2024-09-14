@@ -87,7 +87,7 @@ class GameManager(events.Alpha):
     ## EVENTS
     def start(self):
         print("Game starting!")
-        self.player.health = self.player.max_health
+        self.player.setAttribute("health", self.player.getAttribute("max_health"))
         self.player.alive = True
         self.first_tick()
 

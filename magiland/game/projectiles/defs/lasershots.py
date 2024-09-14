@@ -14,11 +14,17 @@ class CrystalLaserShot(Projectile):
     def getNeededAssets():
         return ["lasershotcrystal"]
 
+    def movementTick(self):
+        super().movementTick()
+
+        if self.world.isTileOpaque(self.getTilePos()):
+            self.kill()
+
     def damageTick(self):
         tpos = self.getTilePos()
 
         for entity in self.world.getEntitiesOnTile(tpos):
-            if self.isValidHit(entity):
+            if self.isValidHit(entity) and not entity.isEnemy():
                 entity.damage(1)
                 self.kill()
 
