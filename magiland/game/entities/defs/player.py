@@ -179,12 +179,16 @@ class Player(Creature):
         return (-bpos[0], -bpos[1])
 
     def draw(self, display):
-        # Draw player sprite
         pos = self.manager.bufferPosToScreenPos(self.getBufferPos())
-        self.atlas.drawTexture(display, pos, "player1")
+        player_texture = self.atlas.getTexture("player1")
 
-        # Draw GUI
+        rotated_texture = pygame.transform.rotate(player_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=pos)
+        display.blit(rotated_texture, rotated_rect.center)
+
         self.hud.draw(display)
+        
 
 class PlayerHUD(events.EventAcceptor):
     HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
