@@ -23,11 +23,11 @@ class Gun(Item):
 
     def fireInTheHole(self, data, player, world, tile_pos, tile):
         pizza = PROJECTILE_CLASSES.Pizza(player.pos, -data["rot"]-45)
+##        if not pizza.isCooldownActive("pizza"):
         pizza.giveImmunity(player)
         world.addProjectile(pizza)
-##        laser = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-45)
-##        laser.giveImmunity(player)
-##        world.addProjectile(laser)
+##        pizza.registerCooldown("lasershot", 60)
+
 ##        player.setAttribute("movement_speed", 10)
         
     def onLeft(self, data, player, world, tile_pos, tile):
