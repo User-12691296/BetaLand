@@ -12,6 +12,6 @@ class SandDarkTile(BasicTile):
         world.addEntity(knight)
 
     def onLeft(self, world, tile_pos):
-        slime = ENTITY_CLASSES.Slime()
-        slime.setPos(tile_pos)
-        world.addEntity(slime)
+        snake = ENTITY_CLASSES.SwampAnaconda()
+        snake.setPos(tile_pos)
+        world.addEntity(snake)
