@@ -20,15 +20,15 @@ class CrystalRaygun(Gun):
 ##        # Handle Swing
 ##        data["rot"] = -(player.getFacing()+90)
 ##        data["rot"] = data["rot"] % 360
-
-    def fireInTheHole(self, data, player, world, tile_pos, tile):
+    def fire(self, data, player, world, tile_pos, tile):
         super().fireInTheHole(data,player,world,tile_pos,tile)
         laser = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-45)
         laser.giveImmunity(player)
         world.addProjectile(laser)
         
     def onLeft(self, data, player, world, tile_pos, tile):
-        self.fireInTheHole(data, player, world, tile_pos, tile)
+        super().onLeft(data,player,world,tile_pos,tile)
+        self.fire(data, player, world, tile_pos, tile)
         return True
 
 
