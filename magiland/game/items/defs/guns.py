@@ -25,7 +25,10 @@ class Gun(Item):
         pizza = PROJECTILE_CLASSES.Pizza(player.pos, -data["rot"]-45)
         pizza.giveImmunity(player)
         world.addProjectile(pizza)
-        player.setAttribute("movement_speed", 10)
+##        laser = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-45)
+##        laser.giveImmunity(player)
+##        world.addProjectile(laser)
+##        player.setAttribute("movement_speed", 10)
         
     def onLeft(self, data, player, world, tile_pos, tile):
         self.fireInTheHole(data, player, world, tile_pos, tile)

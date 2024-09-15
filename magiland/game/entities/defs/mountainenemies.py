@@ -1,4 +1,5 @@
 from ..classes import Enemy
+from ...projectiles import PROJECTILE_CLASSES
 
 class MountainEagle(Enemy):
     def __init__(self):
@@ -12,6 +13,13 @@ class MountainEagle(Enemy):
         return True
 
     def damageTick(self):
+        if self.world.player.diagonalTo(self.pos) <= 8 and not self.isCooldownActive("feather"):
+            feather = PROJECTILE_CLASSES.Feather.fromStartEnd(self.pos, self.world.player.getPos())
+            feather.giveImmunity(self)
+            self.world.addProjectile(feather)
+            self.registerCooldown("feather", 50)
+
+
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
                 entity.damage(0.1)

@@ -7,11 +7,11 @@ class SandDarkTile(BasicTile):
         super().__init__("sanddark", "sanddark", False)
 
     def onRight(self, world, tile_pos):
-        knight = ENTITY_CLASSES.FrozenKnight()
-        knight.setPos(tile_pos)
-        world.addEntity(knight)
+        blob = ENTITY_CLASSES.Blob()
+        blob.setPos(tile_pos)
+        world.addEntity(blob)
 
     def onLeft(self, world, tile_pos):
-        snake = ENTITY_CLASSES.SwampAnaconda()
-        snake.setPos(tile_pos)
-        world.addEntity(snake)
+        MountainEagle = ENTITY_CLASSES.MountainEagle()
+        MountainEagle.setPos(tile_pos)
+        world.addEntity(MountainEagle)
