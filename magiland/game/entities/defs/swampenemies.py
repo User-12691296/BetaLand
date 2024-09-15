@@ -1,7 +1,6 @@
 from ..classes import Enemy
 from ...projectiles import PROJECTILE_CLASSES
 
-
 class SwampAnaconda(Enemy):
     def __init__(self):
         super().__init__(5, 0, 30)
@@ -18,11 +17,12 @@ class SwampAnaconda(Enemy):
             poisondart = PROJECTILE_CLASSES.PoisonDart.fromStartEnd(self.pos, self.world.player.getPos())
             poisondart.giveImmunity(self)
             self.world.addProjectile(poisondart)
-            self.registerCooldown("lasershot", 60)
+            self.registerCooldown("poisondart", 20)
             
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if entity.isEnemyTarget():
                 entity.damage(0.1)
+                
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
