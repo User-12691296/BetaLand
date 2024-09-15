@@ -24,14 +24,14 @@ class Pizza(Projectile):
         tpos = self.getTilePos()
 
         for entity in self.world.getEntitiesOnTile(tpos):
-            if self.isValidHit(entity) and not entity.isEnemy():
+            if self.isValidHit(entity):
                 entity.damage(1)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
 
-        self.stdDraw(display, "lasershotcrystal", display_topleft)
+        self.stdDraw(display, "pizza_bullet", display_topleft)
 
 PIZZA = []
 Pizza.addToGroup(PIZZA)
