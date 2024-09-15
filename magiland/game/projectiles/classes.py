@@ -15,7 +15,7 @@ class Projectile(events.EventAcceptor):
         self.speed = 0
 
         self.pos = [start[0], start[1]]
-
+        
         self.immune = []
 
         self.alive = True
@@ -86,7 +86,7 @@ class Projectile(events.EventAcceptor):
     def movementTick(self):
         delta = self.getMovementDelta()
         self.move(delta)
-
+        
     def damageTick(self): pass
     def finalTick(self): pass
 

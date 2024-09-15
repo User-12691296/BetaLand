@@ -26,7 +26,7 @@ class Gun(Item):
 ##        if not pizza.isCooldownActive("pizza"):
         pizza.giveImmunity(player)
         world.addProjectile(pizza)
-##        pizza.registerCooldown("lasershot", 60)
+##            pizza.registerCooldown("lasershot", 60)
 
 ##        player.setAttribute("movement_speed", 10)
         

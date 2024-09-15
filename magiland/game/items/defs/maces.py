@@ -28,22 +28,13 @@ class Mace(Sword):
 ##        else:
 ##            player.damage(-1)
     def onLeft(self, data, player, world, tile_pos, tile):
-        super().onLeft(data,player,world,tile_pos,tile)
-        laser1 = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-45)
-        laser1.giveImmunity(player)
-        world.addProjectile(laser1)
-        laser2 = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-90)
-        laser2.giveImmunity(player)
-        world.addProjectile(laser2)
-        laser3 = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-135)
-        laser3.giveImmunity(player)
-        world.addProjectile(laser3)            
-        laser4 = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-180)
-        laser4.giveImmunity(player)
-        world.addProjectile(laser4)
-        laser5 = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"]-225)
-        laser5.giveImmunity(player)
-        world.addProjectile(laser5)
+        super().onLeft(data, player, world, tile_pos, tile)
+    
+        angles = [0,45,90,135,180,225,270,315,360]
+        for angle in angles:
+            laser = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"] + angle)
+            laser.giveImmunity(player)
+            world.addProjectile(laser)
                                     
 MACES = []
 Mace("debug_sword", "sword", 1000, 2).addToGroup(MACES)
