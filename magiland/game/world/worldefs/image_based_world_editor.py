@@ -31,6 +31,10 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (150, 0): "swampaccent",
            (0, 150): "swampwater",
            (50, 50): "mountain",
+           (50, 0): "mountainsnow",
+           (0, 50): "mountainsnowier",
+           (255, 50): "mountainlava",
+           (50, 255): "mountainmolten",
            (1,1):"black"}
             
 
