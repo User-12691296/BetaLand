@@ -25,7 +25,7 @@ BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
 BasicTile("mountain", "mountain").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnowier", "mountainsnowier").addTileToList(OVERWORLD_TILES)
-BasicTile("mountainlava", "mountainlava").addTileToList(OVERWORLD_TILES)
+BasicTile("mountainlava", "mountainlava", False).addTileToList(OVERWORLD_TILES)
 BasicTile("mountainmolten", "mountainmolten").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
