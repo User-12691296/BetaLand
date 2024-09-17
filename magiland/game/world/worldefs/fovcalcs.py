@@ -65,6 +65,9 @@ class Row:
             self.start_slope,
             self.end_slope)
 
+# 127 - shown
+# 1 - hidden to tiles
+# 0 - hidden to range
 
 class FOVCalculator:
     def __init__(self, map_size, shown_tiles, range=12):
@@ -82,10 +85,10 @@ class FOVCalculator:
         self.setOpaques(elevs > cutoff)
 
     def showTile(self, tile):
-        self.shown_tiles[tile[1]][tile[0]] = True
+        self.shown_tiles[tile[1]][tile[0]] = 127
 
     def hideAllTiles(self):
-        self.shown_tiles.fill(False)
+        self.shown_tiles.fill(0)
 
     def isTileOpaque(self, tile):
         return self.opaques[tile[1]][tile[0]]

@@ -33,7 +33,7 @@ class Map:
         self.default_tile = self.tileAtlas.default
         
     def initFOV(self):
-        self.shown_tiles = np.empty((self.map_size[1], self.map_size[0]), dtype="bool")
+        self.shown_tiles = np.empty((self.map_size[1], self.map_size[0]), dtype=np.int8)
 
         self.fov_calc = FOVCalculator(self.map_size, self.shown_tiles)
 
@@ -283,15 +283,32 @@ class Map:
 
         visible_darkness = self.shown_tiles.T[relevant_tiles.left:relevant_tiles.right,
                                             relevant_tiles.top:relevant_tiles.bottom]
-        black_darkness = np.array(visible_darkness, dtype=np.int16)*255
-
-        view_blocking = pygame.surfarray.make_surface(black_darkness)
-        view_blocking = pygame.transform.scale_by(view_blocking, self.tile_size)
-        view_blocking.set_colorkey(255)
+        
+        edge_darkness = np.array(visible_darkness >= 2, dtype=np.int16)*255
 
         tile_topleft = self.world.tilePosToBufferPos(relevant_tiles.topleft)
-        pos_delta = (-area_visible.left+tile_topleft[0], -area_visible.top+tile_topleft[1])
-        surface.blit(view_blocking, (pos_delta))
+        edge_darkness_delta = [tile_topleft[0]-area_visible.left, tile_topleft[1]-area_visible.top]
+        if (relevant_tiles.left<=0 or relevant_tiles.top<=0 or relevant_tiles.right>=self.map_size[0]-1 or relevant_tiles.top>=self.map_size[1]-1):
+            edge_darkness = np.pad(edge_darkness, [(1, 1), (1, 1)], mode="constant", constant_values=0)
+
+            edge_darkness_delta[0] -= self.tile_size[0]
+            edge_darkness_delta[1] -= self.tile_size[1]
+            
+        edge_blocking = pygame.surfarray.make_surface(edge_darkness)
+        edge_blocking = pygame.transform.scale_by(edge_blocking, self.tile_size)
+        edge_blocking.set_colorkey(255)
+
+
+        center_darkness = np.array(np.absolute(visible_darkness-63) > 62, dtype=np.int16)*255
+        
+        center_blocking = pygame.surfarray.make_surface(center_darkness)
+        center_blocking = pygame.transform.scale_by(center_blocking, self.tile_size)
+        center_blocking.set_colorkey(255)
+
+        #print(visible_rect.topleft, area_visible, pos_delta, tile_topleft)
+        
+        surface.blit(edge_blocking, (edge_darkness_delta))
+        surface.blit(center_blocking, (tile_topleft[0] + visible_rect.left, tile_topleft[1] + visible_rect.top))
 
 
 class World(events.EventAcceptor):
