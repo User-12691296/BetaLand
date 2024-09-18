@@ -1,4 +1,5 @@
 import os
+import pygame
 
 #MAP
 TILE_SIZE = 64
@@ -14,5 +15,19 @@ PLAYER_WALKING_SPEED = 5
 SMOOTH_PLAYER_MOTION = True
 PLAYER_INVENTORY_SIZE = 24
 PLAYER_INVENTORY_WIDTH = 8
+
+ORIGINAL_CONTROLS_KEYS = {
+    "up": pygame.K_w,
+    "down": pygame.K_s,
+    "right": pygame.K_d,
+    "left": pygame.K_a,
+}
+
+SOUND_VOLUMES = {
+    "Music": 50,
+    "Sound Effects": 50
+}
+
+CONTROLS_KEYS = ORIGINAL_CONTROLS_KEYS.copy()
 
 ITEM_LOCATION_AROUND_PLAYER = (48, -48)

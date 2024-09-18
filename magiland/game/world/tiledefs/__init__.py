@@ -23,8 +23,13 @@ BasicTile("swampwater", "swampwater").addTileToList(OVERWORLD_TILES)
 BasicTile("deepdark", "deepdark", False).addTileToList(OVERWORLD_TILES)
 BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
 BasicTile("mountain", "mountain").addTileToList(OVERWORLD_TILES)
+BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
+BasicTile("mountainsnowier", "mountainsnowier").addTileToList(OVERWORLD_TILES)
+BasicTile("mountainlava", "mountainlava", False).addTileToList(OVERWORLD_TILES)
+BasicTile("mountainmolten", "mountainmolten").addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
+BasicTile("black","black").addTileToList(OVERWORLD_TILES)
 
 
 ALL_TILES = []

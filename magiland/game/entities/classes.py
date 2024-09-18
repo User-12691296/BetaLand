@@ -23,6 +23,8 @@ class Entity(events.EventAcceptor):
         
         self.alive = True
 
+        self.facing_angle = 0
+
     def setWorld(self, world):
         self.world = world
 
@@ -141,7 +143,10 @@ class Entity(events.EventAcceptor):
 
     def movementTick(self): pass
     def damageTick(self): pass
-    def finalTick(self): pass
+    def finalTick(self): 
+        if self.movement_this_tick[0] != 0 or self.movement_this_tick[1] != 0:
+                self.facing_angle = math.degrees(math.atan2(self.movement_this_tick[1], self.movement_this_tick[0]))
+
 
     @staticmethod
     def bufferPosToDisplayPos(bpos, display_topleft):

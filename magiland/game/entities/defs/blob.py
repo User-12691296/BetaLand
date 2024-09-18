@@ -14,7 +14,8 @@ class Blob(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(5)
+                self.damage(30)
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)

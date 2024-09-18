@@ -1,4 +1,5 @@
 from ..classes import Enemy
+from ...projectiles import PROJECTILE_CLASSES
 
 class SwampAnaconda(Enemy):
     def __init__(self):
@@ -12,9 +13,16 @@ class SwampAnaconda(Enemy):
         return True
 
     def damageTick(self):
+        if self.world.player.diagonalTo(self.pos) <= 8 and not self.isCooldownActive("poisondart"):
+            poisondart = PROJECTILE_CLASSES.PoisonDart.fromStartEnd(self.pos, self.world.player.getPos())
+            poisondart.giveImmunity(self)
+            self.world.addProjectile(poisondart)
+            self.registerCooldown("poisondart", 20)
+            
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
-            if not entity.isEnemy():
+            if entity.isEnemyTarget():
                 entity.damage(0.1)
+                
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)

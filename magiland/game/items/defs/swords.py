@@ -29,6 +29,15 @@ class Sword(Item):
     def tick(self, data, player, world):
         data["animations"].tick()
 
+    @staticmethod
+    def isAngleBetween(angle, lower, upper):
+        shifted = (angle - lower)%360
+
+        if (shifted >= 0) and (shifted < (upper-lower)%360):
+            return True
+
+        return False
+
     def damageTick(self, data, player, world):
         # Handle Swing
         angle = data["animations"].getPercentage("sword_swing")*self.swing_angle
@@ -48,7 +57,7 @@ class Sword(Item):
                     
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
-                if (angle_to >= data["rot"] - delta + 45) and (angle_to < data["rot"] + 45):
+                if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
                     entity.damage(self.damage)
                     data["entities_hit"].append(entity)
                             

@@ -41,6 +41,9 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
+        self.inventory.setItemStack(ItemStack("pizza_gun",1),17)
+        self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
+
 
     def initAttributes(self):
         self.defineAttribute("movement_speed", 0)
@@ -102,16 +105,16 @@ class Player(Creature):
         moved = False
 
         pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
+        if pressed[GAME.CONTROLS_KEYS["up"]]:
             self.move(( 0, -1))
             moved = True
-        if pressed[pygame.K_a]:
+        if pressed[GAME.CONTROLS_KEYS["left"]]:
             self.move((-1,  0))
             moved = True
-        if pressed[pygame.K_s]:
+        if pressed[GAME.CONTROLS_KEYS["down"]]:
             self.move(( 0,  1))
             moved = True
-        if pressed[pygame.K_d]:
+        if pressed[GAME.CONTROLS_KEYS["right"]]:
             self.move(( 1,  0))
             moved = True
 
@@ -178,12 +181,16 @@ class Player(Creature):
         return (-bpos[0], -bpos[1])
 
     def draw(self, display):
-        # Draw player sprite
         pos = self.manager.bufferPosToScreenPos(self.getBufferPos())
-        self.atlas.drawTexture(display, pos, "player1")
+        player_texture = self.atlas.getTexture("player1")
 
-        # Draw GUI
+        rotated_texture = pygame.transform.rotate(player_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=pos)
+        display.blit(rotated_texture, rotated_rect.center)
+
         self.hud.draw(display)
+        
 
 class PlayerHUD(events.EventAcceptor):
     HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))

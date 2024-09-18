@@ -3,8 +3,8 @@ import pygame
 import numpy
 import json
 
-IMAGE_PATH = "overworld.png"
-WORLD_NAME = "overworld"
+IMAGE_PATH = "level3whysitcalledthis.png"
+WORLD_NAME = "level_3"
 LEVELS_PATH = "levels.json"
 
 TILE_SEP = ";"
@@ -30,7 +30,13 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (150, 150): "swamp",
            (150, 0): "swampaccent",
            (0, 150): "swampwater",
-           (50, 50): "mountain"}
+           (50, 50): "mountain",
+           (50, 0): "mountainsnow",
+           (0, 50): "mountainsnowier",
+           (255, 50): "mountainlava",
+           (50, 255): "mountainmolten",
+           (1,1):"black"}
+            
 
 
 with open(LEVELS_PATH, "r") as levels_file:

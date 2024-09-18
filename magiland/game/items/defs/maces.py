@@ -1,10 +1,11 @@
 from .swords import Sword
+from ...projectiles import PROJECTILE_CLASSES
 from misc import animations
 import math
 
 SWING_FRAMES = 10
 
-class Mace(Sword):pass
+class Mace(Sword):
 
 ##        #the only problem here is if you spam then it kills you lol
 ##    def startSwing(self, data, player, world, tile_pos, tile):
@@ -26,10 +27,15 @@ class Mace(Sword):pass
 ##            player.damage(0)
 ##        else:
 ##            player.damage(-1)
-
- 
-
-
+    def onLeft(self, data, player, world, tile_pos, tile):
+        super().onLeft(data, player, world, tile_pos, tile)
+    
+        angles = [0,45,90,135,180,225,270,315,360]
+        for angle in angles:
+            laser = PROJECTILE_CLASSES.CrystalLaserShot(player.pos, -data["rot"] + angle)
+            laser.giveImmunity(player)
+            world.addProjectile(laser)
+                                    
 MACES = []
 Mace("debug_sword", "sword", 1000, 2).addToGroup(MACES)
 Mace("wood_mace", "wood_mace", 20, 0, 300, 5).addToGroup(MACES)
