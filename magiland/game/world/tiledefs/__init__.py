@@ -2,6 +2,7 @@ from .basic import BasicTile
 from .grass import GrassTile
 from .barrier import BarrierTile
 from .sanddark import SandDarkTile
+from .damaging import DamageTile
 
 
 OVERWORLD_TILES = []
@@ -25,8 +26,8 @@ BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
 BasicTile("mountain", "mountain").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnowier", "mountainsnowier").addTileToList(OVERWORLD_TILES)
-BasicTile("mountainlava", "mountainlava", False).addTileToList(OVERWORLD_TILES)
-BasicTile("mountainmolten", "mountainmolten").addTileToList(OVERWORLD_TILES)
+DamageTile("mountainlava", "mountainlava", 0.2, False).addTileToList(OVERWORLD_TILES)
+DamageTile("mountainmolten", "mountainmolten", 0.1).addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
 BasicTile("black","black").addTileToList(OVERWORLD_TILES)

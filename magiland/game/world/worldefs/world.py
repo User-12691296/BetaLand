@@ -532,6 +532,8 @@ class World(events.EventAcceptor):
         for projectile in self.projectiles:
             projectile.movementTick()
 
+        self.getTile(self.player.getPos()).onWalk(self, self.player.getPos())
+
         if self.changes_this_tick:
             self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
 
