@@ -18,8 +18,9 @@ class Item(events.EventAcceptor):
 
         self._atlas_given = False
 
-    def initData(self):
-        data = {"rot": 0,
+    def initData(self, stack):
+        data = {"stack": stack,
+                "rot": 0,
                 "animations": animations.Animated()}
         
         return data
@@ -91,7 +92,7 @@ class ItemStack:
         self.initInstanceData()
 
     def initInstanceData(self):
-        self.data = self.item.initData()
+        self.data = self.item.initData(self)
 
     @classmethod
     def setRegistry(self, registry):
@@ -104,10 +105,16 @@ class ItemStack:
         return self.count
 
     def isEmpty(self):
-        return self.getCount()==0
+        return self.getCount()<=0
 
     def setCount(self, count):
         self.count = count
+
+    def changeCount(self, delta):
+        self.count += delta
+
+    def consume(self):
+        self.changeCount(-1)
 
     def tick(self, player, world):
         self.item.tick(self.data, player, world)
@@ -332,6 +339,14 @@ class Inventory(events.EventAcceptor):
         for stack in self.item_stacks:
             if stack:
                 stack.finalTick(player, world)
+
+        self.cullEmptyStacks()
+
+    def cullEmptyStacks(self):
+        for loc, stack in enumerate(self.item_stacks):
+            if stack:
+                 if stack.isEmpty():
+                     self.setItemStack(None, loc)
 
     def close(self):
         self.addItemStack(self.active_stack)

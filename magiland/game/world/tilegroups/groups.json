@@ -1,0 +1,5 @@
+{"desert":{"type":"biome",
+	"tiles":["sand",
+		"sanddark",
+		"sandlight",
+		"sandoasis"]}}

@@ -21,11 +21,6 @@ class Sword(Item):
         else:
             self.swing_range = swing_range
 
-    def initData(self):
-        data = super().initData()
-        
-        return data
-
     def tick(self, data, player, world):
         data["animations"].tick()
 
