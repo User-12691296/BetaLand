@@ -33,7 +33,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
         self.inventory.setItemStack(ItemStack("ice_blade",1),3)
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
-        self.inventory.setItemStack(ItemStack("nature_cure",1),4)
+        self.inventory.setItemStack(ItemStack("soul_cannon",1),4)
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
         self.inventory.setItemStack(ItemStack("wood_mace",1),18)
         self.inventory.setItemStack(ItemStack("stone_mace",1),19)
@@ -42,7 +42,6 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
         self.inventory.setItemStack(ItemStack("pizza_gun",1),17)
-        self.inventory.setItemStack(ItemStack("soul_cannon",1),6)
 
 
     def initAttributes(self):
