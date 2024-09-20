@@ -42,7 +42,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
         self.inventory.setItemStack(ItemStack("pizza_gun",1),17)
-        self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
+        self.inventory.setItemStack(ItemStack("soul_cannon",1),6)
 
 
     def initAttributes(self):
