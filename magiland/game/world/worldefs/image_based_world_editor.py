@@ -33,8 +33,9 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (50, 50): "mountain",
            (50, 0): "mountainsnow",
            (0, 50): "mountainsnowier",
-           (255, 50): "mountainlava",
-           (50, 255): "mountainmolten",
+           (200, 200): "volcano",
+           (200, 0): "volcanolava",
+           (0, 200): "volcanomolten",
            (1,1):"black"}
             
 

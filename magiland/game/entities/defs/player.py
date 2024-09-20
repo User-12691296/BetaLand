@@ -33,17 +33,18 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
         self.inventory.setItemStack(ItemStack("ice_blade",1),3)
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
-        self.inventory.setItemStack(ItemStack("nature_cure",1),4)
+        self.inventory.setItemStack(ItemStack("soul_cannon",1),4)
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
-        self.inventory.setItemStack(ItemStack("wood_mace",1),18)
-        self.inventory.setItemStack(ItemStack("stone_mace",1),19)
+        self.inventory.setItemStack(ItemStack("lemon",1),18)
+        self.inventory.setItemStack(ItemStack("apple",1),19)
         self.inventory.setItemStack(ItemStack("cosmic_mace",1),20)
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
-        self.inventory.setItemStack(ItemStack("pizza_gun",1),17)
+        self.inventory.setItemStack(ItemStack("pizza_gun",1),16)
         self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
+        self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
 
 
     def initAttributes(self):

@@ -1,6 +1,6 @@
 from ..classes import Projectile
 
-class Pizza(Projectile):
+class Arrow(Projectile):
     def __init__(self, start, angle):
         super().__init__(start, angle)
 
@@ -12,7 +12,7 @@ class Pizza(Projectile):
 
     @staticmethod
     def getNeededAssets():
-        return ["pizza_bullet"]
+        return ["arrow"]
 
     def movementTick(self):
         super().movementTick()
@@ -31,7 +31,9 @@ class Pizza(Projectile):
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
 
-        self.stdDraw(display, "pizza_bullet", display_topleft)
+        self.stdDraw(display, "arrow", display_topleft)
 
-PIZZA = []
-Pizza.addToGroup(PIZZA)
+
+
+PLAYERARROWS = []
+Arrow.addToGroup(PLAYERARROWS)

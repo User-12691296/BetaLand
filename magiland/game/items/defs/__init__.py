@@ -3,6 +3,10 @@ from .maces import MACES
 from .guns import GUNS
 from .crystal_raygun import CRYSTALRAYGUN
 from .grenades import GRENADES
+from .soul_cannon import SOULCANNON
+from .bows import BOWS
+from .fruits import FRUITS
+from .geodes import GEODES
 
 
 ALL_ITEM_CLASSES = []
@@ -13,3 +17,7 @@ ALL_ITEM_CLASSES += MACES
 ALL_ITEM_CLASSES += GUNS
 ALL_ITEM_CLASSES += CRYSTALRAYGUN
 ALL_ITEM_CLASSES += GRENADES
+ALL_ITEM_CLASSES += SOULCANNON
+ALL_ITEM_CLASSES += BOWS
+ALL_ITEM_CLASSES += FRUITS
+ALL_ITEM_CLASSES += GEODES
