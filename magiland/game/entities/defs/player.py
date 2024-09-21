@@ -102,7 +102,6 @@ class Player(Creature):
 
     def effectTimeUpdate(self):
         self.incrementEffect("effect_time")
-        print(self.getAttribute("effect_time"))
         if self.getAttribute("effect_time") > self.getAttribute("effect_duration"):
             self.setAttribute("effect_time", 0)
             (self.getAttribute("action"))(self, self.world, self.pos)
