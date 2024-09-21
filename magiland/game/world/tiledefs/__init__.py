@@ -29,6 +29,7 @@ BasicTile("mountainsnowier", "mountainsnowier").addTileToList(OVERWORLD_TILES)
 BasicTile("volcano", "volcano").addTileToList(OVERWORLD_TILES)
 DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)
 DamageTile("volcanomolten", "volcanomolten", 0.1).addTileToList(OVERWORLD_TILES)
+DamageTile("sandcactus", "sandcactus", 0.1).addTileToList(OVERWORLD_TILES)
 BasicTile("void",
           "barrier").addTileToList(OVERWORLD_TILES)
 BasicTile("black","black").addTileToList(OVERWORLD_TILES)
