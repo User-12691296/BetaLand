@@ -68,15 +68,15 @@ class StrengthPotionItem(PotionItem):
         player.decreaseStrength(self.strength_amount)
 
 class SpeedPotionItem(PotionItem):
-            def __init__(self, itemid, tex_name, size, speed_increase, effect_duration):
-                super().__init__(itemid, tex_name, size, "Speed", effect_duration)
-                self.speed_increase = speed_increase
+    def __init__(self, itemid, tex_name, size, speed_increase, effect_duration):
+        super().__init__(itemid, tex_name, size, "Speed", effect_duration)
+        self.speed_increase = speed_increase
 
-            def apply_effect(self, player, world, tile, tile_pos):
-                player.changeSpeed(self.speed_increase)
-                player.setAttribute("effect_time", 1)
-                player.setAttribute("action", self.reverse_effect)
-                player.setAttribute("effect_duration", self.effect_duration)
+    def apply_effect(self, player, world, tile, tile_pos):
+        player.changeSpeed(self.speed_increase)
+        player.setAttribute("effect_time", 1)
+        player.setAttribute("action", self.reverse_effect)
+        player.setAttribute("effect_duration", self.effect_duration)
 
-            def reverse_effect(self, player, world, player_tile_pos):
-                player.changeSpeed(-self.speed_increase)
+    def reverse_effect(self, player, world, player_tile_pos):
+        player.changeSpeed(-self.speed_increase)
