@@ -7,6 +7,7 @@ from misc import events
 from .items import initialiseItems
 from .entities import initialiseEntities, ENTITY_CLASSES
 from .projectiles import initialiseProjectiles, PROJECTILE_CLASSES
+from .world import initialiseWorlds
 
 ASSETS = os.path.join("assets", "game")
 
@@ -22,6 +23,7 @@ class GameManager(events.Alpha):
         initialiseItems(ENTITY_CLASSES.ItemEntity)
         initialiseEntities()
         initialiseProjectiles()
+        initialiseWorlds()
         
         self.loadBgs()
         self.loadWorlds()
