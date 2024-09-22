@@ -1,3 +1,5 @@
+import pygame
+
 from ..classes import Enemy
 from ...projectiles import PROJECTILE_CLASSES
 
@@ -25,12 +27,15 @@ class MountainEagle(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountaineagle")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class MountainGoat(Enemy):
     def __init__(self):
@@ -49,12 +54,15 @@ class MountainGoat(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountaingoat")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class MountainGolem(Enemy):
     def __init__(self):
@@ -73,12 +81,15 @@ class MountainGolem(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountaingolem")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class MountainSlime(Enemy):
     def __init__(self):
@@ -97,12 +108,15 @@ class MountainSlime(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountainslime")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class MountainTroll(Enemy):
     def __init__(self):
@@ -121,13 +135,15 @@ class MountainTroll(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountaintroll")
 
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 class MountainBat(Enemy):
     def __init__(self):
         super().__init__(5, 0, 30)
@@ -145,12 +161,15 @@ class MountainBat(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "mountainbat")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 
 # Add crystal enemies to a group of enemies
