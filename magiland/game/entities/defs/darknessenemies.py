@@ -1,3 +1,5 @@
+import pygame
+
 from ..classes import Enemy
 
 class DarknessGhost(Enemy):
@@ -17,12 +19,15 @@ class DarknessGhost(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessghost")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessGraveTrapper(Enemy):
     def __init__(self):
@@ -41,12 +46,15 @@ class DarknessGraveTrapper(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessgravetrapper")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessJumpscare(Enemy):
     def __init__(self):
@@ -65,12 +73,15 @@ class DarknessJumpscare(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessjumpscare")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessKnightmare1(Enemy):
     def __init__(self):
@@ -89,12 +100,15 @@ class DarknessKnightmare1(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessknightmare1")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessKnightmare2(Enemy):
     def __init__(self):
@@ -113,12 +127,15 @@ class DarknessKnightmare2(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessknightmare2")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessSpreader(Enemy):
     def __init__(self):
@@ -137,12 +154,15 @@ class DarknessSpreader(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessspreader")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class DarknessBat(Enemy):
     def __init__(self):
@@ -161,12 +181,15 @@ class DarknessBat(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "darknessbat")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 
 # Add crystal enemies to a group of enemies
