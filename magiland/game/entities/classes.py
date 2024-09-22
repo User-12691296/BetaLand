@@ -170,6 +170,8 @@ class Creature(Entity):
 
         self.damages_this_tick = []
 
+        self.effects = {}
+
     def onSpawn(self):
         super().onSpawn()
 
@@ -210,10 +212,35 @@ class Creature(Entity):
 
         return dx**2 - (self.radius * 2*dx) + dy**2 - (self.radius * 2*dy)
 
+    def giveEffect(self, effect_name, duration, action, reverse_action):
+        self.effects[effect_name] = {
+            "effect_time": 0,
+            "effect_duration": duration,
+            "action": action,
+            "reverse_action": reverse_action,
+        }
+
+    def effectTimeUpdate(self):
+        for effect in self.effects:
+            self.effects[effect]["effect_time"]+=1
+            self.effects[effect]["action"](self, self.world, self.pos) 
+            # If the duration is less than the counter 
+            if self.effects[effect]["effect_time"] > self.effects[effect]["effect_duration"]:
+                self.effects[effect]["reverse_action"](self, self.world, self.pos) # Reverse Effect
+                self.effects.pop(effect, None)
+                break
+
+        # self.incrementEffect("effect_time")
+        # (self.getAttribute("action"))(self, self.world, self.pos)
+        # if self.getAttribute("effect_time") > self.getAttribute("effect_duration"):
+        #     self.setAttribute("effect_time", 0)
+        #     (self.getAttribute("reverse_effect_action"))(self, self.world, self.pos)
+
     def tick(self):
         super().tick()
 
         self.damages_this_tick = []
+        self.effectTimeUpdate()
 
     def movementTick(self):
         super().movementTick()

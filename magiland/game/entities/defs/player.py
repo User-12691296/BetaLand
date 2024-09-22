@@ -50,10 +50,6 @@ class Player(Creature):
         self.defineAttribute("movement_speed", 0)
         self.setAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
 
-        self.defineAttribute("effect_time", 0)
-        self.defineAttribute("effect_duration", 0)
-        self.defineAttribute("action", lambda:None)
-
     @staticmethod
     def getNeededAssets():
         return ["player1"]
@@ -68,8 +64,6 @@ class Player(Creature):
         super().tick()
 
         self.inventory.tick(self, self.world)
-        if self.getAttribute("effect_time") > 0:
-            self.effectTimeUpdate()
 
     def movementTick(self):
         super().movementTick()
@@ -96,15 +90,6 @@ class Player(Creature):
         super().move(delta)
         
         self.world.registerChange()
-
-    def incrementEffect(self, attribute):
-        self.setAttribute(attribute, self.getAttribute(attribute)+1)
-
-    def effectTimeUpdate(self):
-        self.incrementEffect("effect_time")
-        if self.getAttribute("effect_time") > self.getAttribute("effect_duration"):
-            self.setAttribute("effect_time", 0)
-            (self.getAttribute("action"))(self, self.world, self.pos)
 
     def getMovementSpeed(self):
         return self.getAttribute("movement_speed")
