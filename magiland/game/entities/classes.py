@@ -316,10 +316,13 @@ class Enemy(Creature):
 
         if self.isCooldownActive("movement"):
             return
-        
-        node = self.pathfinder.getNode()    
+
+        node = self.pathfinder.getNode()
         if node:
+            old_pos = self.pos
             self.setPos(node)
+            self.movement_this_tick[1]=self.pos[1]-old_pos[1]
+            self.movement_this_tick[0] = self.pos[0]-old_pos[0]
 
         self.registerCooldown("movement", self.getAttribute("movement_speed"))
         

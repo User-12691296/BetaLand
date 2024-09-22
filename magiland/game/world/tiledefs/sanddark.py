@@ -7,7 +7,7 @@ class SandDarkTile(BasicTile):
         super().__init__("sanddark", "sanddark", False)
 
     def onRight(self, world, tile_pos):
-        blob = ENTITY_CLASSES.Blob()
+        blob = ENTITY_CLASSES.CrystalGolem()
         blob.setPos(tile_pos)
         world.addEntity(blob)
 

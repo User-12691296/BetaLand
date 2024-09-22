@@ -1,3 +1,5 @@
+import pygame
+
 from ..classes import Enemy
 
 class FrozenKnight(Enemy):
@@ -17,12 +19,15 @@ class FrozenKnight(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "frozenknight")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class FrozenPuffer(Enemy):
     def __init__(self):
@@ -41,12 +46,15 @@ class FrozenPuffer(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "frozenpuffer")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class FrozenTroll(Enemy):
     def __init__(self):
@@ -65,12 +73,15 @@ class FrozenTroll(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "frozentroll")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class FrozenSlime(Enemy):
     def __init__(self):
@@ -89,12 +100,15 @@ class FrozenSlime(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "frozenslime")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class FrozenWolf(Enemy):
     def __init__(self):
@@ -113,12 +127,15 @@ class FrozenWolf(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "wolf")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 
 # Add crystal enemies to a group of enemies

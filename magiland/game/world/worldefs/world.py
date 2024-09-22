@@ -1,5 +1,6 @@
 import pygame
 import numpy as np
+import random
 import os
 import json
 import math
@@ -520,6 +521,19 @@ class World(events.EventAcceptor):
 
         for projectile in self.projectiles:
             projectile.tick()
+
+         # debug spawning
+        x = random.randrange(-20, 21)
+        y = random.randrange(-20, 21)
+
+        ppos = [*self.player.getPos()]
+        ppos[0] += x
+        ppos[1] += y
+
+        if random.random()>0.9 and (0 <= ppos[0] < self.size[0]) and (0 <= ppos[1] < self.size[1]) and (len(self.entities)<10):
+            eagle = ENTITY_CLASSES.CrystalGolem()
+            eagle.setPos((ppos[0] + x, ppos[1] + y))
+            self.addEntity(eagle)
 
         self.changes_this_tick = self.first_tick
 

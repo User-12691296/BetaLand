@@ -1,3 +1,5 @@
+import pygame
+
 from ..classes import Enemy
 
 class CrystalGolem(Enemy):
@@ -17,12 +19,15 @@ class CrystalGolem(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "crystalgolem")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class CrystalKnight(Enemy):
     def __init__(self):
@@ -41,12 +46,15 @@ class CrystalKnight(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "crystalknight")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class CrystalScorpion(Enemy):
     def __init__(self):
@@ -65,12 +73,15 @@ class CrystalScorpion(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "crystalscorpion")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class CrystalSlime(Enemy):
     def __init__(self):
@@ -89,12 +100,15 @@ class CrystalSlime(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "crystalslime")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 class CrystalBat(Enemy):
     def __init__(self):
@@ -113,12 +127,15 @@ class CrystalBat(Enemy):
                 entity.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
-        super().draw(display, display_topleft)
-
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
-        
-        self.atlas.drawTexture(display, spos, "crystalbat")
+
+        entity_texture = self.atlas.getTexture("crystalgolem")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
 
 
 # Add crystal enemies to a group of enemies
