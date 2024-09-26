@@ -4,6 +4,7 @@ import math
 from misc import events
 from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
+from ...world import GROUP_MANAGER
 
 from constants import GAME
 
@@ -47,8 +48,49 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
 
     def initAttributes(self):
-        self.defineAttribute("movement_speed", 0)
+        # Frames per movement
+        self.defineAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
         self.setAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
+
+        # Decimal number, outside -1 to +1 range causes problems, -5 to +5 is fatal
+        self.defineAttribute("temperature", 0)
+        self.setAttribute("temperature", 0)
+
+        # Integer part represents its place in the bar chart
+        # Rational part represents fullness
+        self.defineAttribute("vibes", 2.0)
+        self.setAttribute("vibes", 2.0)
+
+        # 0 to 1
+        # < 0.2 halves movement speed
+        # < 0.1 causes screen shaking
+        self.defineAttribute("hunger", 0)
+        self.setAttribute("hunger", 1)
+
+        # 0 to 1
+        # < 0.8 fatal
+        self.defineAttribute("oxygen", 1)
+        self.setAttribute("oxygen", 1)
+
+        # Integer from 0 to 5
+        # 1 - Half movement speed
+        # 2 - Half damage
+        # 3 - No movement
+        # 4 - No damage
+        # 5 - Fatal
+        self.defineAttribute("fatigue", 0)
+        self.setAttribute("fatigue", 0)
+
+        # 0 to 1
+        # > 0.4 plays funny sound
+        # > 1.0 teleports you to the final boss, half movement, controls flipped
+        self.defineAttribute("insanity", 0)
+        self.setAttribute("insanity", 0)
+
+        # 0 to 1
+        # 0 fatal
+        self.defineAttribute("thirst", 1)
+        self.setAttribute("thirst", 1)
 
     @staticmethod
     def getNeededAssets():
@@ -59,6 +101,19 @@ class Player(Creature):
 
     def isPlayer(self):
         return True
+
+    def getTemperaturePercentage(self):
+        temp = self.getAttribute("temperature")
+        return (temp+5)/10
+
+    def temperatureTick(self):
+        tileid = self.world.getTileID(self.pos)
+
+        for group_name in GROUP_MANAGER.getGroupsWithTile(tileid):
+            biome_temp = GROUP_MANAGER.getGroup(group_name).getExtras().get("temperature", 0)
+
+            # Player temperature becomes 10% closer to biome temperature every tick
+            self.setAttribute("temperature", (9*self.getAttribute("temperature")+temp)/10)
 
     def tick(self):
         super().tick()
@@ -194,7 +249,7 @@ class Player(Creature):
         
 
 class PlayerHUD(events.EventAcceptor):
-    HEALTH_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
+    TOPLEFT_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
     INVENTORY_POS = (1600, 100)
     
     def __init__(self, player):
@@ -210,7 +265,12 @@ class PlayerHUD(events.EventAcceptor):
 
         return bool(used)
 
-    def drawHealthBar(self, surface):
+    def drawBars(self, surface):
+        current = self.TOPLEFT_BAR_BOUNDS
+
+        
+
+    def drawHealthBar(self, surface, pos):
         bar = self.HEALTH_BAR_BOUNDS
 
         # Background

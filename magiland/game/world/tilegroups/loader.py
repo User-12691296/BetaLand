@@ -14,9 +14,10 @@ class GroupManager:
     def getGroup(self, name):
         return self.group_data.get(name)
 
-    def setGroup(self, name, type, tiles):
+    def setGroup(self, name, type, tiles, extras={}):
         self.group_data[name] = {"type": type,
-                                 "tiles": tiles}
+                                 "tiles": tiles,
+                                 "extras": extras}
 
     def setFileData(self, json_parsing):
         self.group_data = json_parsing
@@ -34,5 +35,8 @@ class GroupManager:
                 yield group_name
 
         return []
+
+    def getExtras(self, group):
+        return group.get("extras")
 
 GROUP_MANAGER = GroupManager()

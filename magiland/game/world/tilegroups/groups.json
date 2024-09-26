@@ -2,4 +2,5 @@
 	"tiles":["sand",
 		"sanddark",
 		"sandlight",
-		"sandoasis"]}}
+		"sandoasis"],
+	"extras":{"temperature":3}}}
