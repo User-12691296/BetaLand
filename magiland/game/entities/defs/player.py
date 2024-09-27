@@ -4,7 +4,6 @@ import math
 from misc import events
 from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
-from ...world import GROUP_MANAGER
 
 from constants import GAME
 
@@ -52,6 +51,10 @@ class Player(Creature):
         self.defineAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
         self.setAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
 
+        # Damage output modifier
+        self.defineAttribute("damage_modifier", 1)
+        self.setAttribute("damage_modifier", 1)
+
         # Decimal number, outside -1 to +1 range causes problems, -5 to +5 is fatal
         self.defineAttribute("temperature", 0)
         self.setAttribute("temperature", 0)
@@ -80,6 +83,8 @@ class Player(Creature):
         # 5 - Fatal
         self.defineAttribute("fatigue", 0)
         self.setAttribute("fatigue", 0)
+        self._most_recent_fatigue_level_reached = 0
+        self._resting_tick_counter = 0
 
         # 0 to 1
         # > 0.4 plays funny sound
@@ -102,23 +107,133 @@ class Player(Creature):
     def isPlayer(self):
         return True
 
-    def getTemperaturePercentage(self):
+    def getTemperatureBarData(self):
         temp = self.getAttribute("temperature")
-        return (temp+5)/10
+        percent = (temp+5)/10
+        percent = min(1, max(0, percent))
+        return percent, (255*percent, 255*percent, 255*(1-percent))
+
+    def getVibesBarData(self):
+        return self.getAttribute("vibes")%1, (0, 255, 255)
+
+    def getHungerBarData(self):
+        return self.getAttribute("hunger"), (150, 20, 20)
+
+    def getOxygenBarData(self):
+        return self.getAttribute("oxygen"), (0, 250, 100)
+
+    def getFatigueBarData(self):
+        return self.getAttribute("fatigue")/5, (0, 150, 0)
+
+    def getInsanityBarData(self):
+        return self.getAttribute("insanity"), (0, 0, 0)
+
+    def getThirstBarData(self):
+        return self.getAttribute("thirst"), (255, 100, 100)
+
+    def getBarDataGetters(self):
+        return [lambda: (self.getHealthPercentage(), (255, 0, 0)),
+                     self.getTemperatureBarData,
+                     self.getVibesBarData,
+                     self.getHungerBarData,
+                     self.getOxygenBarData,
+                     self.getFatigueBarData,
+                     self.getInsanityBarData,
+                     self.getThirstBarData]
 
     def temperatureTick(self):
-        tileid = self.world.getTileID(self.pos)
+        # Bring self temperature closer to biome temperature
+        for biome_temp in self.world.getTileExtrasFromGroups(self.pos, "temperature", None):
+            if biome_temp != None:
+                prev = self.getAttribute("temperature")
+                self.setAttribute("temperature", (999*prev+biome_temp)/1000)
 
-        for group_name in GROUP_MANAGER.getGroupsWithTile(tileid):
-            biome_temp = GROUP_MANAGER.getGroup(group_name).getExtras().get("temperature", 0)
+        # Die when too hot or too cold
+        if abs(self.getAttribute("temperature")) > 5:
+            self.damage(0.2)
 
-            # Player temperature becomes 10% closer to biome temperature every tick
-            self.setAttribute("temperature", (9*self.getAttribute("temperature")+temp)/10)
+    def vibesTick(self):
+        vibes = self.getAttribute("vibes")
+        vibes += 1
 
+        self.setAttribute("vibes", vibes + math.sin(vibes)/10)
+
+    def hungerTick(self):
+        hunger = self.getAttribute("hunger")
+
+        # 600 seconds till hunger depletes fully
+        hunger -= 1/60/600
+
+        self.setAttribute("hunger", hunger)
+
+        # Die when hunger drops to 0
+        if hunger <= 0:
+            self.damage(0.2)
+    def changeHunger(self, delta):
+        self.setAttribute("hunger", self.getAttribute("hunger")+delta)
+
+    def oxygenTick(self):
+        pass
+
+    def fatigueTick(self):
+        fatigue = self.getAttribute("fatigue")
+
+        if fatigue < self._most_recent_fatigue_level_reached:
+            self._most_recent_fatigue_level_reached = fatigue
+
+        if fatigue >= 1 and self._most_recent_fatigue_level_reached < 1:
+            self.setAttribute("movement_speed", self.getAttribute("movement_speed")*2)
+            self._most_recent_fatigue_level_reached = 1
+
+            self._resting_tick_counter += 1
+
+        if fatigue >= 2 and self._most_recent_fatigue_level_reached < 2:
+            self.setAttribute("damage_modifier", self.getAttribute("damage_modifier")/2)
+            self._most_recent_fatigue_level_reached = 2
+
+        if fatigue >= 3:
+            self.setMovable(False)
+            self._most_recent_fatigue_level_reached = 3
+
+        if fatigue >= 4:
+            self.setAttribute("damage_modifier", 0)
+            self._most_recent_fatigue_level_reached = 4
+
+        if fatigue >= 5:
+            self.kill()
+
+        if self._resting_tick_counter > 60*60 and fatigue > 0:
+            self.setAttribute("fatigue", fatigue-1)
+            self._resting_tick_counter = 0
+    def tire(self, fatigue_delta):
+        self.setAttribute("fatigue", self.getAttribute("fatigue")-fatigue_delta)
+        self._resting_tick_counter = 0
+
+    def insanityTick(self):
+        pass
+
+    def thirstTick(self):
+        pass
+
+    def getAttributeTickers(self):
+        return [self.temperatureTick,
+                self.vibesTick,
+                self.hungerTick,
+                self.oxygenTick,
+                self.fatigueTick,
+                self.insanityTick,
+                self.thirstTick]
+
+    def tickAllAttributes(self):
+        for attribute_ticker in self.getAttributeTickers():
+            attribute_ticker()
+        
     def tick(self):
         super().tick()
 
         self.inventory.tick(self, self.world)
+
+        self.tickAllAttributes()
 
     def movementTick(self):
         super().movementTick()
@@ -249,8 +364,9 @@ class Player(Creature):
         
 
 class PlayerHUD(events.EventAcceptor):
-    TOPLEFT_BAR_BOUNDS = pygame.Rect((10, 10), (500, 20))
+    TOPLEFT_BAR_BOUNDS = pygame.Rect((10, 10), (400, 30))
     INVENTORY_POS = (1600, 100)
+    BAR_BACKGROUND = (40, 40, 40)
     
     def __init__(self, player):
         self.player = player
@@ -266,18 +382,27 @@ class PlayerHUD(events.EventAcceptor):
         return bool(used)
 
     def drawBars(self, surface):
-        current = self.TOPLEFT_BAR_BOUNDS
+        topleft = self.TOPLEFT_BAR_BOUNDS
 
+        x, y = self.TOPLEFT_BAR_BOUNDS.topleft
         
+        for bar_data in self.player.getBarDataGetters():
+            fullness, colour = bar_data()
 
-    def drawHealthBar(self, surface, pos):
-        bar = self.HEALTH_BAR_BOUNDS
+            self.drawBar(surface, fullness, colour, (x, y))
+
+            y += topleft.height
+
+    def drawBar(self, surface, fullness, colour, pos):
+        size = self.TOPLEFT_BAR_BOUNDS.size
+
+        fullness = min(1, max(0, fullness))
 
         # Background
-        pygame.draw.rect(surface, (128, 128, 128), bar)
+        pygame.draw.rect(surface, self.BAR_BACKGROUND, (pos, size))
 
-        # Health stats
-        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(bar.topleft, (bar.width*self.player.getHealthPercentage(), bar.height)))
+        # Bar
+        pygame.draw.rect(surface, colour, pygame.Rect(pos, (size[0]*fullness, size[1])))
 
     def drawInventory(self, surface):
         mouse_pos = pygame.mouse.get_pos()
@@ -297,5 +422,5 @@ class PlayerHUD(events.EventAcceptor):
                                     pos[1]+self.player.world.TILE_SIZE[1]//2))
         
     def draw(self, surface):
-        self.drawHealthBar(surface)
+        self.drawBars(surface)
         self.drawInventory(surface)

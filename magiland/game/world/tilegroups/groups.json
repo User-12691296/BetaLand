@@ -2,5 +2,10 @@
 	"tiles":["sand",
 		"sanddark",
 		"sandlight",
-		"sandoasis"],
-	"extras":{"temperature":3}}}
+		"sandoasis",
+		"sandcactus"],
+	"extras":{"temperature":4}},
+"cooldesert":{"type":"thermals",
+	"tiles":["sand",
+		"sanddark"],
+	"extras":{"temperature":8}}}

@@ -10,6 +10,8 @@ from misc import events
 from .fovcalcs import FOVCalculator
 from misc.textures import TextureAtlas
 
+from ..tilegroups import GROUP_MANAGER
+
 from ...entities import *
 
 DEFAULT_WORLD = "overworld"
@@ -409,6 +411,13 @@ class World(events.EventAcceptor):
         tileid = self.getTileID(tile_pos)
 
         return self.tiles[tileid]
+
+    def getGroupsWithTile(self, tile_pos):
+        return GROUP_MANAGER.getGroupsWithTile(self.getTileID(tile_pos))
+
+    def getTileExtrasFromGroups(self, tile_pos, extra, default):
+        for group in self.getGroupsWithTile(tile_pos):
+            yield GROUP_MANAGER.getExtras(GROUP_MANAGER.getGroup(group)).get(extra, default)
     
     def getTileElevation(self, tile_pos, elev=0):
         # If out of bounds, assume 0 elevation. This gives a raised bevel effect to borders
