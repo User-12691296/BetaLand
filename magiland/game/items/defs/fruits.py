@@ -23,10 +23,10 @@ class Fruit(Item):
         self.effect_time = 0
         self.effect_duration = effect_duration
 
-    def effect(self, data, player, world, tile, tile_pos):
+    def effect(self, player, world, tile, tile_pos):
         pass
 
-    def reverse_effect(self, data, player, world, tile, tile_pos):
+    def reverse_effect(self, player, world, tile, tile_pos):
         pass
 
     def onLeft(self, data, player, world, tile, tile_pos):
