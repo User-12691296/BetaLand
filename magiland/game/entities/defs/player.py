@@ -6,7 +6,6 @@ from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
 
 from constants import GAME
-#har 
 
 INITIAL_PLAYER_HEALTH = 10
 
