@@ -18,6 +18,7 @@ main_manager = MainWindowManager(SCREEN)
 # Main loop
 clock = pygame.time.Clock()
 running = True
+#
 while running:
     # Tick before input
     main_manager.first_tick()
