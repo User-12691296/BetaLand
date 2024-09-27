@@ -7,7 +7,6 @@ from ...items import PlayerInventory, ItemStack
 
 from constants import GAME
 
-
 INITIAL_PLAYER_HEALTH = 10
 
 class Player(Creature):    
