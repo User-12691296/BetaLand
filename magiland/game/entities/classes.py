@@ -166,6 +166,9 @@ class Creature(Entity):
         self.defineAttribute("health", 0)
         self.setAttribute("health", health)
 
+        self.defineAttribute("general_armor", 0)
+        self.setAttribute("damage_threshold", 0)
+
         self.size = size
 
         self.hitbox = pygame.Rect((0, 0), size)
@@ -278,7 +281,24 @@ class Creature(Entity):
         self.changeHealth(-total_damage)
 
     def calcDamageModifiers(self, damage, dtt=0):
+        
+        general_armor = self.getAttribute("general_armor")
+        dmg_threshold = self.getAttribute("damage_threshold")
+        
+        if general_armor != 0: 
+            if damage < dmg_threshold:
+                damage /= general_armor  # Minecraft style
+                damage = max(damage, 0) 
+
+            else:
+                damage -= general_armor  # Terraria style
+                damage = max(damage, 0) 
+
         return (damage/(2**dtt))
+    
+    def setArmorValues (self, armor_points, dmg_threshold): 
+        self.setAttribute("general_armor", armor_points)
+        self.setAttribute("damage_threshold", dmg_threshold)
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display)
