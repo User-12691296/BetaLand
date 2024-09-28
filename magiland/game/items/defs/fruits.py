@@ -72,10 +72,9 @@ class SilverFruit(Fruit):
         player.setArmorValues(self.original_armor_value, self.original_dmg_threshold)
 
 FRUITS = []
-Fruit("debug_sword", "sword", 1, 100).addToGroup(FRUITS)
-Fruit("orange", "orange", 1, 30).addToGroup(FRUITS)
-Fruit("banana", "banana", 1, 30).addToGroup(FRUITS)
-Fruit("watermelon", "watermelon", 1, 30).addToGroup(FRUITS)
+Fruit("orange", "orange", 0, 30).addToGroup(FRUITS)
+Fruit("banana", "banana", 0, 30).addToGroup(FRUITS)
+Fruit("watermelon", "watermelon", 0, 30).addToGroup(FRUITS)
 Fruit("apple", "apple", 0, 100).addToGroup(FRUITS)
 Lemon("lemon", "lemon", 1, 30, 100).addToGroup(FRUITS)
 SilverFruit("silver_apple", "silver_apple", 1, 100, 100, 10).addToGroup(FRUITS)
