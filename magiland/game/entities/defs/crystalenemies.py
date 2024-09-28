@@ -57,7 +57,7 @@ class CrystalKnight(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("crystalknight")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -84,7 +84,7 @@ class CrystalScorpion(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("crystalscorpion")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -111,7 +111,7 @@ class CrystalSlime(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("crystalslime")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -138,7 +138,7 @@ class CrystalBat(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("crystalbat")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 

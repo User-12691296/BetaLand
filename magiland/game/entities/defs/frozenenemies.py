@@ -22,7 +22,7 @@ class FrozenKnight(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("frozenknight")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -49,7 +49,7 @@ class FrozenPuffer(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("frozenpuffer")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -76,7 +76,7 @@ class FrozenTroll(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("frozentroll")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -103,7 +103,7 @@ class FrozenSlime(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("frozenslime")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -130,7 +130,7 @@ class FrozenWolf(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("wolf")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
