@@ -1,3 +1,4 @@
+#i messed with this file icl
 import pygame
 from misc import events
 from constants import *
@@ -9,7 +10,7 @@ class MainMenuOption(events.ButtonShell):
         
         self.name = name
 
-        self.rect = pygame.Rect(0, 0, 800, 110)
+        self.rect = pygame.Rect(0, 0, 800, 110) #(0,0,600,100)
         self.rect.center = center
         
         self.font = pygame.font.SysFont("Times New Roman", 200)
@@ -41,11 +42,11 @@ class MainMenu(events.Alpha):
                           lambda: pygame.event.post(pygame.event.Event(events.OPEN_SETTINGS)),
                           lambda: pygame.event.post(pygame.event.Event(pygame.QUIT))]
 
-        y = 850
+        y = 850 #400 + 200
         
         for option_name, option_action in zip(option_names, option_actions):
-            self.options[option_name] = MainMenuOption(option_name, (675, y), option_action)
-            y += 180
+            self.options[option_name] = MainMenuOption(option_name, (675, y), option_action) #600
+            y += 180 #100
 
     def onMouseDown(self, pos, button):
         for option in self.options.values():
