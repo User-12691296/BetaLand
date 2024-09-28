@@ -286,7 +286,7 @@ class Creature(Entity):
         
         general_armor = self.getAttribute("general_armor")
         dmg_threshold = self.getAttribute("damage_threshold")
-        print(general_armor, dmg_threshold)
+        
         if general_armor != 0 and dmg_threshold != None: 
             if damage < dmg_threshold: 
                 damage /= general_armor  # Minecraft style
