@@ -172,6 +172,8 @@ class Creature(Entity):
 
         self.effects = {}
 
+        self.updateHitbox()
+
     def onSpawn(self):
         super().onSpawn()
 

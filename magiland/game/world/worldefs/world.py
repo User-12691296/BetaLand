@@ -524,16 +524,16 @@ class World(events.EventAcceptor):
     def tick(self):
         self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
         
-        for entity in self.entities:
-            entity.setOpaques(self.opaques)
-            entity.tick()
+        for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 20):
+            if not entity.isPlayer():
+                entity.setOpaques(self.opaques)
+                entity.tick()
 
         for projectile in self.projectiles:
             projectile.tick()
 
-         # debug spawning
-        x = random.randrange(-20, 21)
-        y = random.randrange(-20, 21)
+    def calculateSpawning(self):
+        target = (random.randrange(-20, 21), random.randrange(-20, 21))
 
         ppos = [*self.player.getPos()]
         ppos[0] += x
@@ -549,8 +549,9 @@ class World(events.EventAcceptor):
         self.moving_anim_delta = [0, 0]
 
     def movementTick(self):
-        for entity in self.entities:
-            entity.movementTick()
+        for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 20):
+            if not entity.isPlayer():
+                entity.movementTick()
 
         for projectile in self.projectiles:
             projectile.movementTick()
@@ -561,15 +562,17 @@ class World(events.EventAcceptor):
             self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
 
     def damageTick(self):
-        for entity in self.entities:
-            entity.damageTick()
+        for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 20):
+            if not entity.isPlayer():
+                entity.damageTick()
 
         for projectile in self.projectiles:
             projectile.damageTick()
     
     def finalTick(self):
-        for entity in self.entities:
-            entity.finalTick()
+        for entity in self.getEntitiesInRangeOfTile(self.player.getPos(), 20):
+            if not entity.isPlayer():
+                entity.finalTick()
 
         for projectile in self.projectiles:
             projectile.finalTick()
