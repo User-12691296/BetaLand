@@ -15,8 +15,11 @@ class Armor(Item):
     def unequip(self, player):
         player.setArmorValues(0, 0)
 
+    def isArmor(self):
+        return True
+
     def tick(self, data, player, world):
         data["animations"].tick()
 
 ARMORS = []
-Armor("iron_helmet", "iron_helmet", 1, 5, 10).addToGroup(ARMORS)
+Armor("iron_helmet", "iron_helmet", 0, 10000, 10).addToGroup(ARMORS)

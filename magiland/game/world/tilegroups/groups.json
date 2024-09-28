@@ -5,7 +5,12 @@
 		"sandoasis",
 		"sandcactus"],
 	"extras":{"temperature":4}},
-"cooldesert":{"type":"thermals",
+"hotdesert":{"type":"thermals",
 	"tiles":["sand",
 		"sanddark"],
-	"extras":{"temperature":8}}}
+	"extras":{"temperature":8}},
+
+"deepdark":{"type":"biome",
+	"tiles":["deepdark",
+		"darkwall"],
+	"extras":{"insanity_level":1}}}

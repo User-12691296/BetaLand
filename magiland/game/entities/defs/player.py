@@ -44,6 +44,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
+        self.inventory.setItemStack(ItemStack("iron_helmet",1),0)
 
     def initAttributes(self):
         # Frames per movement
@@ -68,6 +69,7 @@ class Player(Creature):
         # < 0.1 causes screen shaking
         self.defineAttribute("hunger", 0)
         self.setAttribute("hunger", 1)
+        self.defineAttribute("hunger_consumption_speed", 1) # Slower/faster than default of 600 seconds
 
         # 0 to 1
         # < 0.8 fatal
@@ -90,6 +92,8 @@ class Player(Creature):
         # > 1.0 teleports you to the final boss, half movement, controls flipped
         self.defineAttribute("insanity", 0)
         self.setAttribute("insanity", 0)
+        self.defineAttribute("insanity_progress_speed", 40) #seconds
+        self.defineAttribute("insanity_regen_speed", 8) #seconds
 
         # 0 to 1
         # 0 fatal
@@ -161,7 +165,7 @@ class Player(Creature):
         hunger = self.getAttribute("hunger")
 
         # 600 seconds till hunger depletes fully
-        hunger -= 1/60/600
+        hunger -= 1/60/600 * self.getAttribute("hunger_consumption_speed")
 
         self.setAttribute("hunger", hunger)
 
@@ -209,7 +213,16 @@ class Player(Creature):
         self._resting_tick_counter = 0
 
     def insanityTick(self):
-        pass
+        for insanity_level in self.world.getTileExtrasFromGroups(self.pos, "insanity_level", 0):
+            insanity = self.getAttribute("insanity")
+
+            if insanity_level > insanity:
+                # insanity goes up to full in 20 seconds
+                self.setAttribute("insanity", insanity + 1/60/40)
+
+            if insanity_level < insanity:
+                # insanity drops in 5 seconds
+                self.setAttribute("insanity", insanity - 1/60/5)
 
     def thirstTick(self):
         pass

@@ -1,3 +1,5 @@
+import pygame
+
 class BasicTile:
     def __init__(self, tileid, tex_name, rscat=True):
         self.tileid = tileid

@@ -167,7 +167,7 @@ class Creature(Entity):
         self.setAttribute("health", health)
 
         self.defineAttribute("general_armor", 0)
-        self.setAttribute("damage_threshold", 0)
+        self.defineAttribute("damage_threshold", 0)
 
         self.size = size
 
@@ -176,6 +176,8 @@ class Creature(Entity):
         self.damages_this_tick = []
 
         self.effects = {}
+
+        self.updateHitbox()
 
     def onSpawn(self):
         super().onSpawn()
@@ -285,14 +287,14 @@ class Creature(Entity):
         general_armor = self.getAttribute("general_armor")
         dmg_threshold = self.getAttribute("damage_threshold")
         
-        if general_armor != 0: 
-            if damage < dmg_threshold:
+        if general_armor != 0 and dmg_threshold != None: 
+            if damage < dmg_threshold: 
                 damage /= general_armor  # Minecraft style
                 damage = max(damage, 0) 
 
             else:
                 damage -= general_armor  # Terraria style
-                damage = max(damage, 0) 
+                damage = max(damage, 0)  
 
         return (damage/(2**dtt))
     

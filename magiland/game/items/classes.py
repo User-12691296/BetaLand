@@ -77,6 +77,9 @@ class Item(events.EventAcceptor):
         
         surface.blit(tbd, tbd_rect.topleft)
 
+    def isArmor(self):
+        return False
+
     def drawInWorld(self, data, surface, center):
         self.drawRotated(surface, data.get("rot", 0), center)
 
@@ -180,11 +183,12 @@ class ItemStack:
 class Inventory(events.EventAcceptor):
     ItemEntityClass = None
     
-    def __init__(self, size, width, grid_size):
+    def __init__(self, size, width, grid_size, armor_slot = 24):
         self.size = size
         self.width = width
         self.height = round(self.size/self.width+0.4999999999)
         self.grid_size = grid_size
+        self.armor_slot = armor_slot
 
         self.active_stack = None
 
@@ -197,6 +201,20 @@ class Inventory(events.EventAcceptor):
         cls.ItemEntityClass = iecls
 
     def setItemStack(self, stack, loc):
+        if self.getItemStack(loc) != None:
+            if self.getItemStack(loc).item.isArmor():
+                self.getItemStack(loc).item.unequip(self.player) 
+
+        if stack != None:  
+            if loc == self.armor_slot and not stack.item.isArmor(): 
+                self.setActiveStack(stack)
+                return False
+            
+            elif loc == self.armor_slot and stack.item.isArmor():
+                stack.item.equip(self.player)
+                self.item_stacks[loc] = stack
+                return True
+        
         self.item_stacks[loc] = stack
 
     def addItemStack(self, stack):
