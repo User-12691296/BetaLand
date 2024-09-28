@@ -15,7 +15,7 @@ class Fruit(Item):
     #Note to self, add healing effect thru init
     # Fruits give a special status effect TBD
     def __init__(self, itemid, tex_name, size, heal_amount, effect_duration = 60):
-        super().__init__(itemid, tex_name, False, size)
+        super().__init__(itemid, tex_name, True, size)
         self.heal_amount = heal_amount
         
         self.ticker = 0

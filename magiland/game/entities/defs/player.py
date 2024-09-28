@@ -25,7 +25,7 @@ class Player(Creature):
     def loadInventory(self):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
-        self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
+        """ self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
         self.inventory.setItemStack(ItemStack("golf_club",1),1)
@@ -34,16 +34,16 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
         self.inventory.setItemStack(ItemStack("soul_cannon",1),4)
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
-        self.inventory.setItemStack(ItemStack("lemon",1),18)
-        self.inventory.setItemStack(ItemStack("apple",1),19)
         self.inventory.setItemStack(ItemStack("cosmic_mace",1),20)
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
-        self.inventory.setItemStack(ItemStack("lava_mace",1),22)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace",1),23)
+        self.inventory.setItemStack(ItemStack("lava_mace",1),22) """
+        self.inventory.setItemStack(ItemStack("kr1stal_mace",1),1)
         self.inventory.setItemStack(ItemStack("pizza_gun",1),16)
         self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
+        self.inventory.setItemStack(ItemStack("lemon",1),18)
+        self.inventory.setItemStack(ItemStack("apple",1),19)
         self.inventory.setItemStack(ItemStack("iron_helmet",1),0)
 
     def initAttributes(self):
