@@ -53,7 +53,7 @@ class Lemon (Fruit):
     def reverse_effect(self, player, world, player_tile_pos):
         player.setMovementSpeed(GAME.PLAYER_WALKING_SPEED)
 
-class Pineapple(Fruit):
+class SilverFruit(Fruit):
     def __init__(self, itemid, tex_name, size, heal_amount, effect_duration, armor_points):
         super().__init__(itemid, tex_name, size, heal_amount, effect_duration)
         self.armor_points = armor_points
@@ -78,3 +78,4 @@ Fruit("banana", "banana", 1, 30).addToGroup(FRUITS)
 Fruit("watermelon", "watermelon", 1, 30).addToGroup(FRUITS)
 Fruit("apple", "apple", 1, 100).addToGroup(FRUITS)
 Lemon("lemon", "lemon", 1, 30, 100).addToGroup(FRUITS)
+SilverFruit("silver_apple", "silver_apple", 1, 100, 100, 10).addToGroup(FRUITS)
