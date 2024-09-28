@@ -30,7 +30,7 @@ class MountainEagle(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountaineagle")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -57,7 +57,7 @@ class MountainGoat(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountaingoat")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -84,7 +84,7 @@ class MountainGolem(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountaingolem")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -111,7 +111,7 @@ class MountainSlime(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountainslime")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -138,7 +138,7 @@ class MountainTroll(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountaintroll")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -164,7 +164,7 @@ class MountainBat(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("mountainbat")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 

@@ -329,7 +329,7 @@ class Inventory(events.EventAcceptor):
 
     def damageTick(self, player, world):
         while self.thrown_stacks:
-            self.throwStack(world, player.pos, self.thrown_stacks.pop())
+            self.throwStack(world, player.pos, self.thrown_stacks.pop(), 3)
             
         for stack in self.item_stacks:
             if stack:
@@ -352,15 +352,15 @@ class Inventory(events.EventAcceptor):
         self.addItemStack(self.active_stack)
         self.setActiveStack(None)
 
-    def throwStack(self, world, pos, stack):
+    def throwStack(self, world, pos, stack, throw_distance):
         stack_entity = self.ItemEntityClass(stack)
-        stack_entity.placeInWorld(world, pos, 5)
+        stack_entity.placeInWorld(world, pos, throw_distance)
 
-    def throwStackInLoc(self, world, pos, stack_loc):
+    def throwStackInLoc(self, world, pos, stack_loc, throw_distance):
         stack = self.getItemStack(stack_loc)
         
         if stack:
-            self.throwStack(world, pos, stack)
+            self.throwStack(world, pos, stack, throw_distance)
             self.setItemStack(None, stack_loc)
 
     def draw(self, surface, topleft):
@@ -404,7 +404,7 @@ class PlayerInventory(Inventory):
         if sstack: sstack.select()
 
     def throwSelectedStack(self, world, pos):
-        self.throwStackInLoc(world, pos, self.selected_slot)
+        self.throwStackInLoc(world, pos, self.selected_slot, 3)
 
     def onMouseDown(self, pos, button, inv_pos):
         ipos = [pos[0], pos[1]]

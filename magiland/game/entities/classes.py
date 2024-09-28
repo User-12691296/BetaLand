@@ -324,7 +324,7 @@ class Creature(Entity):
 
 class Barrel(Creature):
     def __init__(self, health, stop_range=1, movement_speed=0):
-        super().__init__(health)
+        super().__init__(1)
 
         self.loadInventory()
 
@@ -336,12 +336,15 @@ class Barrel(Creature):
 
     def loadInventory(self):
         self.inventory = Inventory(3,1,1)
-        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
-        self.inventory.setActiveStack(1)
+        self.inventory.setActiveStack(0)
         
     def kill(self):
         super().kill()
-        self.inventory.throwStackInLoc(self.world,self.pos,1)
+        self.dropAllitems()
+    
+    def dropAllitems(self):
+        for current_stack_index in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, 0)
 
     
 class Enemy(Creature):

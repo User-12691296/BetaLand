@@ -27,7 +27,7 @@ class Slime(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("slime")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
