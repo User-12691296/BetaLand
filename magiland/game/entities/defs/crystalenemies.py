@@ -5,6 +5,8 @@ from ..classes import Enemy
 class CrystalGolem(Enemy):
     def __init__(self):
         super().__init__(5, 0, 30)
+        """ CODE FOR MOB DROPS
+        self.loadInventory() """
 
     @staticmethod
     def getNeededAssets():
@@ -18,6 +20,12 @@ class CrystalGolem(Enemy):
             if not entity.isEnemy():
                 entity.damage(0.1)
 
+    """ CODE FOR MOB DROPS
+    def tick(self):
+        super().tick()
+        if self.getHealth() <= 0:
+            self.dropItem """
+    
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)

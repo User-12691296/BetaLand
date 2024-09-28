@@ -4,7 +4,7 @@ import math
 import os
 
 from misc import events
-from ..items import PlayerInventory, Inventory, ItemStack
+from ..items import Item, PlayerInventory, Inventory, ItemStack
 from .pathfinding import PathFinder
 
 from constants import GAME
@@ -154,6 +154,8 @@ class Entity(events.EventAcceptor):
     
     def draw(self, display, display_topleft=(0, 0)): pass
 
+    def damage(x,y): pass
+
 class Creature(Entity):
     def __init__(self, health, size=(1, 1)):
         super().__init__()
@@ -300,11 +302,34 @@ class Creature(Entity):
         health_bar.width = round(width*self.getHealthPercentage())
         pygame.draw.rect(display, (0, 255, 0), health_bar)
 
+class Barrel(Creature):
+    def __init__(self, health, stop_range=1, movement_speed=0):
+        super().__init__(health)
 
+        self.loadInventory()
+
+    def isEnemy(self):
+        return True
+    
+    def isEnemyTarget(self):
+        return False
+
+    def loadInventory(self):
+        self.inventory = Inventory(3,1,1)
+        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
+        self.inventory.setActiveStack(1)
+        
+    def kill(self):
+        super().kill()
+        self.inventory.throwStackInLoc(self.world,self.pos,1)
+
+    
 class Enemy(Creature):
     def __init__(self, health, stop_range=1, movement_speed=10):
         super().__init__(health)
 
+        """ CODE TO ADD MOB DROPS """
+        """ self.loadInventory() """ 
         self.defineAttribute("stopping_range", 0)
         self.setAttribute("stopping_range", stop_range)
         
@@ -352,6 +377,13 @@ class Enemy(Creature):
             self.movement_this_tick[0] = self.pos[0]-old_pos[0]
 
         self.registerCooldown("movement", self.getAttribute("movement_speed"))
-        
-        
 
+    """ CODE TO ADD MOB DROPS """
+    """ def loadInventory(self):
+        self.inventory = Inventory(3,1,1)
+        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
+        self.inventory.setActiveStack(1)
+        
+    def kill(self):
+        super().kill()
+        self.inventory.throwStackInLoc(self.world,self.pos,1) """
