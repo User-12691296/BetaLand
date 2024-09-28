@@ -4,7 +4,7 @@ import math
 import os
 
 from misc import events
-from ..items import PlayerInventory, Inventory, ItemStack
+from ..items import Item, PlayerInventory, Inventory, ItemStack
 from .pathfinding import PathFinder
 
 from constants import GAME
@@ -154,6 +154,8 @@ class Entity(events.EventAcceptor):
     
     def draw(self, display, display_topleft=(0, 0)): pass
 
+    def damage(x,y): pass
+
 class Creature(Entity):
     def __init__(self, health, size=(1, 1)):
         super().__init__()
@@ -163,6 +165,9 @@ class Creature(Entity):
 
         self.defineAttribute("health", 0)
         self.setAttribute("health", health)
+
+        self.defineAttribute("general_armor", 0)
+        self.defineAttribute("damage_threshold", 0)
 
         self.size = size
 
@@ -278,7 +283,24 @@ class Creature(Entity):
         self.changeHealth(-total_damage)
 
     def calcDamageModifiers(self, damage, dtt=0):
+        
+        general_armor = self.getAttribute("general_armor")
+        dmg_threshold = self.getAttribute("damage_threshold")
+        print(general_armor, dmg_threshold)
+        if general_armor != 0 and dmg_threshold != None: 
+            if damage < dmg_threshold: 
+                damage /= general_armor  # Minecraft style
+                damage = max(damage, 0) 
+
+            else:
+                damage -= general_armor  # Terraria style
+                damage = max(damage, 0)  
+
         return (damage/(2**dtt))
+    
+    def setArmorValues (self, armor_points, dmg_threshold): 
+        self.setAttribute("general_armor", armor_points)
+        self.setAttribute("damage_threshold", dmg_threshold)
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display)
@@ -302,11 +324,34 @@ class Creature(Entity):
         health_bar.width = round(width*self.getHealthPercentage())
         pygame.draw.rect(display, (0, 255, 0), health_bar)
 
+class Barrel(Creature):
+    def __init__(self, health, stop_range=1, movement_speed=0):
+        super().__init__(health)
 
+        self.loadInventory()
+
+    def isEnemy(self):
+        return True
+    
+    def isEnemyTarget(self):
+        return False
+
+    def loadInventory(self):
+        self.inventory = Inventory(3,1,1)
+        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
+        self.inventory.setActiveStack(1)
+        
+    def kill(self):
+        super().kill()
+        self.inventory.throwStackInLoc(self.world,self.pos,1)
+
+    
 class Enemy(Creature):
     def __init__(self, health, stop_range=1, movement_speed=10):
         super().__init__(health)
 
+        """ CODE TO ADD MOB DROPS """
+        """ self.loadInventory() """ 
         self.defineAttribute("stopping_range", 0)
         self.setAttribute("stopping_range", stop_range)
         
@@ -354,6 +399,13 @@ class Enemy(Creature):
             self.movement_this_tick[0] = self.pos[0]-old_pos[0]
 
         self.registerCooldown("movement", self.getAttribute("movement_speed"))
-        
-        
 
+    """ CODE TO ADD MOB DROPS """
+    """ def loadInventory(self):
+        self.inventory = Inventory(3,1,1)
+        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
+        self.inventory.setActiveStack(1)
+        
+    def kill(self):
+        super().kill()
+        self.inventory.throwStackInLoc(self.world,self.pos,1) """

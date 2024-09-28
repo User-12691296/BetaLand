@@ -6,6 +6,7 @@ from .grenades import GRENADES
 from .soul_cannon import SOULCANNON
 from .bows import BOWS
 from .fruits import FRUITS
+from .armor import ARMORS
 from .geodes import GEODES
 
 
@@ -21,3 +22,4 @@ ALL_ITEM_CLASSES += SOULCANNON
 ALL_ITEM_CLASSES += BOWS
 ALL_ITEM_CLASSES += FRUITS
 ALL_ITEM_CLASSES += GEODES
+ALL_ITEM_CLASSES += ARMORS

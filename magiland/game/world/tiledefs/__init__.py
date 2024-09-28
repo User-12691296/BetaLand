@@ -3,6 +3,8 @@ from .grass import GrassTile
 from .barrier import BarrierTile
 from .sanddark import SandDarkTile
 from .damaging import DamageTile
+from .slowing import SlowTile
+from .cactus import Cactus
 
 
 OVERWORLD_TILES = []
@@ -13,7 +15,8 @@ BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("sandlight", "sandlight").addTileToList(OVERWORLD_TILES)
 BasicTile("sandoasis", "sandoasis", False).addTileToList(OVERWORLD_TILES)
-DamageTile("sandcactus", "sandcactus", 0.1).addTileToList(OVERWORLD_TILES)
+Cactus("sandcactus", "sandcactus", 0.1, 2).addTileToList(OVERWORLD_TILES)
+
 
 BasicTile("kr1stal", "kr1stal").addTileToList(OVERWORLD_TILES)
 BasicTile("kr1stalfloor", "kr1stalfloor").addTileToList(OVERWORLD_TILES)
