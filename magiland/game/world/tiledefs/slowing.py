@@ -9,8 +9,7 @@ class SlowTile(BasicTile):
         
     def onWalk(self, world, tile_pos):
         player = world.getPlayer()
-        world.getAnimationDelta()
-        
+                
         # A BIT BUGGY, WORTH FIXING LATER, BUT JUMPY WHENEVER YOU CHANGE SPEED
 
         player.setMovementSpeed(GAME.PLAYER_WALKING_SPEED*self.slow_value)
