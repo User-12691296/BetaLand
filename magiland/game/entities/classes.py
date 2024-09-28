@@ -302,6 +302,9 @@ class Creature(Entity):
         self.setAttribute("general_armor", armor_points)
         self.setAttribute("damage_threshold", dmg_threshold)
 
+    def getArmorValues(self):
+        return (self.getAttribute("general_armor"), self.getAttribute("damage_threshold"))
+
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display)
         

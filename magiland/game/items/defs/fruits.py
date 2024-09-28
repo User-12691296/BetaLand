@@ -53,6 +53,23 @@ class Lemon (Fruit):
     def reverse_effect(self, player, world, player_tile_pos):
         player.setMovementSpeed(GAME.PLAYER_WALKING_SPEED)
 
+class Pineapple(Fruit):
+    def __init__(self, itemid, tex_name, size, heal_amount, effect_duration, armor_points):
+        super().__init__(itemid, tex_name, size, heal_amount, effect_duration)
+        self.armor_points = armor_points
+        self.original_armor_value = None
+        self.original_dmg_threshold = None
+
+    def effect(self, player, world, tile, tile_pos):
+        self.original_armor_value = player.getArmorValues()[0]
+        self.original_dmg_threshold = player.getArmorValues()[1]
+        new_armor_value = self.original_armor_value + self.armor_points 
+        player.setArmorValues(new_armor_value, self.original_dmg_threshold)
+
+        player.giveEffect("defense", self.effect_duration, lambda x, y, z:None, self.reverse_effect)
+
+    def reverse_effect(self, player, world, tile_pos):
+        player.setArmorValues(self.original_armor_value, self.original_dmg_threshold)
 
 FRUITS = []
 Fruit("debug_sword", "sword", 1, 100).addToGroup(FRUITS)
