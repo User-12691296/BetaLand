@@ -12,7 +12,7 @@ from constants import GAME
 
 class Entity(events.EventAcceptor):
     def __init__(self):
-        self.pos = [0, 0]
+        self.pos = [600, 0]
 
         self.cooldowns = {}
 
@@ -301,6 +301,9 @@ class Creature(Entity):
     def setArmorValues (self, armor_points, dmg_threshold): 
         self.setAttribute("general_armor", armor_points)
         self.setAttribute("damage_threshold", dmg_threshold)
+
+    def getArmorValues(self):
+        return (self.getAttribute("general_armor"), self.getAttribute("damage_threshold"))
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display)

@@ -25,7 +25,7 @@ class Player(Creature):
     def loadInventory(self):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
-        """ self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
+        self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
         self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
         self.inventory.setItemStack(ItemStack("golf_club",1),1)
@@ -36,7 +36,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
         self.inventory.setItemStack(ItemStack("cosmic_mace",1),20)
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
-        self.inventory.setItemStack(ItemStack("lava_mace",1),22) """
+        self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),1)
         self.inventory.setItemStack(ItemStack("pizza_gun",1),16)
         self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
