@@ -22,4 +22,10 @@ class Armor(Item):
         data["animations"].tick()
 
 ARMORS = []
-Armor("iron_helmet", "iron_helmet", 0, 10000, 10).addToGroup(ARMORS)
+Armor("iron_helmet", "iron_helmet", 0, 3.8, 10).addToGroup(ARMORS)
+Armor("croc", "croc", 0, 1, 10).addToGroup(ARMORS)
+Armor("swamp_armor", "swamp_armor", 0, 1.5, 10).addToGroup(ARMORS)
+Armor("crystal_armor", "crystal_armor", 0, 2, 10).addToGroup(ARMORS)
+Armor("arctic_armor", "arctic_armor", 0, 2.4, 10).addToGroup(ARMORS)
+Armor("deepdark_armor", "deepdark_armor", 0, 2.6, 10).addToGroup(ARMORS)
+Armor("dragon_hide", "dragon_hide", 0, 3, 10).addToGroup(ARMORS)
