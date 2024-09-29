@@ -12,6 +12,7 @@ GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
 SandDarkTile().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
+
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("sandlight", "sandlight").addTileToList(OVERWORLD_TILES)
 SlowTile("sandoasis", "sandoasis",0.1, False).addTileToList(OVERWORLD_TILES)

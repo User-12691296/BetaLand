@@ -9,9 +9,12 @@ class CrystalBronze(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("lil_sword", 1), 0)
-        self.inventory.setItemStack(ItemStack("apple", (random.randint(3, 10))), 1)
-        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 2)
+        self.inventory.setItemStack(ItemStack("apple", (random.randint(3, 10))), 0)
+        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("lil_sword", 1), 2)
+        self.inventory.setItemStack(ItemStack("epic_sword", 2), 3)
+        self.inventory.setItemStack(ItemStack("cool_sword", 3), 4)
+        
 
 
     @staticmethod
@@ -24,7 +27,7 @@ class CrystalBronze(Barrel):
     def tick(self):
         super().tick()
         if self.getHealth() <= 0:
-            self.dropAllitems
+            self.dropItems
     
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
