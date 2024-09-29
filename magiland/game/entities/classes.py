@@ -12,7 +12,7 @@ from constants import GAME
 
 class Entity(events.EventAcceptor):
     def __init__(self):
-        self.pos = [0, 0]
+        self.pos = [600, 0]
 
         self.cooldowns = {}
 
