@@ -21,6 +21,10 @@ ORIGINAL_CONTROLS_KEYS = {
     "down": pygame.K_s,
     "right": pygame.K_d,
     "left": pygame.K_a,
+    "throw": pygame.K_t,
+    "inventory right": pygame.K_e,
+    "inventory left": pygame.K_q,
+    "pause": pygame.K_RETURN
 }
 
 SOUND_VOLUMES = {
