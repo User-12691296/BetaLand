@@ -7,9 +7,9 @@ import math
 SWING_FRAMES = 10
 
 class Bow(Item):
-    def __init__(self, itemid, tex_name, size):
+    def __init__(self, itemid, tex_name, size, cooldown):
         super().__init__(itemid, tex_name, False, size)
-    
+        self.cooldown = cooldown # In frames
 ##    def initData(self):
 ##        data = super().initData()
 ##        return data
@@ -23,13 +23,11 @@ class Bow(Item):
         data["rot"] = data["rot"] % 360
 
     def fireInTheHole(self, data, player, world, tile_pos, tile):
-        arrow = PROJECTILE_CLASSES.Arrow(player.pos, -data["rot"]-45)
-##        if not pizza.isCooldownActive("pizza"):
-        arrow.giveImmunity(player)
-        world.addProjectile(arrow)
-##            pizza.registerCooldown("lasershot", 60)
-
-##        player.setAttribute("movement_speed", 10)
+        if not data["animations"].exists("cooldown"):
+            arrow = PROJECTILE_CLASSES.Arrow(player.pos, -data["rot"]-45)
+            arrow.giveImmunity(player)
+            world.addProjectile(arrow)
+            data["animations"].create("cooldown", self.cooldown)
         
     def onLeft(self, data, player, world, tile_pos, tile):
         self.fireInTheHole(data, player, world, tile_pos, tile)
@@ -39,6 +37,6 @@ class Bow(Item):
 # Do we need separate for crossbow?
 
 BOWS = []
-Bow("debug_sword", "sword", 1).addToGroup(BOWS)
-Bow("basic_crossbow", "basic_crossbow", 1).addToGroup(BOWS)
+Bow("debug_sword", "sword", 1, 1).addToGroup(BOWS)
+Bow("basic_crossbow", "basic_crossbow", 1, 30).addToGroup(BOWS)
 

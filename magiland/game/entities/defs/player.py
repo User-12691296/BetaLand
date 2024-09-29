@@ -336,11 +336,11 @@ class Player(Creature):
         return self.facing
 
     def onKeyDown(self, key, unicode, mod):
-        if key == pygame.K_e:
+        if key == GAME.CONTROLS_KEYS["inventory right"]:
             self.inventory.changeSelectedStack(1)
-        if key == pygame.K_q:
+        if key == GAME.CONTROLS_KEYS["inventory left"]:
             self.inventory.changeSelectedStack(-1)
-        if key == pygame.K_t:
+        if key == GAME.CONTROLS_KEYS["throw"]:
             self.inventory.throwSelectedStack(self.world, self.pos)
 
     def onMouseDown(self, pos, button):
