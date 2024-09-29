@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import math
+import random
 import os
 
 from misc import events
@@ -12,7 +13,7 @@ from constants import GAME
 
 class Entity(events.EventAcceptor):
     def __init__(self):
-        self.pos = [600, 0]
+        self.pos = [0, 0]
 
         self.cooldowns = {}
 
@@ -340,16 +341,18 @@ class Barrel(Creature):
         return False
 
     def loadInventory(self):
-        self.inventory = Inventory(3,1,1)
+        self.inventory = Inventory(5,1,1)
         self.inventory.setActiveStack(0)
         
     def kill(self):
         super().kill()
-        self.dropAllitems()
+        self.dropItems()
     
-    def dropAllitems(self):
-        for current_stack_index in range(self.inventory.size):
+    def dropItems(self):
+        for current_stack_index in range((self.inventory.size) - 2):
             self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, 0)
+        self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, (random.randint(1, 5)))
+        
 
     
 class Enemy(Creature):
