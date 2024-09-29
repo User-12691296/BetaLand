@@ -26,11 +26,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-            clean_close = True
+        # if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        #     clean_close = True
 
-        else:
-            main_manager.handleEvent(event)
+        # else:
+        #     main_manager.handleEvent(event)
+
+        main_manager.handleEvent(event)
 
     # Tick after input
     main_manager.main_tick()

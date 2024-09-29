@@ -342,7 +342,7 @@ class Player(Creature):
             self.inventory.changeSelectedStack(-1)
         if key == GAME.CONTROLS_KEYS["throw"]:
             self.inventory.throwSelectedStack(self.world, self.pos)
-
+            
     def onMouseDown(self, pos, button):
         # If anything uses the button, player will hog mouse input
         used = 0

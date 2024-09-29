@@ -2,6 +2,8 @@ import pygame
 import os
 import json
 
+from pygame.constants import BUTTON_LEFT as BUTTON_LEFT
+
 from .world import LOADABLE_WORLDS
 from misc import events
 from .items import initialiseItems
@@ -9,7 +11,35 @@ from .entities import initialiseEntities, ENTITY_CLASSES
 from .projectiles import initialiseProjectiles, PROJECTILE_CLASSES
 from .world import initialiseWorlds
 
+from constants import GAME
+from constants import assets
+from misc.events import ButtonShell
+
+
 ASSETS = os.path.join("assets", "game")
+
+PAUSE_FONT = pygame.font.Font(os.path.join(assets.FONT_PATH, assets.NOTABLE_FONT), 70)
+PAUSE_TITLE_FONT = pygame.font.Font(os.path.join(assets.FONT_PATH, assets.NOTABLE_FONT), 100)
+RETURN_FONT = pygame.font.Font(os.path.join(assets.FONT_PATH, assets.NOTABLE_FONT), 40)
+
+
+class ExitButton(ButtonShell):
+    def __init__(self, action, button=pygame.BUTTON_LEFT):
+        super().__init__(action, button)
+        self.font = PAUSE_FONT.render("Exit to Menu", False, "white")
+        self.name = "Exit to Menu"
+        self.rect = self.font.get_rect()
+        self.font = PAUSE_FONT
+
+    def draw(self, surface):
+        self.rect.center = (surface.get_width()/2, surface.get_height()/2+100)
+        option_text = self.font.render(self.name, False, (255,255,255))
+        if self.hovered:
+            option_text = self.font.render(self.name, False, (220,220,220))
+        if self.pressed:
+            option_text = self.font.render(self.name, False, (100,100,100))
+        surface.blit(option_text, (self.rect.topleft))
+
 
 DEFAULT_WORLD = "overworld"
 # world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["maze_level", [1,1]], ["level_3", [1,1]]]
@@ -29,6 +59,13 @@ class GameManager(events.Alpha):
         self.loadWorlds()
         self.loadPlayer()
         self.finaliseWorlds()
+
+        self.paused = False
+        self.pause_exit = ExitButton(self.exitButtonAction)
+
+    def exitButtonAction(self):
+        self.player.kill()
+        self.paused = False
 
     def loadWorlds(self):
         self.worlds = {}
@@ -71,20 +108,24 @@ class GameManager(events.Alpha):
         delta = self.getScreenBufferDelta()
         return (bpos[0]+delta[0], bpos[1]+delta[1])
 
+    def switchPause(self):
+        self.paused = not self.paused
+
     ## TICK
     def first_tick(self):
         self.player.tick()
         self.getWorld().tick()
     
     def main_tick(self):
-        self.player.movementTick()
-        self.getWorld().movementTick()
+        if not self.paused:
+            self.player.movementTick()
+            self.getWorld().movementTick()
 
-        self.player.damageTick()
-        self.getWorld().damageTick()
+            self.player.damageTick()
+            self.getWorld().damageTick()
 
-        self.player.finalTick()
-        self.getWorld().finalTick()
+            self.player.finalTick()
+            self.getWorld().finalTick()
     
     ## EVENTS
     def start(self):
@@ -96,33 +137,51 @@ class GameManager(events.Alpha):
     def onKeyDown(self, key, unicode, mod):
         global world_set, world_counter
 
-        if key == pygame.K_SPACE:
-            world_set[world_counter].pop(1)
-            world_set[world_counter].append(self.player.getPos())
+        if key == GAME.CONTROLS_KEYS["pause"]:
+            self.switchPause()
 
-            world_counter += 1  
-            self.changeWorld(world_set[world_counter][0])
-            self.player.setPos(world_set[world_counter][1])
+        if not self.paused:
+
+            if key == pygame.K_SPACE:
+                world_set[world_counter].pop(1)
+                world_set[world_counter].append(self.player.getPos())
+
+                world_counter += 1  
+                self.changeWorld(world_set[world_counter][0])
+                self.player.setPos(world_set[world_counter][1])
+                
+                if world_counter == len(world_set)-1:
+                    world_counter = -1 # Reset the counter
+
+                return
             
-            if world_counter == len(world_set)-1:
-                world_counter = -1 # Reset the counter
+            self.player.onKeyDown(key, unicode, mod)
+            self.getWorld().onKeyDown(key, unicode, mod)
 
-            return
-        
-        self.player.onKeyDown(key, unicode, mod)
-        self.getWorld().onKeyDown(key, unicode, mod)
-
+                
     def onKeyUp(self, key, unicode, mod):
+        if self.paused:
+            return
         self.player.onKeyUp(key, unicode, mod)
         self.getWorld().onKeyUp(key, unicode, mod)
         
-    def onMouseDown(self, spos, button):        
+    def onMouseMotion (self, spos):
+        if self.paused:
+            self.pause_exit.onMouseMotion(spos)
+
+    def onMouseDown(self, spos, button):      
+        if self.paused:
+            self.pause_exit.onMouseDown(spos, button)
+            return  
         used = self.player.onMouseDown(spos, button)
         if not used:
             bpos = self.screenPosToBufferPos(spos)
             self.getWorld().onMouseDown(bpos, button)
 
-    def onMouseUp(self, spos, button):        
+    def onMouseUp(self, spos, button):    
+        if self.paused:
+            self.pause_exit.onMouseUp(spos, button)
+            return    
         used = self.player.onMouseUp(spos, button)
         if not used:
             bpos = self.screenPosToBufferPos(spos)
@@ -133,12 +192,21 @@ class GameManager(events.Alpha):
     
     ## DRAW
     def draw(self, surface):
+        if self.paused:
+            self.drawPauseMenu(surface)
+            return
         self.drawBg(surface)
         self.drawWorld(surface)
         self.drawPlayer(surface)
 
     def drawBg(self, surface):
         surface.blit(self.bg, (0, 0))
+
+    def drawPauseMenu(self, surface):
+        surface.blit(PAUSE_TITLE_FONT.render("Paused", True, (255,255,255)), (surface.get_width()/2-PAUSE_TITLE_FONT.size("Paused")[0]/2, (surface.get_height()/2-PAUSE_TITLE_FONT.size("Paused")[1]/2-100)))
+        message = f"Please Press {pygame.key.name(GAME.CONTROLS_KEYS["pause"])} to unpause."
+        surface.blit(RETURN_FONT.render(message, True, "white"), (surface.get_width()/2-RETURN_FONT.size(message)[0]/2,surface.get_height()-100))
+        self.pause_exit.draw(surface)
 
     def drawWorld(self, surface):
         viewing_rect = pygame.Rect(self.getScreenBufferDelta(), self.screen_size)
