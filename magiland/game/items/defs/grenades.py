@@ -7,20 +7,36 @@ class Bomb(Item):
     def __init__(self):
         super().__init__("bomb", "crystal_geode", True, 0)
 
-        self.damage = 5
+        self.damage = 500
         self.range = 10
+
+    def initData(self, stack):
+        data = super().initData(stack)
+        
+        data["detonated"] = False
+
+        return data
     
     def tick(self, data, player, world):
         data["animations"].tick()
 
     def ignite(self, data, player, world, tile_pos, tile):
-        data["animations"].create("explosion_progress", 18, lambda: self.detonate(data, player, world, tile_pos, tile))
+        data["animations"].create("explosion_progress", 18, lambda: self.markForDetonation(data))
 
+    def markForDetonation(self, data):
+        data["detonated"] = True
+
+    def damageTick(self, data, player, world):
+        if data["detonated"]:
+            self.detonate(data, player, world, player.pos, world.getTileID(player.pos))
+            
     def detonate(self, data, player, world, tile_pos, tile):
         for entity in world.getEntitiesInRangeOfTile(tile_pos, self.range):
-            entity.damage(self.damage)
+            if not entity.isPlayer():
+                entity.damage(self.damage)
 
         data["stack"].consume()
+        data["detonated"] = False
     
     def onLeft(self, data, player, world, tile_pos, tile):
         self.ignite(data, player, world, tile_pos, tile)

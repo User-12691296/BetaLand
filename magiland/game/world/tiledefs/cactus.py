@@ -8,9 +8,6 @@ class Cactus(SlowTile):
         self.slow_value = slow_value
         
     def onWalk(self, world, tile_pos):
-
-        # A BIT BUGGY, WORTH FIXING LATER, BUT JUMPY WHENEVER YOU CHANGE SPEED
-
         super().onWalk(world, tile_pos)
         player = world.getPlayer()
         player.damage(self.damage_value)
