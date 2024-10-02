@@ -30,7 +30,7 @@ class SwampAnaconda(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("swampanaconda")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -57,7 +57,7 @@ class SwampOtter(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("swampotter")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -84,7 +84,7 @@ class SwampTangler(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("swamptangler")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -111,7 +111,7 @@ class SwampSlime(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("swampslime")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 

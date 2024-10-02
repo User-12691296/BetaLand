@@ -22,7 +22,7 @@ class DarknessGhost(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessghost")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -49,7 +49,7 @@ class DarknessGraveTrapper(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessgravetrapper")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -76,7 +76,7 @@ class DarknessJumpscare(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessjumpscare")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -103,7 +103,7 @@ class DarknessKnightmare1(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessknightmare1")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -130,7 +130,7 @@ class DarknessKnightmare2(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessknightmare2")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -157,7 +157,7 @@ class DarknessSpreader(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessspreader")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
@@ -184,7 +184,7 @@ class DarknessBat(Enemy):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("crystalgolem")
+        entity_texture = self.atlas.getTexture("darknessbat")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 

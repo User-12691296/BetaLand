@@ -6,8 +6,10 @@ import math
 SWING_FRAMES = 10
 
 class Gun(Item):
-    def __init__(self, itemid, tex_name, size):
+    def __init__(self, itemid, tex_name, size, cooldown, bullet = PROJECTILE_CLASSES.Pizza):
         super().__init__(itemid, tex_name, False, size)
+        self.bullet=bullet
+        self.cooldown = cooldown
 
     def tick(self, data, player, world):
         data["animations"].tick()
@@ -18,13 +20,11 @@ class Gun(Item):
         data["rot"] = data["rot"] % 360
 
     def fireInTheHole(self, data, player, world, tile_pos, tile):
-        pizza = PROJECTILE_CLASSES.Pizza(player.pos, -data["rot"]-45)
-##        if not pizza.isCooldownActive("pizza"):
-        pizza.giveImmunity(player)
-        world.addProjectile(pizza)
-##            pizza.registerCooldown("lasershot", 60)
-
-##        player.setAttribute("movement_speed", 10)
+        if not data["animations"].exists("cooldown"):
+            bullet = self.bullet(player.pos, -data["rot"]-45)
+            bullet.giveImmunity(player)
+            world.addProjectile(bullet)
+            data["animations"].create("cooldown", self.cooldown)
         
     def onLeft(self, data, player, world, tile_pos, tile):
         self.fireInTheHole(data, player, world, tile_pos, tile)
@@ -32,6 +32,7 @@ class Gun(Item):
 
 
 GUNS = []
-Gun("debug_sword", "sword", 1).addToGroup(GUNS)
-Gun("pizza_gun", "pizza_gun", 1).addToGroup(GUNS)
+Gun("pizza_gun", "pizza_gun", 1, 10).addToGroup(GUNS)
+Gun("soul_cannon", "soul_cannon", 1, 10, bullet=PROJECTILE_CLASSES.SoulBlast).addToGroup(GUNS)
+Gun("crystal_raygun", "crystal_raygun", 2, 10, bullet=PROJECTILE_CLASSES.CrystalLaserShot).addToGroup(GUNS)
 

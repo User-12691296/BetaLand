@@ -15,7 +15,7 @@ class Fruit(Item):
     #Note to self, add healing effect thru init
     # Fruits give a special status effect TBD
     def __init__(self, itemid, tex_name, size, heal_amount, effect_duration = 60):
-        super().__init__(itemid, tex_name, False, size)
+        super().__init__(itemid, tex_name, True, size)
         self.heal_amount = heal_amount
         
         self.ticker = 0
@@ -53,11 +53,28 @@ class Lemon (Fruit):
     def reverse_effect(self, player, world, player_tile_pos):
         player.setMovementSpeed(GAME.PLAYER_WALKING_SPEED)
 
+class SilverFruit(Fruit):
+    def __init__(self, itemid, tex_name, size, heal_amount, effect_duration, armor_points):
+        super().__init__(itemid, tex_name, size, heal_amount, effect_duration)
+        self.armor_points = armor_points
+        self.original_armor_value = None
+        self.original_dmg_threshold = None
+
+    def effect(self, player, world, tile, tile_pos):
+        self.original_armor_value = player.getArmorValues()[0]
+        self.original_dmg_threshold = player.getArmorValues()[1]
+        new_armor_value = self.original_armor_value + self.armor_points 
+        player.setArmorValues(new_armor_value, self.original_dmg_threshold)
+
+        player.giveEffect("defense", self.effect_duration, lambda x, y, z:None, self.reverse_effect)
+
+    def reverse_effect(self, player, world, tile_pos):
+        player.setArmorValues(self.original_armor_value, self.original_dmg_threshold)
 
 FRUITS = []
-Fruit("debug_sword", "sword", 1, 100).addToGroup(FRUITS)
-Fruit("orange", "orange", 1, 30).addToGroup(FRUITS)
-Fruit("banana", "banana", 1, 30).addToGroup(FRUITS)
-Fruit("watermelon", "watermelon", 1, 30).addToGroup(FRUITS)
-Fruit("apple", "apple", 1, 100).addToGroup(FRUITS)
-Lemon("lemon", "lemon", 1, 30, 100).addToGroup(FRUITS)
+Fruit("orange", "orange", 0, 30).addToGroup(FRUITS)
+Fruit("banana", "banana", 0, 30).addToGroup(FRUITS)
+Fruit("watermelon", "watermelon", 0, 30).addToGroup(FRUITS)
+Fruit("apple", "apple", 0, 100).addToGroup(FRUITS)
+Lemon("lemon", "lemon", 0, 30, 100).addToGroup(FRUITS)
+SilverFruit("silver_apple", "silver_apple", 1, 100, 100, 10).addToGroup(FRUITS)

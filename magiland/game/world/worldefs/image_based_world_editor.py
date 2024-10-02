@@ -3,8 +3,8 @@ import pygame
 import numpy
 import json
 
-IMAGE_PATH = "level3whysitcalledthis.png"
-WORLD_NAME = "level_3"
+IMAGE_PATH = "overworld.png"
+WORLD_NAME = "overworld"
 LEVELS_PATH = "levels.json"
 
 TILE_SEP = ";"
@@ -14,31 +14,39 @@ ROWS_STORAGE = "tiles"
 
 IGNORE_TILE_VAL = "error"
 RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
+           (1,1):"black",
            (0, 255):"grass",
            (255, 0):"barrier",
            (15,15):"darkwall",
            (5, 5): "deepdark",
+           
            (255, 245): "sand",
            (245, 255): "sandlight",
            (255, 200): "sanddark",
            (200, 255): "sandoasis",
            (0, 245): "sandcactus",
+           
            (100, 100): "kr1stalfloor",
            (100, 0): "kr1stalrunes",
            (0, 100): "kr1stal",
+           
            (160, 250): "snow",
            (160, 200): "snow2",
            (150, 150): "swamp",
+           
            (150, 0): "swampaccent",
            (0, 150): "swampwater",
+           
            (50, 50): "mountain",
+           (50, 100): "mountainlight",
+           (100,50): "mountainmoss",
            (50, 0): "mountainsnow",
-           (0, 50): "mountainsnowier",
+           (0, 50): "mountainsnowmoss",
+           
            (200, 200): "volcano",
            (200, 0): "volcanolava",
-           (0, 200): "volcanomolten",
-           (1,1):"black"}
-            
+           (0, 200): "volcanomolten"
+           }
 
 
 with open(LEVELS_PATH, "r") as levels_file:

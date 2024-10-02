@@ -7,11 +7,11 @@ class SandDarkTile(BasicTile):
         super().__init__("sanddark", "sanddark", False)
 
     def onRight(self, world, tile_pos):
-        blob = ENTITY_CLASSES.CrystalGolem()
+        blob = ENTITY_CLASSES.Blob()
         blob.setPos(tile_pos)
         world.addEntity(blob)
 
     def onLeft(self, world, tile_pos):
-        MountainEagle = ENTITY_CLASSES.MountainEagle()
-        MountainEagle.setPos(tile_pos)
-        world.addEntity(MountainEagle)
+        CrystalBronze = ENTITY_CLASSES.CrystalBronze()
+        CrystalBronze.setPos(tile_pos)
+        world.addEntity(CrystalBronze)

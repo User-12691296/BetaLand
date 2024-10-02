@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import math
+import random
 import os
 
 from misc import events
@@ -278,8 +279,13 @@ class Creature(Entity):
     def calcDamageModifiers(self, damage, dtt=0):
         general_armor = self.getAttribute("general_armor")
         dmg_threshold = self.getAttribute("damage_threshold")
+<<<<<<< HEAD
 
         if general_armor > 0 and dmg_threshold > 0:
+=======
+        
+        if general_armor != 0 and dmg_threshold != None: 
+>>>>>>> 6af938058fda068b51b059ff511dd2c3c87c8dde
             if damage < dmg_threshold: 
                 damage /= general_armor  # Minecraft style
                 damage = max(damage, 0) 
@@ -293,6 +299,9 @@ class Creature(Entity):
     def setArmorValues (self, armor_points, dmg_threshold): 
         self.setAttribute("general_armor", armor_points)
         self.setAttribute("damage_threshold", dmg_threshold)
+
+    def getArmorValues(self):
+        return (self.getAttribute("general_armor"), self.getAttribute("damage_threshold"))
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display)
@@ -318,7 +327,7 @@ class Creature(Entity):
 
 class Barrel(Creature):
     def __init__(self, health, stop_range=1, movement_speed=0):
-        super().__init__(health)
+        super().__init__(1)
 
         self.loadInventory()
 
@@ -329,13 +338,18 @@ class Barrel(Creature):
         return False
 
     def loadInventory(self):
-        self.inventory = Inventory(3,1,1)
-        self.inventory.setItemStack(ItemStack("lil_sword", 1), 1)
-        self.inventory.setActiveStack(1)
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setActiveStack(0)
         
     def kill(self):
         super().kill()
-        self.inventory.throwStackInLoc(self.world,self.pos,1)
+        self.dropItems()
+    
+    def dropItems(self):
+        for current_stack_index in range((self.inventory.size) - 2):
+            self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, 0)
+        self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, (random.randint(1, 5)))
+        
 
     
 class Enemy(Creature):
