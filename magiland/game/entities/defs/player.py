@@ -54,6 +54,10 @@ class Player(Creature):
         self.defineAttribute("projectile_rate_modifier", 1)
         self.setAttribute("projectile_rate_modifier", 1)
 
+        # Range of vision
+        self.defineAttribute("vision_range", 12)
+        self.setAttribute("vision_range", 12)
+
         # Damage output modifier
         self.defineAttribute("damage_modifier", 1)
         self.setAttribute("damage_modifier", 1)
@@ -114,6 +118,12 @@ class Player(Creature):
 
     def isPlayer(self):
         return True
+
+    def setVisionRange(self, range):
+        self.setAttribute("vision_range", range)
+        
+    def getVisionRange(self):
+        return self.getAttribute("vision_range")
 
     def getTemperatureBarData(self):
         temp = self.getAttribute("temperature")

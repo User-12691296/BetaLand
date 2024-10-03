@@ -249,7 +249,9 @@ class Map:
         
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
 
-    def calcFOV(self, origin):
+    def calcFOV(self, origin, range=None):
+        if range:
+            self.fov_calc.setRange(range)
         self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
         self.fov_calc.calcFOV(origin)
 
@@ -561,7 +563,7 @@ class World(events.EventAcceptor):
         self.getTile(self.player.getPos()).onWalk(self, self.player.getPos())
 
         if self.changes_this_tick:
-            self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
+            self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])), self.getPlayer().getVisionRange())
 
     def damageTick(self):
         for entity in self.getTickableEntities():
