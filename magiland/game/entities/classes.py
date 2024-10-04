@@ -279,16 +279,8 @@ class Creature(Entity):
     def calcDamageModifiers(self, damage, dtt=0):
         general_armor = self.getAttribute("general_armor")
         dmg_threshold = self.getAttribute("damage_threshold")
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         if general_armor > 0 and dmg_threshold > 0:
-=======
-=======
->>>>>>> 6af938058fda068b51b059ff511dd2c3c87c8dde
-        
-        if general_armor != 0 and dmg_threshold != None: 
->>>>>>> 6af938058fda068b51b059ff511dd2c3c87c8dde
             if damage < dmg_threshold: 
                 damage /= general_armor  # Minecraft style
                 damage = max(damage, 0) 
