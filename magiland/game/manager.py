@@ -204,7 +204,7 @@ class GameManager(events.Alpha):
 
     def drawPauseMenu(self, surface):
         surface.blit(PAUSE_TITLE_FONT.render("Paused", True, (255,255,255)), (surface.get_width()/2-PAUSE_TITLE_FONT.size("Paused")[0]/2, (surface.get_height()/2-PAUSE_TITLE_FONT.size("Paused")[1]/2-100)))
-        message = f"Please Press {pygame.key.name(GAME.CONTROLS_KEYS["pause"])} to unpause."
+        message = f'Please Press {pygame.key.name(GAME.CONTROLS_KEYS["pause"])} to unpause.'
         surface.blit(RETURN_FONT.render(message, True, "white"), (surface.get_width()/2-RETURN_FONT.size(message)[0]/2,surface.get_height()-100))
         self.pause_exit.draw(surface)
 

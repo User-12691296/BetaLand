@@ -1,0 +1,24 @@
+{"all":{
+	"biome":{
+		"desert":{
+			"lava_knight":{"chance":0.01},
+			"desert_raiders":{"chance":0.01}
+			}
+		}
+	},
+	"fixed":{
+		"lava_knight":[
+			[10, 10],
+			[15, 15]
+			]
+	},
+
+"overworld":{
+	"biome:":{},
+	"fixed":{}
+	},
+
+"level_1":{
+	"biome:":{},
+	"fixed":{}
+	}}

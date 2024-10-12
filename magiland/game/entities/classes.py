@@ -173,12 +173,11 @@ class Creature(Entity):
         self.size = size
 
         self.hitbox = pygame.Rect((0, 0), size)
+        self.radius = (self.size[0]+self.size[1])//2
 
         self.damages_this_tick = []
 
         self.effects = {}
-
-        self.updateHitbox()
 
     def onSpawn(self):
         super().onSpawn()
@@ -237,13 +236,7 @@ class Creature(Entity):
                 self.effects[effect]["reverse_action"](self, self.world, self.pos) # Reverse Effect
                 self.effects.pop(effect, None)
                 break
-
-        # self.incrementEffect("effect_time")
-        # (self.getAttribute("action"))(self, self.world, self.pos)
-        # if self.getAttribute("effect_time") > self.getAttribute("effect_duration"):
-        #     self.setAttribute("effect_time", 0)
-        #     (self.getAttribute("reverse_effect_action"))(self, self.world, self.pos)
-
+            
     def tick(self):
         super().tick()
 
@@ -284,11 +277,10 @@ class Creature(Entity):
         self.changeHealth(-total_damage)
 
     def calcDamageModifiers(self, damage, dtt=0):
-        
         general_armor = self.getAttribute("general_armor")
         dmg_threshold = self.getAttribute("damage_threshold")
-        
-        if general_armor != 0 and dmg_threshold != None: 
+
+        if general_armor > 0 and dmg_threshold > 0:
             if damage < dmg_threshold: 
                 damage /= general_armor  # Minecraft style
                 damage = max(damage, 0) 
@@ -404,7 +396,7 @@ class Enemy(Creature):
         if node:
             old_pos = self.pos
             self.setPos(node)
-            self.movement_this_tick[1]=self.pos[1]-old_pos[1]
+            self.movement_this_tick[1] = self.pos[1]-old_pos[1]
             self.movement_this_tick[0] = self.pos[0]-old_pos[0]
 
         self.registerCooldown("movement", self.getAttribute("movement_speed"))

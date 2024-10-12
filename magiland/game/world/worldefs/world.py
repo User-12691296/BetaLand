@@ -249,7 +249,9 @@ class Map:
         
         self.blit(tbd, self.world.tilePosToBufferPos(tile_pos))
 
-    def calcFOV(self, origin):
+    def calcFOV(self, origin, range=None):
+        if range:
+            self.fov_calc.setRange(range)
         self.fov_calc.genOpaquesFromElevCutoff(self.world.world_tile_elevations, self.world.OPAQUE_TILE_ELEV_DELTA)
         self.fov_calc.calcFOV(origin)
 
@@ -511,6 +513,9 @@ class World(events.EventAcceptor):
     def getEntitiesInDiagToTile(self, tile_pos, range):
         return [entity for entity in self.getAllEntities() if entity.diagonalTo(tile_pos) <= range]
 
+    def getTickableEntities(self):
+        return [entity for entity in self.entities if entity.distanceTo2(self.player.pos) <= 400]
+
     def addProjectile(self, projectile):
         self.projectiles.append(projectile)
         projectile.setWorld(self)
@@ -524,7 +529,7 @@ class World(events.EventAcceptor):
     def tick(self):
         self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
         
-        for entity in self.entities:
+        for entity in self.getTickableEntities():
             entity.setOpaques(self.opaques)
             entity.tick()
 
@@ -549,7 +554,7 @@ class World(events.EventAcceptor):
         self.moving_anim_delta = [0, 0]
 
     def movementTick(self):
-        for entity in self.entities:
+        for entity in self.getTickableEntities():
             entity.movementTick()
 
         for projectile in self.projectiles:
@@ -558,17 +563,17 @@ class World(events.EventAcceptor):
         self.getTile(self.player.getPos()).onWalk(self, self.player.getPos())
 
         if self.changes_this_tick:
-            self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])))
+            self.map.calcFOV((int(self.getPlayer().pos[0]), int(self.getPlayer().pos[1])), self.getPlayer().getVisionRange())
 
     def damageTick(self):
-        for entity in self.entities:
+        for entity in self.getTickableEntities():
             entity.damageTick()
 
         for projectile in self.projectiles:
             projectile.damageTick()
     
     def finalTick(self):
-        for entity in self.entities:
+        for entity in self.getTickableEntities():
             entity.finalTick()
 
         for projectile in self.projectiles:

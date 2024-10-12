@@ -2,7 +2,7 @@ from accelerants import aStarSearch
 import numpy as np
 from queue import SimpleQueue, Empty
 
-MAX_PATH_LENGTH = 400
+MAX_PATH_LENGTH = 100
 
 class PathFinder:
     def __init__(self, map_size, stop_range):
@@ -37,17 +37,12 @@ class PathFinder:
             return None
 
     def extendPathFromXY(self, pathx, pathy, x, y, length):
-        #path = [] 
         # Back to front add nodes
         for i in range(length):
             index = length - i - 1
-
             node = (pathx[index]+x, pathy[index]+y)
-            #path.append(node)
-
             self.addPathNode(node)
 
-        #print(path)
 
     def calcPath(self, start, end):
         left = min(start[0], end[0])

@@ -21,6 +21,7 @@ class Item(events.EventAcceptor):
     def initData(self, stack):
         data = {"stack": stack,
                 "rot": 0,
+                "rarity": 1, # Level from 1-5, 1-3 is upgradable, 4 is craftable, 5 is endgame loot
                 "animations": animations.Animated()}
         
         return data
@@ -44,6 +45,9 @@ class Item(events.EventAcceptor):
 
     def isStackable(self):
         return self.stackable
+
+    def isUpgradeable(self):
+        return False
 
     def getItemID(self):
         return self.itemid
@@ -132,6 +136,19 @@ class ItemStack:
         self.item.select(self.data)
     def deSelect(self):
         self.item.deSelect(self.data)
+
+    def getRarity(self):
+        return self.data.get("rarity", 1)
+    def setRarity(self, rarity):
+        self.data["rarity"] = rarity
+    def upgradeRarity(self):
+        if self.item.isUpgreadable():
+            rarity = self.getRarity()
+            
+            if rarity < 3:
+                rarity = rarity + 1
+                
+            self.setRarity(rarity)
 
     def onLeft(self, player, world, tile, tile_pos):
         return self.item.onLeft(self.data, player, world, tile, tile_pos)

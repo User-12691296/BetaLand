@@ -51,6 +51,13 @@ class Player(Creature):
         self.defineAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
         self.setAttribute("movement_speed", GAME.PLAYER_WALKING_SPEED)
 
+        self.defineAttribute("projectile_rate_modifier", 1)
+        self.setAttribute("projectile_rate_modifier", 1)
+
+        # Range of vision
+        self.defineAttribute("vision_range", 12)
+        self.setAttribute("vision_range", 12)
+
         # Damage output modifier
         self.defineAttribute("damage_modifier", 1)
         self.setAttribute("damage_modifier", 1)
@@ -58,6 +65,8 @@ class Player(Creature):
         # Decimal number, outside -1 to +1 range causes problems, -5 to +5 is fatal
         self.defineAttribute("temperature", 0)
         self.setAttribute("temperature", 0)
+        self.defineAttribute("thermal_insulation", 6)
+        self.setAttribute("thermal_insulation", 6)
 
         # Integer part represents its place in the bar chart
         # Rational part represents fullness
@@ -110,6 +119,12 @@ class Player(Creature):
     def isPlayer(self):
         return True
 
+    def setVisionRange(self, range):
+        self.setAttribute("vision_range", range)
+        
+    def getVisionRange(self):
+        return self.getAttribute("vision_range")
+
     def getTemperatureBarData(self):
         temp = self.getAttribute("temperature")
         percent = (temp+5)/10
@@ -145,11 +160,22 @@ class Player(Creature):
                      self.getThirstBarData]
 
     def temperatureTick(self):
+        extern_temp = 0
+        
         # Bring self temperature closer to biome temperature
-        for biome_temp in self.world.getTileExtrasFromGroups(self.pos, "temperature", None):
-            if biome_temp != None:
-                prev = self.getAttribute("temperature")
-                self.setAttribute("temperature", (999*prev+biome_temp)/1000)
+        for biome_temp in self.world.getTileExtrasFromGroups(self.pos, "temperature", 0):
+            extern_temp += biome_temp
+            
+        intern_temp = self.getAttribute("temperature")
+
+        temp_delta = extern_temp - intern_temp
+
+        if abs(temp_delta) > 0.1:
+            # Temperature changes by 0.1 in the direction of temp_change
+            temp_change = max(1/60/self.getAttribute("thermal_insulation"),
+                              abs(temp_delta)/60/self.getAttribute("thermal_insulation"))
+
+            self.setAttribute("temperature", intern_temp + math.copysign(temp_change, temp_delta))
 
         # Die when too hot or too cold
         if abs(self.getAttribute("temperature")) > 5:
@@ -213,16 +239,19 @@ class Player(Creature):
         self._resting_tick_counter = 0
 
     def insanityTick(self):
+        intern_insanity = self.getAttribute("insanity")
+        extern_insanity = 0
+        
         for insanity_level in self.world.getTileExtrasFromGroups(self.pos, "insanity_level", 0):
-            insanity = self.getAttribute("insanity")
+            extern_insanity += insanity_level
 
-            if insanity_level > insanity:
-                # insanity goes up to full in 20 seconds
-                self.setAttribute("insanity", insanity + 1/60/40)
+        if extern_insanity > intern_insanity:
+            # insanity goes up to full in 20 seconds
+            self.setAttribute("insanity", intern_insanity + 1/60/self.getAttribute("insanity_progress_speed"))
 
-            if insanity_level < insanity:
-                # insanity drops in 5 seconds
-                self.setAttribute("insanity", insanity - 1/60/5)
+        if extern_insanity < intern_insanity:
+            # insanity drops in 5 seconds
+            self.setAttribute("insanity", intern_insanity - 1/60/self.getAttribute("insanity_regen_speed"))
 
     def thirstTick(self):
         pass
