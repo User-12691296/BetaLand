@@ -5,11 +5,11 @@ import random
 from ..classes import Barrel, ItemStack
 from ...items import Inventory, ItemStack
 
-class CrystalBronze(Barrel):
+class MountainBronze(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("watermelon", (random.randint(3, 10))), 0)
+        self.inventory.setItemStack(ItemStack("orange", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("apple", (random.randint(1, 3))), 1)
         self.inventory.setItemStack(ItemStack("silver_apple", (random.randint(1, 3))), 1)
         
@@ -34,12 +34,12 @@ class CrystalBronze(Barrel):
         
         self.atlas.drawTexture(display, spos, "bronze")
 
-class CrystalSilver(Barrel):
+class MountainSilver(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("cool_sword", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
+        self.inventory.setItemStack(ItemStack("stone_mace", 1), 0)
 
 
     @staticmethod
@@ -62,13 +62,13 @@ class CrystalSilver(Barrel):
         
         self.atlas.drawTexture(display, spos, "silver")
 
-class CrystalGold(Barrel):
+class MountainGold(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 0)
+        self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
+        self.inventory.setItemStack(ItemStack("lava_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 0)
 
 
     @staticmethod
@@ -91,13 +91,13 @@ class CrystalGold(Barrel):
         
         self.atlas.drawTexture(display, spos, "gold")
 
-class CrystalPlat(Barrel):
+class MountainPlat(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 0)
+        self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
+        self.inventory.setItemStack(ItemStack("lava_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 0)
 
 
     @staticmethod
@@ -121,14 +121,14 @@ class CrystalPlat(Barrel):
         self.atlas.drawTexture(display, spos, "plat")
 
 #Add crystal barrels to a group of barrels
-CRYSTALBRONZE = []
-CrystalBronze.addToGroup(CRYSTALBRONZE)
+MOUNTAINBRONZE = []
+MountainBronze.addToGroup(MOUNTAINBRONZE)
 
-CRYSTALSILVER = []
-CrystalSilver.addToGroup(CRYSTALBRONZE)
+MOUNTAINSILVER = []
+MountainSilver.addToGroup(MOUNTAINSILVER)
 
-CRYSTALGOLD = []
-CrystalGold.addToGroup(CRYSTALGOLD)
+MOUNTAINGOLD = []
+MountainGold.addToGroup(MOUNTAINGOLD)
 
-CRYSTALPLAT = []
-CrystalPlat.addToGroup(CRYSTALPLAT)
+MOUNTAINPLAT = []
+MountainPlat.addToGroup(MOUNTAINPLAT)
