@@ -31,14 +31,14 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club",1),1)
         self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
         self.inventory.setItemStack(ItemStack("ice_blade",1),3)
-        self.inventory.setItemStack(ItemStack("golf_club", 1), 1)
-        self.inventory.setItemStack(ItemStack("soul_cannon",1),4)
+        self.inventory.setItemStack(ItemStack("basic_crossbow", 1), 1)
+        self.inventory.setItemStack(ItemStack("desert_bow",1),4)
         self.inventory.setItemStack(ItemStack("sanguine_slasher",1),5)
         self.inventory.setItemStack(ItemStack("cosmic_mace",1),20)
         self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
         self.inventory.setItemStack(ItemStack("lava_mace",1),22)
         self.inventory.setItemStack(ItemStack("kr1stal_mace",1),1)
-        self.inventory.setItemStack(ItemStack("pizza_gun",1),16)
+        self.inventory.setItemStack(ItemStack("frozen_bow",1),16)
         self.inventory.setItemStack(ItemStack("crystal_raygun",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
@@ -179,7 +179,8 @@ class Player(Creature):
 
         # Die when too hot or too cold
         if abs(self.getAttribute("temperature")) > 5:
-            self.damage(0.2)
+            #CHANGE BACK TO 0.2
+            self.damage(0)
 
     def vibesTick(self):
         vibes = self.getAttribute("vibes")
