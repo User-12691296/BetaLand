@@ -69,7 +69,6 @@ def placeholderFunction (x, y, z):
 
 
 # Template arrow
-
 class MoltenArrow(BasicProjectileWithEffects):
     def __init__(self, start, angle):
         super().__init__(start, angle)
@@ -98,20 +97,27 @@ class IceArrow(BasicProjectileWithEffects):
     def __init__(self, start, angle):
         super().__init__(start, angle)
 
-        self.speed = 0.2
+        self.speed = 0.3
+        self.normalspeed=None
         
-        self.init_effect = placeholderFunction
+        self.init_effect = self.initial_effect
         self.tick_effect = self.ice_tick_effect
-        self.reverse_effect = placeholderFunction
+        self.reverse_effect = self.reverse_ice_effect
 
         self.effect_name = "Ice"
-        self.effect_duration = 50
+        self.effect_duration = 8
 
     def getNeededAssets():
         return ["IceArrow"]
 
+    def initial_effect(self,entity,world,tile_pos):
+        self.normalspeed=entity.getAttribute("movement_speed")
+
     def ice_tick_effect(self, entity, world, tile_pos):
-        entity.setAttribute("movement_speed", 0)
+        entity.setAttribute("movement_speed", 1000)
+
+    def reverse_ice_effect(self,entity,world,tile_pos):
+        entity.setAttribute("movement_speed", self.normalspeed)
 
     def draw(self, display, display_topleft=(0, 0)):    
         super().draw(display, display_topleft)
