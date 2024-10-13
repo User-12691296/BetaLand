@@ -10,7 +10,7 @@ from misc import events
 from .fovcalcs import FOVCalculator
 from misc.textures import TextureAtlas
 
-from ..tilegroups import GROUP_MANAGER
+from ..tilegroups import GROUP_MANAGER, SPAWNING_REGISTRY
 
 from ...entities import *
 
@@ -392,7 +392,17 @@ class World(events.EventAcceptor):
                 self.world_tile_elevations[row_index][tile_index] = int(elevation)
                 
         self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
-                
+
+    def doFixedSpawning(self):
+        instructions = SPAWNING_REGISTRY.getFixedSpawningInstructions(self.world_name)
+
+        for inst in instructions:
+            self.spawnFromInstruction(inst)
+
+    def spawnFromInstruction(self, inst):
+        entity = inst["class"]()
+        entity.setPos(inst["loc"])
+        self.addEntity(entity)
         
     def setPlayer(self, player):
         self.player = player
@@ -585,7 +595,9 @@ class World(events.EventAcceptor):
         if GAME.SMOOTH_PLAYER_MOTION:
             self.updateMovingAnimation()
 
-        self.first_tick = False
+        if self.first_tick:
+            self.doFixedSpawning()
+            self.first_tick = False
 
     def cullDeadEntities(self):
         self.entities = [entity for entity in self.entities if entity.isAlive()]
