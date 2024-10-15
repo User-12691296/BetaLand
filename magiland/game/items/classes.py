@@ -218,20 +218,21 @@ class Inventory(events.EventAcceptor):
         cls.ItemEntityClass = iecls
 
     def setItemStack(self, stack, loc):
-        if self.getItemStack(loc) != None:
-            if self.getItemStack(loc).item.isArmor():
-                self.getItemStack(loc).item.unequip(self.player) 
+        if self.size == 25:
+            if self.getItemStack(loc) != None:
+                if self.getItemStack(loc).item.isArmor():
+                    self.getItemStack(loc).item.unequip(self.player) 
 
-        if stack != None:  
-            if loc == self.armor_slot and not stack.item.isArmor(): 
-                self.setActiveStack(stack)
-                return False
+            if stack != None:  
+                if loc == self.armor_slot and not stack.item.isArmor(): 
+                    self.setActiveStack(stack)
+                    return False
+                
+                elif loc == self.armor_slot and stack.item.isArmor():
+                    stack.item.equip(self.player)
+                    self.item_stacks[loc] = stack
+                    return True
             
-            elif loc == self.armor_slot and stack.item.isArmor():
-                stack.item.equip(self.player)
-                self.item_stacks[loc] = stack
-                return True
-        
         self.item_stacks[loc] = stack
 
     def addItemStack(self, stack):

@@ -5,7 +5,33 @@ from ...entities import ENTITY_CLASSES as EC
 
 SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "desert_raiders":   EC.DessertRaider,
-                "crab_boss":        EC.WhaleBoss}
+                "darknessbronze_barrel": EC.DarknessBronze,
+                "darknesssilver_barrel": EC.DarknessSilver,
+                "darknessgold_barrel": EC.DarknessGold,
+                "darknessplatinum_barrel": EC.DarknessPlat,
+                "frozenbronze_barrel": EC.FrozenBronze,
+                "frozensilver_barrel": EC.FrozenSilver,
+                "frozengold_barrel": EC.FrozenGold,
+                "frozenplatinum_barrel": EC.FrozenPlat,
+                "crystalbronze_barrel": EC.CrystalBronze,
+                "crystalsilver_barrel": EC.CrystalSilver,
+                "crystalgold_barrel": EC.CrystalGold,
+                "crystalplatinum_barrel": EC.CrystalPlat,
+                "dessertbronze_barrel": EC.DessertBronze,
+                "dessertsilver_barrel": EC.DessertSilver,
+                "dessertgold_barrel": EC.DessertGold,
+                "dessertplatinum_barrel": EC.DessertPlat,
+                "mountainbronze_barrel": EC.MountainBronze,
+                "mountainsilver_barrel": EC.MountainSilver,
+                "mountaingold_barrel": EC.MountainGold,
+                "mountainplatinum_barrel": EC.MountainPlat,
+                "swampbronze_barrel": EC.SwampBronze,
+                "swampsilver_barrel": EC.SwampSilver,
+                "swampgold_barrel": EC.SwampGold,
+                "swampplatinum_barrel": EC.SwampPlat,
+                
+                "crab_boss": EC.WhaleBoss}
+
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")
 
