@@ -427,7 +427,7 @@ class PlayerInventory(Inventory):
 
     def getSelectedStack(self):
         return self.getItemStack(self.selected_slot)
-    
+
     def changeSelectedStack(self, ds):
         sstack = self.getSelectedStack()
         if sstack: sstack.deSelect()

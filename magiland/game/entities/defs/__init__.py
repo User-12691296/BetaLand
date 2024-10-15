@@ -9,9 +9,9 @@ from .frozenenemies import *
 from .mountainenemies import *
 from .darknessenemies import *
 from .item import ItemEntity
+from .bosses import *
 
 ALL_ENTITY_CLASSES = []
-
 
 ALL_ENTITY_CLASSES.append(Player)
 ALL_ENTITY_CLASSES.append(ItemEntity)
@@ -67,3 +67,9 @@ ALL_ENTITY_CLASSES += DARKNESSKNIGHTMARE1
 ALL_ENTITY_CLASSES += DARKNESSKNIGHTMARE2
 ALL_ENTITY_CLASSES += DARKNESSSPREADERS
 ALL_ENTITY_CLASSES += DARKNESSBATS
+
+#BOSSES!!!!!!!!!!
+
+ALL_ENTITY_CLASSES.append(CrabBoss)
+ALL_ENTITY_CLASSES.append(CraneBoss)
+ALL_ENTITY_CLASSES.append(WhaleBoss)

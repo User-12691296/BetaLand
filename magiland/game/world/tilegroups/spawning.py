@@ -2,8 +2,10 @@ import json
 import os
 from ...entities import ENTITY_CLASSES as EC
 
+
 SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
-                "desert_raiders":   EC.DessertRaider}
+                "desert_raiders":   EC.DessertRaider,
+                "crab_boss":        EC.WhaleBoss}
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")
 
