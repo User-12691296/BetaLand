@@ -9,6 +9,9 @@ class Armor(Item):
         self.armor_points = armor_points
         self.dmg_threshold = dmg_threshold
 
+    def getItemID(self):
+        return self.itemid
+
     def equip(self, player):
         player.setArmorValues(self.armor_points, self.dmg_threshold)
 

@@ -46,8 +46,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
         self.inventory.setItemStack(ItemStack("lemon",1),18)
         self.inventory.setItemStack(ItemStack("apple",1),19)
-        self.inventory.setItemStack(ItemStack("iron_helmet",1),0)
-        self.inventory.setItemStack(ItemStack("red_protection",1),0)
+        self.inventory.setItemStack(ItemStack("croc",1),0)
 
     def initAttributes(self):
         # Frames per movement
