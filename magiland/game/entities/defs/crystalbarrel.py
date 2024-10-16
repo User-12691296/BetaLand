@@ -11,7 +11,7 @@ class CrystalBronze(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("watermelon", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("apple", (random.randint(1, 3))), 1)
-        self.inventory.setItemStack(ItemStack("silver_apple", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("silver_apple", (random.randint(1, 3))), 2)
         
 
     @staticmethod
@@ -39,7 +39,7 @@ class CrystalSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("cool_sword", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class CrystalGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 0)
+        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class CrystalPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 0)
+        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 2)
 
 
     @staticmethod
