@@ -352,7 +352,6 @@ class Barrel(Creature):
                 while item_stack == None:
                     current_stack_index = random.randint(0, self.inventory.size - 3)
                     item_stack = self.inventory.getItemStack(current_stack_index)
-                    print(item_stack) 
                 self.inventory.throwStackInLoc(self.world, self.pos, current_stack_index, 0)
 
         else: 
@@ -362,7 +361,6 @@ class Barrel(Creature):
                 while item_stack == None:
                     current_stack_index = random.randint(0, self.inventory.size - 3)
                     item_stack = self.inventory.getItemStack(current_stack_index)
-                    print(item_stack) 
                 self.inventory.throwStackInLoc(self.world, self.pos, current_stack_index, 0)
 
         """ for current_stack_index in range((self.inventory.size) - 2):
