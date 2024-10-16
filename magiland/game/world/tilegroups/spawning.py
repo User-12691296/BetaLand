@@ -30,8 +30,8 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "swampgold_barrel": EC.SwampGold,
                 "swampplatinum_barrel": EC.SwampPlat,
                 
-                "crab_boss": EC.WhaleBoss}
-
+                "crab_boss": EC.WhaleBoss
+}
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")
 
