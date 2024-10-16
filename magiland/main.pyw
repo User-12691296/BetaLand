@@ -26,12 +26,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        # if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-        #     clean_close = True
-
-        # else:
-        #     main_manager.handleEvent(event)
-
         main_manager.handleEvent(event)
 
     # Tick after input
@@ -49,6 +43,3 @@ while running:
 
 pygame.quit()
 
-
-if False:#clean_close == False:
-    from misc import closer

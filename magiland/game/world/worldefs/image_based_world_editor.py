@@ -39,13 +39,16 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            
            (50, 50): "mountain",
            (50, 100): "mountainlight",
-           (100,50): "mountainmoss",
+           (100, 50): "mountainmoss",
            (50, 0): "mountainsnow",
            (0, 50): "mountainsnowmoss",
            
            (200, 200): "volcano",
            (200, 0): "volcanolava",
-           (0, 200): "volcanomolten"
+           (0, 200): "volcanomolten",
+
+           (64, 64): "deathvoid",
+           (125, 125): "walkablevoid"
            }
 
 
