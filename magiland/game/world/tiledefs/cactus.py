@@ -15,6 +15,6 @@ class Cactus(SlowTile):
         damage = self.damage_value
         if player.inventory.getItemStack(24) != None:
             if player.inventory.getItemStack(-1).item.getItemID() == "croc":
-                damage = damage / 2
+                damage = 0
 
         player.damage(damage)
