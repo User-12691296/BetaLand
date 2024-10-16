@@ -13,7 +13,7 @@ from constants import GAME
 
 class Entity(events.EventAcceptor):
     def __init__(self):
-        self.pos = [0, 0]
+        self.pos = [2,10]
 
         self.cooldowns = {}
 
@@ -23,6 +23,7 @@ class Entity(events.EventAcceptor):
         self.movement_this_tick = [0, 0]
         
         self.alive = True
+        self.active = True # Literally just used for the whale, means if you can pass through
 
         self.facing_angle = 0
 
@@ -87,6 +88,9 @@ class Entity(events.EventAcceptor):
         return False
     
     def isEnemy(self):
+        return False
+    
+    def isBoss(self):
         return False
 
     def isEnemyTarget(self):
@@ -341,9 +345,27 @@ class Barrel(Creature):
         self.dropItems()
     
     def dropItems(self):
-        for current_stack_index in range((self.inventory.size) - 2):
+        if self.getNeededAssets() == ["bronze"] or self.getNeededAssets() == ["plat"]:
+            for i in range(2):
+                current_stack_index = random.randint(0, self.inventory.size - 3)
+                item_stack = self.inventory.getItemStack(current_stack_index)
+                while item_stack == None:
+                    current_stack_index = random.randint(0, self.inventory.size - 3)
+                    item_stack = self.inventory.getItemStack(current_stack_index)
+                self.inventory.throwStackInLoc(self.world, self.pos, current_stack_index, 0)
+
+        else: 
+            for i in range(1):
+                current_stack_index = random.randint(0, self.inventory.size - 3)
+                item_stack = self.inventory.getItemStack(current_stack_index)
+                while item_stack == None:
+                    current_stack_index = random.randint(0, self.inventory.size - 3)
+                    item_stack = self.inventory.getItemStack(current_stack_index)
+                self.inventory.throwStackInLoc(self.world, self.pos, current_stack_index, 0)
+
+        """ for current_stack_index in range((self.inventory.size) - 2):
             self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, 0)
-        self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, (random.randint(1, 5)))
+        self.inventory.throwStackInLoc(self.world,self.pos,current_stack_index, (random.randint(1, 5))) """
         
 
     

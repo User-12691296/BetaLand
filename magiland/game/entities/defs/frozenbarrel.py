@@ -11,7 +11,7 @@ class FrozenBronze(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("apple", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 1)
-        self.inventory.setItemStack(ItemStack("orange", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("orange", (random.randint(1, 3))), 2)
         
 
     @staticmethod
@@ -39,7 +39,7 @@ class FrozenSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("ice_blade", 1), 0)
-        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class FrozenGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("arctic_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("soul_cannon", 1), 0)
+        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("soul_cannon", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class FrozenPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("arctic_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("soul_cannon", 1), 0)
+        self.inventory.setItemStack(ItemStack("celestial_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("soul_cannon", 1), 2)
 
 
     @staticmethod

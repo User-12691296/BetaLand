@@ -11,7 +11,7 @@ class DarknessBronze(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("banana", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("watermelon", (random.randint(1, 3))), 1)
-        self.inventory.setItemStack(ItemStack("silver_apple", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("silver_apple", (random.randint(1, 3))), 2)
         
 
     @staticmethod
@@ -39,7 +39,7 @@ class DarknessSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 0)
-        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class DarknessGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("deepdark_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 0)
+        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class DarknessPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("deepdark_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 0)
+        self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 2)
 
 
     @staticmethod

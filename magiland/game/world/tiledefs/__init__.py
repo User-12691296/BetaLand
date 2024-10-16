@@ -5,6 +5,7 @@ from .sanddark import SandDarkTile
 from .damaging import DamageTile
 from .slowing import SlowTile
 from .cactus import Cactus
+from .void import WalkableVoidTile, DeathVoidTile
 
 
 OVERWORLD_TILES = []
@@ -15,7 +16,7 @@ BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("sandlight", "sandlight").addTileToList(OVERWORLD_TILES)
-SlowTile("sandoasis", "sandoasis",0.1, False).addTileToList(OVERWORLD_TILES)
+SlowTile("sandoasis", "sandoasis",2, False).addTileToList(OVERWORLD_TILES)
 Cactus("sandcactus", "sandcactus", 0.1, 2).addTileToList(OVERWORLD_TILES)
 
 
@@ -28,7 +29,7 @@ BasicTile("snow2", "snow2", False).addTileToList(OVERWORLD_TILES)
 
 BasicTile("swamp", "swamp").addTileToList(OVERWORLD_TILES)
 BasicTile("swampaccent", "swampaccent").addTileToList(OVERWORLD_TILES)
-SlowTile("swampwater", "swampwater",0.1).addTileToList(OVERWORLD_TILES)
+SlowTile("swampwater", "swampwater",2).addTileToList(OVERWORLD_TILES)
 
 BasicTile("deepdark", "deepdark", False).addTileToList(OVERWORLD_TILES)
 BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)
@@ -42,6 +43,9 @@ BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
 BasicTile("volcano", "volcano").addTileToList(OVERWORLD_TILES)
 DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)
 DamageTile("volcanomolten", "volcanomolten", 0.1).addTileToList(OVERWORLD_TILES)
+
+WalkableVoidTile().addTileToList(OVERWORLD_TILES)
+DeathVoidTile().addTileToList(OVERWORLD_TILES)
 
 BasicTile("void", "barrier").addTileToList(OVERWORLD_TILES)
 BasicTile("black", "black").addTileToList(OVERWORLD_TILES)

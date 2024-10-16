@@ -18,7 +18,7 @@ class Sword(Item):
         if not swing_range:
             self.swing_range = self.size + 2
 
-        else:
+        else
             self.swing_range = swing_range
 
     def tick(self, data, player, world):
@@ -73,7 +73,7 @@ class Sword(Item):
         self.startSwing(data, player, world, tile_pos, tile)
         return True
 
-
+        
 SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
 Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)

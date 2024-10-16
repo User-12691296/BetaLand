@@ -2,7 +2,7 @@ from accelerants import aStarSearch
 import numpy as np
 from queue import SimpleQueue, Empty
 
-MAX_PATH_LENGTH = 100
+MAX_PATH_LENGTH = 400
 
 class PathFinder:
     def __init__(self, map_size, stop_range):

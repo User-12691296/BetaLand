@@ -17,6 +17,8 @@ class Player(Creature):
         self.loadInventory()
         self.initAttributes()
 
+        self.pos = [2,10]
+
         self.disp = False
 
     def loadHUD(self):
@@ -44,7 +46,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
         self.inventory.setItemStack(ItemStack("lemon",1),18)
         self.inventory.setItemStack(ItemStack("apple",1),19)
-        self.inventory.setItemStack(ItemStack("iron_helmet",1),0)
+        self.inventory.setItemStack(ItemStack("croc",1),0)
 
     def initAttributes(self):
         # Frames per movement
@@ -53,6 +55,10 @@ class Player(Creature):
 
         self.defineAttribute("projectile_rate_modifier", 1)
         self.setAttribute("projectile_rate_modifier", 1)
+
+        # Magma speed boost
+        self.defineAttribute("magma_speed_boost", False)
+        self.setAttribute("magma_speed_boost", False)
 
         # Range of vision
         self.defineAttribute("vision_range", 12)
@@ -296,8 +302,6 @@ class Player(Creature):
     def finalTick(self):
         super().finalTick()
 
-        self.inventory.damageTick(self, self.world)
-
     def move(self, delta):
         super().move(delta)
         
@@ -333,17 +337,30 @@ class Player(Creature):
 
 
         ##DEBUG
-        if pressed[pygame.K_i]:
+        if pressed[pygame.K_h]:
             self.move(( 0, -10))
             moved = True
-        if pressed[pygame.K_j]:
+        if pressed[pygame.K_b]:
             self.move((-10,  0))
             moved = True
-        if pressed[pygame.K_k]:
+        if pressed[pygame.K_n]:
             self.move(( 0,  10))
             moved = True
-        if pressed[pygame.K_l]:
+        if pressed[pygame.K_m]:
             self.move(( 10,  0))
+            moved = True
+
+        if pressed[pygame.K_i]:
+            self.move(( 0, -40))
+            moved = True
+        if pressed[pygame.K_j]:
+            self.move((-40,  0))
+            moved = True
+        if pressed[pygame.K_k]:
+            self.move(( 0,  40))
+            moved = True
+        if pressed[pygame.K_l]:
+            self.move(( 40,  0))
             moved = True
         ##
 
@@ -387,7 +404,7 @@ class Player(Creature):
     def kill(self):
         self.alive = False
         
-        pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
             
     def getMapDelta(self):
         bpos = self.getBufferPos()

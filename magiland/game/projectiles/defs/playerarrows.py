@@ -100,7 +100,7 @@ class IceArrow(BasicProjectileWithEffects):
         self.speed = 0.3
         self.normalspeed=None
         
-        self.init_effect = self.initial_effect
+        self.init_effect = placeholderFunction
         self.tick_effect = self.ice_tick_effect
         self.reverse_effect = self.reverse_ice_effect
 
@@ -110,14 +110,11 @@ class IceArrow(BasicProjectileWithEffects):
     def getNeededAssets():
         return ["IceArrow"]
 
-    def initial_effect(self,entity,world,tile_pos):
-        self.normalspeed=entity.getAttribute("movement_speed")
-
     def ice_tick_effect(self, entity, world, tile_pos):
-        entity.setAttribute("movement_speed", 1000)
+        entity.setMovable(False)
 
     def reverse_ice_effect(self,entity,world,tile_pos):
-        entity.setAttribute("movement_speed", self.normalspeed)
+        entity.setMovable(True)
 
     def draw(self, display, display_topleft=(0, 0)):    
         super().draw(display, display_topleft)
