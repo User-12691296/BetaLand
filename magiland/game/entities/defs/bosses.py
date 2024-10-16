@@ -15,7 +15,25 @@ class CrabBoss (Enemy):
         super().__init__(100, 2, 8)
         self.size = (5,5)
         self.radius = 5
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -121,10 +139,9 @@ class CrabBoss (Enemy):
 
 class MedusaBoss (Enemy):
     def __init__(self):
-        super().__init__(100, 1, 10)
+        super().__init__(75, 3, 10)
         self.size = (3,3)
-        self.radius = 1
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.radius = 3
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -239,8 +256,7 @@ class MedusaBoss (Enemy):
         pass    
 
     def draw(self, display, display_topleft=(0, 0)):
-        self.updateHitbox()
-        self.radius = 5
+        self.hitbox.center = self.getPos()
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
@@ -252,8 +268,6 @@ class MedusaBoss (Enemy):
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
 
-        # HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
-        # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
 
 # FINAL BOSSES
 class CraneBoss (Enemy):
@@ -261,7 +275,25 @@ class CraneBoss (Enemy):
         super().__init__(200, 2, 8)
         self.size = (5,5)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -393,7 +425,25 @@ class WhaleBoss (Enemy):
         super().__init__(200, 2, 8)
         self.size = (9,9)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -541,7 +591,25 @@ class DragonBoss (Enemy):
         super().__init__(300, 2, 8)
         self.size = (5,5)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -681,7 +749,25 @@ class WormBoss(Enemy):
         super().__init__(150, 2, 6)
         self.size = (3,3)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -823,7 +909,7 @@ class MountainBoss (Enemy):
         super().__init__(300, 2, 8)
         self.size = (5,5)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -835,6 +921,26 @@ class MountainBoss (Enemy):
         self.image_rect = self.image.get_rect()
 
         self.loadInventory()
+
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
+        return ["MountainDangerThunderBirdButNotReally"]
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -975,7 +1081,25 @@ class DarknessBoss (Enemy):
         super().__init__(200, 2, 8)
         self.size = (5,5)
         self.radius = 2
-        self.hitbox = pygame.Rect(self.getPos(), self.size)
+        self.loadInventory()
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+
+    @staticmethod
+    def getNeededAssets():
         self.attack_pattern = 0
         self.attack_progress = 0
 

@@ -17,6 +17,8 @@ class Player(Creature):
         self.loadInventory()
         self.initAttributes()
 
+        self.pos = [2,10]
+
         self.disp = False
 
     def loadHUD(self):
@@ -403,7 +405,7 @@ class Player(Creature):
     def kill(self):
         self.alive = False
         
-        pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
             
     def getMapDelta(self):
         bpos = self.getBufferPos()
