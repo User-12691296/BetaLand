@@ -78,6 +78,12 @@ ALL_ENTITY_CLASSES += DARKNESSBATS
 ALL_ENTITY_CLASSES.append(CrabBoss)
 ALL_ENTITY_CLASSES.append(CraneBoss)
 ALL_ENTITY_CLASSES.append(WhaleBoss)
+ALL_ENTITY_CLASSES.append(DragonBoss)
+ALL_ENTITY_CLASSES.append(WormBoss)
+ALL_ENTITY_CLASSES.append(MedusaBoss)
+ALL_ENTITY_CLASSES.append(MountainBoss)
+ALL_ENTITY_CLASSES.append(DarknessBoss)
+
 # Add darkness barrles to a group of barrels
 ALL_ENTITY_CLASSES += DARKNESSBRONZE
 ALL_ENTITY_CLASSES += DARKNESSSILVER
