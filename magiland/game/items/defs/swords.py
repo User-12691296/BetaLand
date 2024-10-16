@@ -18,7 +18,7 @@ class Sword(Item):
         if not swing_range:
             self.swing_range = self.size + 2
 
-        else
+        else:
             self.swing_range = swing_range
 
     def tick(self, data, player, world):
