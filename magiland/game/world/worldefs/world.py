@@ -513,7 +513,7 @@ class World(events.EventAcceptor):
         self.entities.remove(entity)
 
     def getEntitiesOnTile(self, tile_pos):
-        return [entity for entity in self.getAllEntities() if entity.collidesWith(tile_pos)]
+        return [entity for entity in self.getAllEntities() if entity.collidesWith(tile_pos) and entity.active]
 
     def getEntitiesInRangeOfTile(self, tile_pos, range):
         r = int(range**2)

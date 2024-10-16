@@ -7,9 +7,10 @@ import math
 SWING_FRAMES = 10
 
 class Bow(Item):
-    def __init__(self, itemid, tex_name, size, cooldown):
+    def __init__(self, itemid, tex_name, size, cooldown, arrow = PROJECTILE_CLASSES.Arrow):
         super().__init__(itemid, tex_name, False, size)
         self.cooldown = cooldown # In frames
+        self.arrow=arrow
 ##    def initData(self):
 ##        data = super().initData()
 ##        return data
@@ -24,7 +25,7 @@ class Bow(Item):
 
     def fireInTheHole(self, data, player, world, tile_pos, tile):
         if not data["animations"].exists("cooldown"):
-            arrow = PROJECTILE_CLASSES.Arrow(player.pos, -data["rot"]-45)
+            arrow = self.arrow(player.pos, -data["rot"]-45)
             arrow.giveImmunity(player)
             world.addProjectile(arrow)
             data["animations"].create("cooldown", self.cooldown)
@@ -37,6 +38,8 @@ class Bow(Item):
 # Do we need separate for crossbow?
 
 BOWS = []
-Bow("debug_sword", "sword", 1, 1).addToGroup(BOWS)
 Bow("basic_crossbow", "basic_crossbow", 1, 30).addToGroup(BOWS)
+Bow("desert_bow", "desert_bow", 0, 40, arrow=PROJECTILE_CLASSES.MoltenArrow).addToGroup(BOWS)
+Bow("frozen_bow", "frozen_bow", 0, 20, arrow=PROJECTILE_CLASSES.IceArrow).addToGroup(BOWS)
+
 

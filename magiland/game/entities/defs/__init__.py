@@ -8,10 +8,16 @@ from .dessertenemies import *
 from .frozenenemies import *
 from .mountainenemies import *
 from .darknessenemies import *
+from .darknessbarrel import *
+from .frozenbarrel import *
+from .crystalbarrel import *
+from .dessertbarrel import *
+from .mountainbarrel import *
+from .swampbarrel import *
 from .item import ItemEntity
+from .bosses import *
 
 ALL_ENTITY_CLASSES = []
-
 
 ALL_ENTITY_CLASSES.append(Player)
 ALL_ENTITY_CLASSES.append(ItemEntity)
@@ -58,7 +64,6 @@ ALL_ENTITY_CLASSES += MOUNTAINGOATS
 ALL_ENTITY_CLASSES += MOUNTAINTROLLS
 ALL_ENTITY_CLASSES += MOUNTAINBATS
 
-
 # Add darkness enemies to a group of enemies
 ALL_ENTITY_CLASSES += DARKNESSGHOSTS
 ALL_ENTITY_CLASSES += DARKNESSGRAVETRAPPERS
@@ -67,3 +72,44 @@ ALL_ENTITY_CLASSES += DARKNESSKNIGHTMARE1
 ALL_ENTITY_CLASSES += DARKNESSKNIGHTMARE2
 ALL_ENTITY_CLASSES += DARKNESSSPREADERS
 ALL_ENTITY_CLASSES += DARKNESSBATS
+
+#BOSSES!!!!!!!!!!
+
+ALL_ENTITY_CLASSES.append(CrabBoss)
+ALL_ENTITY_CLASSES.append(CraneBoss)
+ALL_ENTITY_CLASSES.append(WhaleBoss)
+# Add darkness barrles to a group of barrels
+ALL_ENTITY_CLASSES += DARKNESSBRONZE
+ALL_ENTITY_CLASSES += DARKNESSSILVER
+ALL_ENTITY_CLASSES += DARKNESSGOLD
+ALL_ENTITY_CLASSES += DARKNESSPLAT
+
+# Add frozen barrles to a group of barrels
+ALL_ENTITY_CLASSES += FROZENBRONZE
+ALL_ENTITY_CLASSES += FROZENSILVER
+ALL_ENTITY_CLASSES += FROZENGOLD
+ALL_ENTITY_CLASSES += FROZENPLAT
+
+# Add crystal barrles to a group of barrels
+ALL_ENTITY_CLASSES += CRYSTALBRONZE
+ALL_ENTITY_CLASSES += CRYSTALSILVER 
+ALL_ENTITY_CLASSES += CRYSTALGOLD
+ALL_ENTITY_CLASSES += CRYSTALPLAT
+
+# Add dessert barrles to a group of barrels
+ALL_ENTITY_CLASSES += DESSERTBRONZE
+ALL_ENTITY_CLASSES += DESSERTSILVER
+ALL_ENTITY_CLASSES += DESSERTGOLD
+ALL_ENTITY_CLASSES += DESSERTPLAT
+
+# Add mountain barrles to a group of barrels
+ALL_ENTITY_CLASSES += MOUNTAINBRONZE
+ALL_ENTITY_CLASSES += MOUNTAINSILVER
+ALL_ENTITY_CLASSES += MOUNTAINGOLD
+ALL_ENTITY_CLASSES += MOUNTAINPLAT
+
+# Add swamp barrles to a group of barrels
+ALL_ENTITY_CLASSES += SWAMPBRONZE
+ALL_ENTITY_CLASSES += SWAMPSILVER
+ALL_ENTITY_CLASSES += SWAMPGOLD
+ALL_ENTITY_CLASSES += SWAMPPLAT

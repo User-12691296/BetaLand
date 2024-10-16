@@ -13,7 +13,7 @@ from constants import GAME
 
 class Entity(events.EventAcceptor):
     def __init__(self):
-        self.pos = [0, 0]
+        self.pos = [2,10]
 
         self.cooldowns = {}
 
@@ -23,6 +23,7 @@ class Entity(events.EventAcceptor):
         self.movement_this_tick = [0, 0]
         
         self.alive = True
+        self.active = True # Literally just used for the whale, means if you can pass through
 
         self.facing_angle = 0
 
@@ -87,6 +88,9 @@ class Entity(events.EventAcceptor):
         return False
     
     def isEnemy(self):
+        return False
+    
+    def isBoss(self):
         return False
 
     def isEnemyTarget(self):

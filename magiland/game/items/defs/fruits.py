@@ -32,7 +32,7 @@ class Fruit(Item):
     def onLeft(self, data, player, world, tile, tile_pos):
         player.changeHealth(self.heal_amount)
         self.effect(player, world, tile, tile_pos)
-        player.inventory.setItemStack(None,0)
+        player.inventory.setItemStack(None,player.inventory.selected_slot)
 
 
     def tick(self, data, player, world):
