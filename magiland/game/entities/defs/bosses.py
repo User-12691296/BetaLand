@@ -33,7 +33,7 @@ class CrabBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -293,7 +293,7 @@ class CraneBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -443,7 +443,7 @@ class WhaleBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -609,7 +609,7 @@ class DragonBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -767,7 +767,7 @@ class WormBoss(Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -1099,7 +1099,7 @@ class DarknessBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets():
+    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
