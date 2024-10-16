@@ -5,7 +5,7 @@ import math
 
 SWING_FRAMES = 10
 
-class Mace(Sword):
+class SigWeapon(Sword):
 
     def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0, amount_of_projectiles=8, laser = PROJECTILE_CLASSES.CrystalLaserShot, cooldown=0):
         super().__init__(itemid, tex_name, damage, size, swing_angle, swing_range, player_damage_on_hit)
@@ -29,13 +29,7 @@ class Mace(Sword):
                 world.addProjectile(laser)
             data["animations"].create("cooldown", self.cooldown)
                                     
-MACES = []
-Mace("debug_sword", "sword", 1000, 2).addToGroup(MACES)
-Mace("wood_mace", "wood_mace", 20, 0, 300, 5, cooldown=20).addToGroup(MACES)
-Mace("stone_mace", "stone_mace", 20, 0, 300, 5, cooldown=10).addToGroup(MACES)
-Mace("kr1stal_mace", "kr1stal_mace", 20, 1, 300, 5, amount_of_projectiles=20, laser=PROJECTILE_CLASSES.CrystalMaceProj, cooldown=60).addToGroup(MACES)
-Mace("lava_mace", "lava_mace", 20, 1, 300, 5, amount_of_projectiles=20, laser=PROJECTILE_CLASSES.MoltenMaceProj).addToGroup(MACES)
-Mace("celestial_mace", "celestial_mace", 20, 2, 300, 5, amount_of_projectiles=16, laser=PROJECTILE_CLASSES.CelestialMaceProj).addToGroup(MACES)
-Mace("cosmic_mace", "cosmic_mace", 20, 2, 300, 5, amount_of_projectiles=16, laser=PROJECTILE_CLASSES.DarknessMaceProj).addToGroup(MACES) #cosmic = darkness
-Mace("snake_mace", "snake_mace", 20, 2, 300,5, amount_of_projectiles=8,laser=PROJECTILE_CLASSES.PoisonDart).addToGroup(MACES) 
-
+SIGWEAPONS = []
+SigWeapon("clawofcrabking", "clawofcrabking", 100, 2, 360, cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("clawofsnakequeen", "clawnofsnakequeen", 100, 2, 360, cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("scissors", "scissors", 100,2,360,cooldown=20).addToGroup(SIGWEAPONS)

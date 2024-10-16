@@ -584,6 +584,38 @@ class WhaleBoss (Enemy):
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
 
+
+class EvilSnail (Enemy):
+    def __init__(self):
+        super().__init__(45, 0, 35)
+
+    @staticmethod
+    def getNeededAssets():
+        return ["swamptangler"]
+
+    def isEnemy(self):
+        return True
+
+    def damageTick(self):
+        for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
+            if not entity.isEnemy():
+                entity.damage(0.1)
+
+    def movementTick(self):
+        return super().movementTick()
+
+    def draw(self, display, display_topleft=(0, 0)):
+        bpos = self.world.tilePosToBufferPos(self.pos)
+        spos = self.bufferPosToDisplayPos(bpos, display_topleft)
+
+        entity_texture = self.atlas.getTexture("swamptangler")
+
+        rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
+
+        rotated_rect = rotated_texture.get_rect(center=spos)
+        display.blit(rotated_texture, rotated_rect.center)
+
+
 # End Final Bosses
 
 class DragonBoss (Enemy):
@@ -592,6 +624,17 @@ class DragonBoss (Enemy):
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
+
+        self.attack_pattern = 0
+        self.attack_progress = 0
+
+        self.x, self.y = 0,0
+        self.normal_movement_speed = 8
+
+        self.image = pygame.image.load(os.path.join(BOSS_PATH, "MoltenDragon.png")).convert_alpha()
+        self.image = pygame.transform.scale_by(self.image, 4)
+        self.image_rect = self.image.get_rect()
+
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -751,6 +794,17 @@ class WormBoss(Enemy):
         self.radius = 2
         self.loadInventory()
 
+        self.attack_pattern = 0
+        self.attack_progress = 0
+
+        self.x, self.y = 0,0
+        self.normal_movement_speed = 8
+
+        self.image = pygame.image.load(os.path.join(BOSS_PATH, "BurrowedWorm.png")).convert_alpha()
+        self.image = pygame.transform.scale_by(self.image, 4)
+        self.image_rect = self.image.get_rect()
+
+
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
         self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
@@ -909,7 +963,6 @@ class MountainBoss (Enemy):
         super().__init__(300, 2, 8)
         self.size = (5,5)
         self.radius = 2
-        self.loadInventory()
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -1082,6 +1135,17 @@ class DarknessBoss (Enemy):
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
+
+        self.attack_pattern = 0
+        self.attack_progress = 0
+
+        self.x, self.y = 0,0
+        self.normal_movement_speed = 8
+
+        self.image = pygame.image.load(os.path.join(BOSS_PATH, "DarknessCorruptedSalamander.png")).convert_alpha()
+        self.image = pygame.transform.scale_by(self.image, 4)
+        self.image_rect = self.image.get_rect()
+
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
