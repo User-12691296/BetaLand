@@ -8,6 +8,7 @@ from .bows import BOWS
 from .fruits import FRUITS
 from .armor import ARMORS
 from .geodes import GEODES
+from .signatureweapons import SIGWEAPONS
 
 
 ALL_ITEM_CLASSES = []
@@ -23,3 +24,5 @@ ALL_ITEM_CLASSES += BOWS
 ALL_ITEM_CLASSES += FRUITS
 ALL_ITEM_CLASSES += GEODES
 ALL_ITEM_CLASSES += ARMORS
+ALL_ITEM_CLASSES += SIGWEAPONS
+
