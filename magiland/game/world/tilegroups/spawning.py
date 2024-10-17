@@ -44,7 +44,11 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "darkness_spreader": EC.DarknessSpreader,
                 "darkness_bat": EC.DarknessBat,
 
-                
+                "frozen_knight": EC.FrozenKnight,
+                "frozen_pufferfish": EC.FrozenPuffer,
+                "frozen_troll": EC.FrozenTroll,
+                "frozen_slime": EC.FrozenSlime,
+                "frozen_wolf": EC.FrozenWolf,
                 
                 "crab_boss": EC.CrabBoss,
                 "medusa": EC.MedusaBoss,
