@@ -29,6 +29,22 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "swampsilver_barrel": EC.SwampSilver,
                 "swampgold_barrel": EC.SwampGold,
                 "swampplatinum_barrel": EC.SwampPlat,
+
+                "crystal_golem": EC.CrystalGolem,
+                "crystal_knight": EC.CrystalKnight,
+                "crystal_scorpion": EC.CrystalScorpion,
+                "crystal_slime": EC.CrystalSlime,
+                "crystal_bat": EC.CrystalBat,
+
+                "darkness_ghost": EC.DarknessGhost,
+                "darkness_gravetrapper": EC.DarknessGraveTrapper,
+                "darkness_jumpscare": EC.DarknessJumpscare,
+                "darkness_knightmare1": EC.DarknessKnightmare1,
+                "darkness_knightmare2": EC.DarknessKnightmare2,
+                "darkness_spreader": EC.DarknessSpreader,
+                "darkness_bat": EC.DarknessBat,
+
+                
                 
                 "crab_boss": EC.WormBoss,
                 "hunger_crystal": EC.HungerCrystal
