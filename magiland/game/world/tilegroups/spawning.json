@@ -21,6 +21,9 @@
 	"fixed":{
 		"lava_knight":[
 			[5, 5]
+			],
+		"hunger_crystal":[
+			[2, 2]
 			]
 		}
 	},
