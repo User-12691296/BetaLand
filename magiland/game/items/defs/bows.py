@@ -44,6 +44,6 @@ Bow("frozen_bow", "frozen_bow", 0, 20, arrow=PROJECTILE_CLASSES.IceArrow).addToG
 Bow("swamp_bow", "swamp_bow", 0, 20).addToGroup(BOWS)
 Bow("wood_bow", "wood_bow", 0, 10).addToGroup(BOWS)
 Bow("mountain_bow", "mountain_bow", 0, 20).addToGroup(BOWS)
-Bow("darkness_bow", "darkness_bow", 0 30).addToGroup(BOWS)
+Bow("darkness_bow", "darkness_bow", 0, 30).addToGroup(BOWS)
 
 
