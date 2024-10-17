@@ -16,6 +16,7 @@ from .mountainbarrel import *
 from .swampbarrel import *
 from .item import ItemEntity
 from .bosses import *
+from .crystals import *
 
 ALL_ENTITY_CLASSES = []
 
@@ -26,6 +27,7 @@ ALL_ENTITY_CLASSES += CRYSTALBRONZE
 ALL_ENTITY_CLASSES += CRYSTALSILVER
 ALL_ENTITY_CLASSES += CRYSTALGOLD
 ALL_ENTITY_CLASSES += CRYSTALPLAT
+ALL_ENTITY_CLASSES += CRYSTALS
 
 ALL_ENTITY_CLASSES += SLIMES
 ALL_ENTITY_CLASSES += BLOBS

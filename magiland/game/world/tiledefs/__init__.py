@@ -6,12 +6,14 @@ from .damaging import DamageTile
 from .slowing import SlowTile
 from .cactus import Cactus
 from .void import WalkableVoidTile, DeathVoidTile
+from .swampwater import SwampWater
 
 
 OVERWORLD_TILES = []
 GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
 SandDarkTile().addTileToList(OVERWORLD_TILES)
+SwampWater().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
@@ -29,7 +31,7 @@ BasicTile("snow2", "snow2", False).addTileToList(OVERWORLD_TILES)
 
 BasicTile("swamp", "swamp").addTileToList(OVERWORLD_TILES)
 BasicTile("swampaccent", "swampaccent").addTileToList(OVERWORLD_TILES)
-SlowTile("swampwater", "swampwater",2).addTileToList(OVERWORLD_TILES)
+##SlowTile("swampwater", "swampwater",2).addTileToList(OVERWORLD_TILES)
 
 BasicTile("deepdark", "deepdark", False).addTileToList(OVERWORLD_TILES)
 BasicTile("darkwall", "darkwall", False).addTileToList(OVERWORLD_TILES)

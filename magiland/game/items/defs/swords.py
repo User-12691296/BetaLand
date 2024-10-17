@@ -9,6 +9,7 @@ class Sword(Item):
         #player_damage_on_hit can be postive/negative for healing effect
         super().__init__(itemid, tex_name, False, size)
 
+        #what's a good buff amount? this could be 10%,20%,30% or 15%,30%,45%, or 20%,40%,60%
         self.damage = damage
         self.swing_angle = swing_angle
         # player_damage_on_hit stuff
@@ -53,7 +54,7 @@ class Sword(Item):
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
                 if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
-                    entity.damage(self.damage)
+                    entity.damage(self.damage * (1 + data["rarity"] * 0.1))
                     data["entities_hit"].append(entity)
                             
 
@@ -71,6 +72,9 @@ class Sword(Item):
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
+        return True
+
+    def isUpgradeable(self, data, player, world):
         return True
 
         
