@@ -67,3 +67,4 @@ MaceArmor("crystal_armor", "crystal_armor", 0, 2, 10, 300, 8, PROJECTILE_CLASSES
 Armor("arctic_armor", "arctic_armor", 0, 2.4, 10).addToGroup(ARMORS)
 MaceArmor("deepdark_armor", "deepdark_armor", 0, 2.6, 10, 300, 8, PROJECTILE_CLASSES.DarknessMaceProj).addToGroup(ARMORS)
 MaceArmor("dragon_hide", "dragon_hide", 0, 3, 10, 300, 8, PROJECTILE_CLASSES.MoltenMaceProj).addToGroup(ARMORS)
+MaceArmor("dragon_hide", "dragon_hide", 0, 3, 10, 300, 8, PROJECTILE_CLASSES.MoltenMaceProj).addToGroup(ARMORS)

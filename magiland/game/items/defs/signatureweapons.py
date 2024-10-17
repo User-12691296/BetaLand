@@ -7,7 +7,7 @@ SWING_FRAMES = 10
 
 class SigWeapon(Sword):
 
-    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0, amount_of_projectiles=8, laser = PROJECTILE_CLASSES.CrystalLaserShot, cooldown=0):
+    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0, amount_of_projectiles=16, laser = PROJECTILE_CLASSES.CrystalLaserShot, cooldown=0):
         super().__init__(itemid, tex_name, damage, size, swing_angle, swing_range, player_damage_on_hit)
 
         self.angles = []
