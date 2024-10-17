@@ -4,15 +4,6 @@
 			"lava_knight":{"chance":0.01},
 			"desert_raiders":{"chance":0.01}
 			}
-		},
-	"fixed":{
-		"lava_knight":[
-			[10, 10],
-			[15, 15]
-			],
-        "crab_boss": [
-            [30,30]
-        ]
 		}
 	},
 
@@ -207,6 +198,12 @@
 			[40, 17], [10, 153], [190, 88], [162, 179]
 			]
 		}
-	}	
+	},
+"bossarena":{
+    "biome:":{},
+    "fixed":{
+        "crane_boss":[[10,10]]
+    }    
+}
 }
 	

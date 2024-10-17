@@ -46,6 +46,16 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
 
                 
                 
+                "crab_boss": EC.CrabBoss,
+                "medusa": EC.MedusaBoss,
+                "dragon_boss": EC.DragonBoss,
+                "worm_boss": EC.WormBoss,
+                "mountain_boss": EC.MountainBoss,
+                "darkness_boss": EC.DarknessBoss,
+
+                "evil_snail": EC.EvilSnail,
+                "whale_boss": EC.WhaleBoss,
+                "crane_boss": EC.CraneBoss,
                 "crab_boss": EC.WormBoss,
                 "hunger_crystal": EC.HungerCrystal
 }

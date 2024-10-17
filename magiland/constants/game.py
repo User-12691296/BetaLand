@@ -35,3 +35,29 @@ SOUND_VOLUMES = {
 CONTROLS_KEYS = ORIGINAL_CONTROLS_KEYS.copy()
 
 ITEM_LOCATION_AROUND_PLAYER = (48, -48)
+
+class ShouldSpawnBossAndInvincibillity():
+    def __init__(self):
+        self.snail_spawn = True
+        self.doug_spawn = True
+        self.boss_invincibillity = True
+
+    def setSnailSpawn(self, value):
+        self.snail_spawn = value
+
+    def setDougSpawn(self, value):
+        self.doug_spawn = value
+
+    def getDougSpawn(self):
+        return self.doug_spawn
+    
+    def getSnailSpawn(self):
+        return self.snail_spawn
+
+    def setBossInvincibillity(self, value):
+        self.boss_invincibillity = value
+
+    def getBossInvincibillity(self):
+        return self.boss_invincibillity
+    
+BOSS_CONDITIONS = ShouldSpawnBossAndInvincibillity()
