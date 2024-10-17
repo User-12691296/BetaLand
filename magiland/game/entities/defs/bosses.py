@@ -1,5 +1,5 @@
 from ..classes import Enemy
-from constants.game import TILE_SIZE
+from constants.game import TILE_SIZE, BOSS_CONDITIONS
 from constants.assets import BOSS_PATH
 import pygame
 import random
@@ -86,7 +86,7 @@ class CrabBoss (Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -133,6 +133,9 @@ class CrabBoss (Enemy):
 
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
+
+        self.drawHealthBar(display, display_topleft)
+
 
         # HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
@@ -209,7 +212,7 @@ class MedusaBoss (Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -256,7 +259,7 @@ class MedusaBoss (Enemy):
         pass    
 
     def draw(self, display, display_topleft=(0, 0)):
-        self.hitbox.center = self.getPos()
+        self.hitbox.center = self.getPos().copy()
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
@@ -265,6 +268,8 @@ class MedusaBoss (Enemy):
         final_rect = rotated_image.get_rect(center=spos)
         # final_texture = pygame.transform.scale(rotated_texture, (self.size[0]*TILE_SIZE, self.size[1]*TILE_SIZE))
 
+        self.drawHealthBar(display, display_topleft)
+
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
 
@@ -272,10 +277,21 @@ class MedusaBoss (Enemy):
 # FINAL BOSSES
 class CraneBoss (Enemy):
     def __init__(self):
-        super().__init__(200, 2, 8)
+        super().__init__(200, 2, 7)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
+
+        self.attack_pattern = 0
+        self.attack_progress = 0
+
+        self.x, self.y = 0,0
+        self.normal_movement_speed = 8
+
+        self.image = pygame.image.load(os.path.join(BOSS_PATH, "KungFuKrane.png")).convert_alpha()
+        self.image = pygame.transform.scale_by(self.image, 4)
+        self.image_rect = self.image.get_rect()
+
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -346,7 +362,7 @@ class CraneBoss (Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -381,15 +397,15 @@ class CraneBoss (Enemy):
         if self.isCooldownActive("bullets"): 
             return
 
-        number_of_bullets = 4
+        number_of_bullets = 8
         for i in range(number_of_bullets):
             angle = (360/number_of_bullets)*i
             pos = self.pos
-            self.projectile = PROJECTILE_CLASSES.Arrow(pos, angle)
+            self.projectile = PROJECTILE_CLASSES.PoisonDart(pos, angle)
             self.projectile.giveImmunity(self)
             self.world.addProjectile(self.projectile)
 
-        self.registerCooldown("bullets", 10)
+        self.registerCooldown("bullets", 25)
 
     def updatePositionForPattern2(self):
         speed = 1
@@ -402,6 +418,9 @@ class CraneBoss (Enemy):
     def handleAttacksForPattern2(self):
         self.handleAttacksForPattern1()
         
+
+    def isFinalBoss(self):
+        return True
 
     def draw(self, display, display_topleft=(0, 0)):
         self.updateHitbox()
@@ -416,6 +435,8 @@ class CraneBoss (Enemy):
 
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
+
+        self.drawHealthBar(display, display_topleft)
 
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
@@ -565,7 +586,11 @@ class WhaleBoss (Enemy):
 
     # def handleAttacksForPattern2(self):
     #     self.handleAttacksForPattern1()
-        
+
+  
+    def isFinalBoss(self):
+        return True
+      
 
     def draw(self, display, display_topleft=(0, 0)):
         self.updateHitbox()
@@ -581,19 +606,28 @@ class WhaleBoss (Enemy):
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
 
+        self.drawHealthBar(display, display_topleft)
+
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
 
 
 class EvilSnail (Enemy):
     def __init__(self):
-        super().__init__(45, 0, 35)
+        super().__init__(300, 0, 35)
+        self.stuck = False
 
     @staticmethod
     def getNeededAssets():
-        return ["swamptangler"]
+        return ["EvilSnail"]
 
     def isEnemy(self):
+        return True
+    
+    def isBoss(self):
+        return True
+
+    def isFinalBoss(self):
         return True
 
     def damageTick(self):
@@ -601,20 +635,72 @@ class EvilSnail (Enemy):
             if not entity.isEnemy():
                 entity.damage(0.1)
 
+    def kill(self):
+        super().kill()
+        BOSS_CONDITIONS.setBossInvincibillity(False)
+
     def movementTick(self):
-        return super().movementTick()
+        if self.world.changes_this_tick:
+            self.calcPath()
+
+        if self.isCooldownActive("movement"):
+            return
+        
+        if self.stuck:
+            return
+
+        node = self.pathfinder.getNode()
+        if node:
+            old_pos = self.pos
+            self.setPos([node[0], node[1]])
+            self.movement_this_tick[1] = self.pos[1]-old_pos[1]
+            self.movement_this_tick[0] = self.pos[0]-old_pos[0]
+
+            self.setPos([old_pos[0]-self.movement_this_tick[0], old_pos[1]-self.movement_this_tick[1]])
+
+            self.movement_this_tick[1] = -self.movement_this_tick[1]
+            self.movement_this_tick[0] = -self.movement_this_tick[0]
+
+            if self.world.getTileID(self.pos) != "grass":
+                if self.movement_this_tick[0] > 1 and self.movement_this_tick[1] > 1:
+                    if self.world.getTileId(old_pos[0], old_pos[1]+ self.movement_this_tick[1]) != "grass":
+                        self.movement_this_tick[0] = 0
+                    elif self.world.getTileId(old_pos[0]+self.movement_this_tick[0], old_pos[1]) != "grass":
+                        self.movement_this_tick[1] = 0
+
+                if self.movement_this_tick[0] == 0:
+                    if self.movement_this_tick[1] > 0:
+                        self.movement_this_tick[0] = 1
+                    if self.movement_this_tick[1] < 0:
+                        self.movement_this_tick[0] = -1
+                    self.movement_this_tick[1] = 0
+                if self.movement_this_tick[1] == 0:
+                    if self.movement_this_tick[0] > 0:
+                        self.movement_this_tick[1] = 1
+                    if self.movement_this_tick[0] < 0:
+                        self.movement_this_tick[1] = -1
+                    self.movement_this_tick[0] = 0
+
+            self.setPos([old_pos[0]+self.movement_this_tick[0], old_pos[1]+ self.movement_this_tick[1]])
+            if self.world.getTileID(self.pos) != "grass":
+                self.setPos(old_pos)
+                self.stuck = True
+
+
+        self.registerCooldown("movement", self.getAttribute("movement_speed"))
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
-        entity_texture = self.atlas.getTexture("swamptangler")
+        entity_texture = self.atlas.getTexture("EvilSnail")
 
         rotated_texture = pygame.transform.rotate(entity_texture, -self.facing_angle+90)
 
+        self.drawHealthBar(display, display_topleft)
+
         rotated_rect = rotated_texture.get_rect(center=spos)
         display.blit(rotated_texture, rotated_rect.center)
-
 
 # End Final Bosses
 
@@ -711,7 +797,7 @@ class DragonBoss (Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1,2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -783,7 +869,7 @@ class DragonBoss (Enemy):
 
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
-
+        self.drawHealthBar(display, display_topleft)
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
 
@@ -879,7 +965,7 @@ class WormBoss(Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1,1)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -956,7 +1042,7 @@ class WormBoss(Enemy):
         display.blit(rotated_image, final_rect)
 
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
-        pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], self.size[0]*TILE_SIZE, self.size[1]*TILE_SIZE))
+        # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], self.size[0]*TILE_SIZE, self.size[1]*TILE_SIZE))
 
 class MountainBoss (Enemy):
     def __init__(self):
@@ -1041,7 +1127,7 @@ class MountainBoss (Enemy):
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1,2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -1125,6 +1211,7 @@ class MountainBoss (Enemy):
 
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
+        self.drawHealthBar(display, display_topleft)
 
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
@@ -1223,13 +1310,12 @@ class DarknessBoss (Enemy):
             self.attack_progress = 1
             angle = random.randint(0,360)
             self.facing_angle = angle
-            self.initial_player_pos = self.world.getPlayer().getPos()
+            self.initial_player_pos = self.world.getPlayer().getPos().copy()
             self.initial_x = self.initial_player_pos[0]+10*math.cos(math.radians(angle))
             self.initial_y = self.initial_player_pos[1]+10*math.sin(math.radians(angle))
             self.final_x = self.initial_player_pos[0]-10*math.cos(math.radians(angle))
             self.final_y = self.initial_player_pos[1]-10*math.sin(math.radians(angle))
 
-            self.initial_player_pos = self.world.getPlayer().getPos()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -1298,6 +1384,7 @@ class DarknessBoss (Enemy):
 
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
+        self.drawHealthBar(display, display_topleft)
 
         HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
         # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))

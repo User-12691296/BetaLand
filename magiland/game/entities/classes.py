@@ -92,6 +92,9 @@ class Entity(events.EventAcceptor):
     
     def isBoss(self):
         return False
+    
+    def isFinalBoss(self):
+        return False
 
     def isEnemyTarget(self):
         return False
@@ -398,6 +401,7 @@ class Enemy(Creature):
 
     def calcPath(self):
         self.pathfinder.calcPath(self.getPos(), self.world.getPlayer().getPos())
+        print(self)
 
     def isEnemy(self):
         return True

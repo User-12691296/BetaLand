@@ -83,6 +83,7 @@ ALL_ENTITY_CLASSES.append(WormBoss)
 ALL_ENTITY_CLASSES.append(MedusaBoss)
 ALL_ENTITY_CLASSES.append(MountainBoss)
 ALL_ENTITY_CLASSES.append(DarknessBoss)
+ALL_ENTITY_CLASSES.append(EvilSnail)
 
 # Add darkness barrles to a group of barrels
 ALL_ENTITY_CLASSES += DARKNESSBRONZE

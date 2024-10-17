@@ -524,7 +524,7 @@ class World(events.EventAcceptor):
         return [entity for entity in self.getAllEntities() if entity.diagonalTo(tile_pos) <= range]
 
     def getTickableEntities(self):
-        return [entity for entity in self.entities if entity.distanceTo2(self.player.pos) <= 400]
+        return [entity for entity in self.entities if entity.distanceTo2(self.player.pos) <= 400 or entity.isFinalBoss()]
 
     def addProjectile(self, projectile):
         self.projectiles.append(projectile)
