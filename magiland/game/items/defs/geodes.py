@@ -20,4 +20,6 @@ Geode("debug_sword", "sword", 1).addToGroup(GEODES)
 Geode("crystal_geode", "crystal_geode", 0).addToGroup(GEODES)
 Geode("iron_geode", "iron_geode", 0).addToGroup(GEODES)
 Geode("gold_geode", "gold_geode", 0).addToGroup(GEODES)
+Geode("purifying_mirror", "purifying_mirror",0).addToGroup(GEODES)
+Geode("rusty_mirror", "rusty_mirror",0).addToGroup(GEODES)
 
