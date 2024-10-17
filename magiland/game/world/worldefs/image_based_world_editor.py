@@ -3,8 +3,8 @@ import pygame
 import numpy
 import json
 
-IMAGE_PATH = "bossarena.png"
-WORLD_NAME = "bossarena"
+IMAGE_PATH = "overworld.png"
+WORLD_NAME = "overworld"
 LEVELS_PATH = "levels.json"
 
 TILE_SEP = ";"
