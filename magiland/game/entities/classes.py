@@ -401,7 +401,6 @@ class Enemy(Creature):
 
     def calcPath(self):
         self.pathfinder.calcPath(self.getPos(), self.world.getPlayer().getPos())
-        print(self)
 
     def isEnemy(self):
         return True

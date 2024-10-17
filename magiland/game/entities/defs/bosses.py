@@ -292,6 +292,9 @@ class CraneBoss (Enemy):
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
 
+        self.initial_tick = True
+        self.max_health = 200
+
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -358,7 +361,24 @@ class CraneBoss (Enemy):
             pass
 
     def tick(self):
+        if BOSS_CONDITIONS.getBossInvincibillity():
+            self.setAttribute("health", self.max_health)
         super().tick()
+
+        if self.initial_tick:
+            if BOSS_CONDITIONS.getDougSpawn():
+                whale = WhaleBoss()
+                whale.setPos([self.pos[0]+5, self.pos[1]])
+                whale.setFinalBoss()
+                self.world.addEntity(whale)
+            if BOSS_CONDITIONS.getSnailSpawn():
+                snail = EvilSnail()
+                snail.setPos([self.pos[0]-5, self.pos[1]])
+                self.world.addEntity(snail)
+
+            self.initial_tick = False
+
+
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
             self.attack_progress = 1
@@ -443,28 +463,11 @@ class CraneBoss (Enemy):
 
 class WhaleBoss (Enemy):
     def __init__(self):
-        super().__init__(200, 2, 8)
+        super().__init__(400, 2, 8)
         self.size = (9,9)
         self.radius = 2
         self.loadInventory()
 
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -475,10 +478,33 @@ class WhaleBoss (Enemy):
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
 
+        self.final_boss = False
         self.alpha = 0
-        self.active = True
 
-        self.loadInventory()
+        self.max_health = 400
+
+    def loadInventory(self):
+        self.inventory = Inventory(5,1,1)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+
+
+    def clearInventory(self):
+        for i in range(self.inventory.size):
+            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+
+    def kill(self):
+        super().kill()
+        self.clearInventory()
+        BOSS_CONDITIONS.setDougSpawn(False)
+        
+    def setFinalBoss(self):
+        self.final_boss = True
+
+    @staticmethod
+    def getNeededAssets(self):
+        return ["DarknessWhaleBoss"]
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -489,10 +515,6 @@ class WhaleBoss (Enemy):
     def clearInventory(self):
         for i in range(self.inventory.size):
             self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
 
     @staticmethod
     def getNeededAssets():
@@ -514,6 +536,8 @@ class WhaleBoss (Enemy):
         pass
 
     def tick(self):
+        if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
+            self.setAttribute("health", self.max_health)
         super().tick()
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 1)
@@ -544,12 +568,12 @@ class WhaleBoss (Enemy):
 
     def updatePositionForPattern1(self):
         if not self.active:
-            self.alpha = self.attack_progress*7
+            self.alpha = self.attack_progress*8
 
             if self.alpha > 255:
                 self.alpha = 255
                 self.active = True
-                self.clearAttributes(40)
+                self.clearAttributes(20)
 
     def handleAttacksForPattern1(self):
         if self.isCooldownActive("bullets"): 
@@ -563,16 +587,11 @@ class WhaleBoss (Enemy):
             self.projectile = PROJECTILE_CLASSES.Arrow(pos, angle)
             self.projectile.giveImmunity(self)
             self.world.addProjectile(self.projectile)
-        
-        eagle = DarknessKnightmare1()
-        eagle.setPos((self.pos[0] + random.randint(5,10)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(5,10)*(random.randint(0,1)*2-1)))
-        counter = 0
-        while len(self.world.getEntitiesOnTile(eagle.pos)) > 1 or counter < 5:
+        if self.alpha % 60 == 0:
+            eagle = DarknessKnightmare1()
             eagle.setPos((self.pos[0] + random.randint(5,10)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(5,10)*(random.randint(0,1)*2-1)))
-            counter+=1
-        if counter != 5:
             self.world.addEntity(eagle)
-
+        
 
         self.registerCooldown("bullets", 25)
 
@@ -589,7 +608,7 @@ class WhaleBoss (Enemy):
 
   
     def isFinalBoss(self):
-        return True
+        return self.final_boss
       
 
     def draw(self, display, display_topleft=(0, 0)):

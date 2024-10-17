@@ -274,7 +274,7 @@ class Player(Creature):
     def tickAllAttributes(self):
         for attribute_ticker in self.getAttributeTickers():
             attribute_ticker()
-        
+
     def tick(self):
         super().tick()
 
@@ -402,7 +402,7 @@ class Player(Creature):
         
     def kill(self):
         self.alive = False
-        
+        # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
             
     def getMapDelta(self):
