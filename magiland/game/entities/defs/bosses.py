@@ -204,7 +204,6 @@ class MedusaBoss (Enemy):
         super().movementTick()
 
     def tick(self):
-        print(self.pos)
         super().tick()
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
