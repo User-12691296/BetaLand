@@ -247,7 +247,7 @@ class Inventory(events.EventAcceptor):
                 added = True
                 break
 
-            elif stack.stackWith(self.getItemStack(stack_loc)):
+            elif self.getItemStack(stack_loc).stackWith(stack):
                 added = True
                 break
 

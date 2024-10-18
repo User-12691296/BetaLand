@@ -346,9 +346,12 @@ class Player(Creature):
         self.inventory.damageTick(self, self.world)
         
     def finalTick(self):
-        self.checkBiome()
         super().finalTick()
+        
+        self.checkBiome()
 
+        self.inventory.finalTick(self, self.world)
+        
     def move(self, delta):
         super().move(delta)
         
