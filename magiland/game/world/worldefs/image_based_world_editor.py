@@ -42,7 +42,7 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (100, 50): "mountainmoss",
            (50, 0): "mountainsnow",
            (0, 50): "mountainsnowmoss",
-           (80,80): "shadowbrick",
+           (80,80): "icewall",
            
            (200, 200): "volcano",
            (200, 0): "volcanolava",
