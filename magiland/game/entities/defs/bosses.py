@@ -32,9 +32,11 @@ class CrabBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
+        self.inventory.setItemStack(ItemStack("dynamite_string", 1), 1)
+        self.inventory.setItemStack(ItemStack("clawofcrabking", 5), 2)
+        self.inventory.setItemStack(ItemStack("lemon", 2), 3)
+        self.inventory.setItemStack(ItemStack("bomb", 1), 4)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -42,6 +44,7 @@ class CrabBoss (Enemy):
 
     def kill(self):
         super().kill()
+        
         self.clearInventory()
 
     @staticmethod
@@ -329,6 +332,7 @@ class CraneBoss (Enemy):
 
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
+            print("hi")
             BOSS_CONDITIONS.setWhaleAlive(True)
             self.should_spawn_whale = True
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
@@ -346,12 +350,14 @@ class CraneBoss (Enemy):
 
                 if self.should_spawn_whale:
                     self.world.addEntity(self.whale)
+                    self.should_spawn_whale = False
 
             if BOSS_CONDITIONS.getSnailSpawn():
                 self.snail.setPos([self.pos[0]-5, self.pos[1]])
 
                 if self.should_spawn_snail:
                     self.world.addEntity(self.snail)
+                    self.should_spawn_snail = True
 
             BOSS_CONDITIONS.setBossFirstMove(False)
             self.registerCooldown("first_move", 120)
@@ -726,9 +732,9 @@ class DragonBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 10), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 5), 2)
 
 
     def clearInventory(self):

@@ -215,6 +215,9 @@ class Player(Creature):
     def fatigueTick(self):
         fatigue = self.getAttribute("fatigue")
 
+        if "mountains" in self.world.getGroupsWithTile(self.pos):
+            self.tire(0.01)
+
         if fatigue < self._most_recent_fatigue_level_reached:
             self._most_recent_fatigue_level_reached = fatigue
 
