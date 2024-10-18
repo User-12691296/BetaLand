@@ -43,7 +43,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("frozen_bow",1),16)
         self.inventory.setItemStack(ItemStack("dynamite",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
-        self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
+        self.inventory.setItemStack(ItemStack("greengem",1),17)
         self.inventory.setItemStack(ItemStack("lemon",1),18)
         self.inventory.setItemStack(ItemStack("apple",1),19)
         self.inventory.setItemStack(ItemStack("dragon_hide",1),0)

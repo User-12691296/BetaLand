@@ -7,6 +7,8 @@ from .slowing import SlowTile
 from .cactus import Cactus
 from .void import WalkableVoidTile, DeathVoidTile
 from .swampwater import SwampWater
+from .lavaforge import VolcanoLava
+from .lavaforge import VolcanoMolten
 from .worldswitcher import WorldSwitcher
 
 
@@ -15,10 +17,12 @@ GrassTile().addTileToList(OVERWORLD_TILES)
 BarrierTile().addTileToList(OVERWORLD_TILES)
 SandDarkTile().addTileToList(OVERWORLD_TILES)
 SwampWater().addTileToList(OVERWORLD_TILES)
+VolcanoLava().addTileToList(OVERWORLD_TILES)
+VolcanoMolten().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
-
 BasicTile("lobbyfloor", "lobbyfloor", False).addTileToList(OVERWORLD_TILES)
 BasicTile("lobbywall", "lobbywall", False).addTileToList(OVERWORLD_TILES)
+
 
 #texname and id is switched im sorry
 WorldSwitcher("portal", "bossarena", "bossarena", (10,10), False).addTileToList(OVERWORLD_TILES)
