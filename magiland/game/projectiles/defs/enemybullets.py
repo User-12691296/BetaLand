@@ -188,7 +188,7 @@ class IceBullet(Projectile):
 
         if self.world.isTileOpaque(self.getTilePos()):
             self.kill()
-            self.init_effect = placeholderFunction
+            # self.init_effect = lambda x, y, z: None
 
     def damageTick(self):
         tpos = self.getTilePos()
