@@ -7,7 +7,7 @@ class Bomb(Item):
     def __init__(self):
         super().__init__("bomb", "crystal_geode", True, 0)
 
-        self.damage = 500
+        self.damage = 50
         self.range = 10
 
     def initData(self, stack):
