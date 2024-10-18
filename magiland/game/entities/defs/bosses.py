@@ -327,7 +327,6 @@ class CraneBoss (Enemy):
             self.setAttribute("health", self.max_health)
         super().tick()
 
-        print(BOSS_CONDITIONS.getSnailAlive(), BOSS_CONDITIONS.getWhaleAlive())
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
             BOSS_CONDITIONS.setWhaleAlive(True)
@@ -517,8 +516,8 @@ class WhaleBoss (Enemy):
         pass
 
     def tick(self):
-        # if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
-        self.setAttribute("health", self.max_health)
+        if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
+            self.setAttribute("health", self.max_health)
 
         super().tick()
         self.first_time = time.time()
