@@ -39,7 +39,7 @@ class MountainSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
-        self.inventory.setItemStack(ItemStack("stone_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("stone_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class MountainGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
-        self.inventory.setItemStack(ItemStack("lava_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 0)
+        self.inventory.setItemStack(ItemStack("lava_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class MountainPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
-        self.inventory.setItemStack(ItemStack("lava_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 0)
+        self.inventory.setItemStack(ItemStack("lava_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("sanguine_slasher", 1), 2)
 
 
     @staticmethod

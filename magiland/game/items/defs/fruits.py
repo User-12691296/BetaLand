@@ -4,6 +4,7 @@ import math
 import time
 from constants import GAME
 
+
 SWING_FRAMES = 10
 
 """
@@ -32,7 +33,10 @@ class Fruit(Item):
     def onLeft(self, data, player, world, tile, tile_pos):
         player.changeHealth(self.heal_amount)
         self.effect(player, world, tile, tile_pos)
-        player.inventory.setItemStack(None,player.inventory.selected_slot)
+        fruit = player.inventory.getItemStack(player.inventory.selected_slot)
+        fruit.changeCount(-1)
+        if fruit.isEmpty():
+            player.inventory.setItemStack(None,player.inventory.selected_slot)
 
 
     def tick(self, data, player, world):

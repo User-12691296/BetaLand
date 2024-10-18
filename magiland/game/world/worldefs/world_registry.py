@@ -49,5 +49,14 @@ class Level3(World):
         
         super().__init__(ALL_TILES)  
 
+class bossarena(World):
+    world_name = "bossarena"
+    
+    def __init__(self):
+        self.world_name = "bossarena"
+        
+        super().__init__(ALL_TILES)
+
+
 # LOADABLE_WORLDS = (Overworld, Level1, CrystalLevel, DeepDarkLevel, MazeLevel, Level3)
-LOADABLE_WORLDS = (Overworld, Level1, CrystalLevel, DeepDarkLevel, Level3)
+LOADABLE_WORLDS = (Overworld, Level1, CrystalLevel, DeepDarkLevel, Level3, bossarena)

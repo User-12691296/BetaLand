@@ -16,6 +16,7 @@ from .mountainbarrel import *
 from .swampbarrel import *
 from .item import ItemEntity
 from .bosses import *
+from .crystals import *
 
 ALL_ENTITY_CLASSES = []
 
@@ -26,6 +27,7 @@ ALL_ENTITY_CLASSES += CRYSTALBRONZE
 ALL_ENTITY_CLASSES += CRYSTALSILVER
 ALL_ENTITY_CLASSES += CRYSTALGOLD
 ALL_ENTITY_CLASSES += CRYSTALPLAT
+ALL_ENTITY_CLASSES += CRYSTALS
 
 ALL_ENTITY_CLASSES += SLIMES
 ALL_ENTITY_CLASSES += BLOBS
@@ -78,6 +80,13 @@ ALL_ENTITY_CLASSES += DARKNESSBATS
 ALL_ENTITY_CLASSES.append(CrabBoss)
 ALL_ENTITY_CLASSES.append(CraneBoss)
 ALL_ENTITY_CLASSES.append(WhaleBoss)
+ALL_ENTITY_CLASSES.append(DragonBoss)
+ALL_ENTITY_CLASSES.append(WormBoss)
+ALL_ENTITY_CLASSES.append(MedusaBoss)
+ALL_ENTITY_CLASSES.append(MountainBoss)
+ALL_ENTITY_CLASSES.append(DarknessBoss)
+ALL_ENTITY_CLASSES.append(EvilSnail)
+
 # Add darkness barrles to a group of barrels
 ALL_ENTITY_CLASSES += DARKNESSBRONZE
 ALL_ENTITY_CLASSES += DARKNESSSILVER

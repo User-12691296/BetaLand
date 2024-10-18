@@ -371,8 +371,8 @@ class World(events.EventAcceptor):
         return tile_data.split(",")
 
     def loadWorldDataFromDict(self, rows):
-        self.world_tile_ids = np.empty((self.size[1], self.size[0]), dtype="<U16")
-        self.world_tile_elevations = np.empty((self.size[1], self.size[0]), dtype=np.int16)
+        self.world_tile_ids = np.empty((self.size[1], self.size[0]), dtype="<U32")
+        self.world_tile_elevations = np.empty((self.size[1], self.size[0]), dtype=np.int32)
         default_row = "grass,0;"*self.size[0]
         
         for row_index in range(self.size[1]):
@@ -524,7 +524,7 @@ class World(events.EventAcceptor):
         return [entity for entity in self.getAllEntities() if entity.diagonalTo(tile_pos) <= range]
 
     def getTickableEntities(self):
-        return [entity for entity in self.entities if entity.distanceTo2(self.player.pos) <= 400]
+        return [entity for entity in self.entities if entity.distanceTo2(self.player.pos) <= 400 or entity.isFinalBoss()]
 
     def addProjectile(self, projectile):
         self.projectiles.append(projectile)

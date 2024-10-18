@@ -11,7 +11,7 @@ class SwampBronze(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("orange", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("banana", (random.randint(1, 3))), 1)
-        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 2)
         
 
     @staticmethod
@@ -39,7 +39,7 @@ class SwampSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("epic_sword", 1), 0)
-        self.inventory.setItemStack(ItemStack("snake_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("snake_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class SwampGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("swamp_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("snake_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 0)
+        self.inventory.setItemStack(ItemStack("snake_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class SwampPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("swamp_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("snake_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 0)
+        self.inventory.setItemStack(ItemStack("snake_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 2)
 
 
     @staticmethod

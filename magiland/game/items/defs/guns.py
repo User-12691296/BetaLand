@@ -35,4 +35,8 @@ GUNS = []
 Gun("pizza_gun", "pizza_gun", 1, 10).addToGroup(GUNS)
 Gun("soul_cannon", "soul_cannon", 1, 10, bullet=PROJECTILE_CLASSES.SoulBlast).addToGroup(GUNS)
 Gun("crystal_raygun", "crystal_raygun", 2, 10, bullet=PROJECTILE_CLASSES.CrystalLaserShot).addToGroup(GUNS)
+Gun("cold_barrel_gun", "cold_barrel_gun", 2, 10, bullet=PROJECTILE_CLASSES.ColdDoug).addToGroup(GUNS)
+Gun("thunder_cannon", "thunder_cannon", 1, 10, bullet=PROJECTILE_CLASSES.ThunderSpark).addToGroup(GUNS)
+Gun("barrel_of_doug", "barrel_of_doug", 2, 10, bullet=PROJECTILE_CLASSES.FrogBullet).addToGroup(GUNS)
+Gun("dart_gun", "dart_gun", 0, 10, bullet=PROJECTILE_CLASSES.DartProjectile).addToGroup(GUNS)
 

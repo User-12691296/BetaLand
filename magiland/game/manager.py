@@ -3,6 +3,7 @@ import os
 import json
 
 from pygame.constants import BUTTON_LEFT as BUTTON_LEFT
+import pygame
 
 from .world import LOADABLE_WORLDS
 from misc import events
@@ -42,7 +43,7 @@ class ExitButton(events.ButtonShell):
 
 DEFAULT_WORLD = "overworld"
 # world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["maze_level", [1,1]], ["level_3", [1,1]]]
-world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["level_3", [100,10]]]
+world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["level_3", [100,10]], ["bossarena", [10,10]]]
 world_counter = 0 # 0 is overworld, 1 is level_1, 2 is crystal_level, 3 is deep_dark_level, 4 is maze_level, 5 is level_3
 
 class GameManager(events.Alpha):
@@ -61,12 +62,18 @@ class GameManager(events.Alpha):
 
         self.paused = False
         self.pause_exit = ExitButton(self.exitButtonAction)
+        self.died = False
 
         self.first = True
 
     def exitButtonAction(self):
-        self.player.kill()
         self.paused = False
+        self.player.setAttribute("health", self.player.getAttribute("max_health"))
+        self.player.alive = True
+        self.died = False
+        self.first_tick()
+
+        pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
 
     def loadWorlds(self):
         self.worlds = {}
@@ -127,6 +134,9 @@ class GameManager(events.Alpha):
 
             self.player.finalTick()
             self.getWorld().finalTick()
+            if not self.player.alive:
+                self.died = True
+                self.paused = True
     
     ## EVENTS
     def start(self):
@@ -145,7 +155,7 @@ class GameManager(events.Alpha):
     def onKeyDown(self, key, unicode, mod):
         global world_set, world_counter
 
-        if key == GAME.CONTROLS_KEYS["pause"]:
+        if key == GAME.CONTROLS_KEYS["pause"] and not self.died:
             self.switchPause()
 
         if not self.paused:
@@ -200,7 +210,10 @@ class GameManager(events.Alpha):
     
     ## DRAW
     def draw(self, surface):
-        if self.paused:
+        if self.died:
+            self.drawDeathMenu(surface)
+            return
+        elif self.paused:
             self.drawPauseMenu(surface)
             return
         self.drawBg(surface)
@@ -215,6 +228,12 @@ class GameManager(events.Alpha):
         message = f'Please Press {pygame.key.name(GAME.CONTROLS_KEYS["pause"])} to unpause.'
         surface.blit(RETURN_FONT.render(message, True, "white"), (surface.get_width()/2-RETURN_FONT.size(message)[0]/2,surface.get_height()-100))
         self.pause_exit.draw(surface)
+
+    def drawDeathMenu(self, surface):
+        message = "YOU'VE LOST, PLEASE EXIT THE GAME"
+        surface.blit(PAUSE_TITLE_FONT.render(message, True, (255,255,255)), (surface.get_width()/2-PAUSE_TITLE_FONT.size(message)[0]/2, (surface.get_height()/2-PAUSE_TITLE_FONT.size(message)[1]/2-100)))
+        self.pause_exit.draw(surface)
+
 
     def drawWorld(self, surface):
         viewing_rect = pygame.Rect(self.getScreenBufferDelta(), self.screen_size)

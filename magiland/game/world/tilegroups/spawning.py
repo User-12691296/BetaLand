@@ -3,8 +3,10 @@ import os
 from ...entities import ENTITY_CLASSES as EC
 
 
+
 SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "desert_raiders":   EC.DessertRaider,
+                
                 "darknessbronze_barrel": EC.DarknessBronze,
                 "darknesssilver_barrel": EC.DarknessSilver,
                 "darknessgold_barrel": EC.DarknessGold,
@@ -29,8 +31,45 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "swampsilver_barrel": EC.SwampSilver,
                 "swampgold_barrel": EC.SwampGold,
                 "swampplatinum_barrel": EC.SwampPlat,
+
+                "crystal_golem": EC.CrystalGolem,
+                "crystal_knight": EC.CrystalKnight,
+                "crystal_scorpion": EC.CrystalScorpion,
+                "crystal_slime": EC.CrystalSlime,
+                "crystal_bat": EC.CrystalBat,
+
+                "darkness_ghost": EC.DarknessGhost,
+                "darkness_gravetrapper": EC.DarknessGraveTrapper,
+                "darkness_jumpscare": EC.DarknessJumpscare,
+                "darkness_knightmare1": EC.DarknessKnightmare1,
+                "darkness_knightmare2": EC.DarknessKnightmare2,
+                "darkness_spreader": EC.DarknessSpreader,
+                "darkness_bat": EC.DarknessBat,
+
+                "frozen_knight": EC.FrozenKnight,
+                "frozen_pufferfish": EC.FrozenPuffer,
+                "frozen_troll": EC.FrozenTroll,
+                "frozen_slime": EC.FrozenSlime,
+                "frozen_wolf": EC.FrozenWolf,
                 
-                "crab_boss": EC.WhaleBoss
+                "crab_boss": EC.CrabBoss,
+                "medusa": EC.MedusaBoss,
+                "dragon_boss": EC.DragonBoss,
+                "worm_boss": EC.WormBoss,
+                "mountain_boss": EC.MountainBoss,
+                "darkness_boss": EC.DarknessBoss,
+
+                "evil_snail": EC.EvilSnail,
+                "whale_boss": EC.WhaleBoss,
+                "crane_boss": EC.CraneBoss,
+                "crab_boss": EC.WormBoss,
+                "hunger_crystal": EC.HungerCrystal,
+
+                "mountain_eagle": EC.MountainEagle,
+                "mountain_slime": EC.MountainSlime,
+                "mountain_goat": EC.MountainGoat,
+                "mountain_golem": EC.MountainGolem,
+                "mountain_troll": EC.MountainTroll
 }
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")

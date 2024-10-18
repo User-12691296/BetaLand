@@ -51,4 +51,6 @@
 "deepdark":{"type":"biome",
 	"tiles":["deepdark",
 		"darkwall"],
-	"extras":{"insanity_level":1}}}
+	"extras":{"insanity_level":1}}
+}
+

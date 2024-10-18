@@ -191,7 +191,41 @@ class PoisonDart(Projectile):
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
-        self.stdDraw(display, "poison_dart", display_topleft) 
+        self.stdDraw(display, "poison_dart", display_topleft)
+
+class DartProjectile(Projectile):
+    def __init__(self, start, angle):
+        super().__init__(start, angle)
+
+        self.speed = 0.3
+
+    @classmethod
+    def fromStartEnd(cls, start, end):
+        return super().fromStartEnd(start, end)
+
+    @staticmethod
+    def getNeededAssets():
+        return ["dart_projectile"]
+
+    def movementTick(self):
+        super().movementTick()
+
+        if self.world.isTileOpaque(self.getTilePos()):
+            self.kill()
+
+    def damageTick(self):
+        tpos = self.getTilePos()
+
+        for entity in self.world.getEntitiesOnTile(tpos):
+            if self.isValidHit(entity):
+                entity.damage(2)
+                self.kill()
+
+    def draw(self, display, display_topleft=(0, 0)):
+        super().draw(display, display_topleft)
+        self.stdDraw(display, "dart_projectile", display_topleft) 
+
+       
 
 PLAYERBULLETS = []
 Pizza.addToGroup(PLAYERBULLETS)
@@ -201,5 +235,6 @@ FrogBullet.addToGroup(PLAYERBULLETS)
 PoisonDart.addToGroup(PLAYERBULLETS)
 ColdDoug.addToGroup(PLAYERBULLETS)
 FrogBullet.addToGroup(PLAYERBULLETS)
+DartProjectile.addToGroup(PLAYERBULLETS)
                                 
 

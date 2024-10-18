@@ -11,7 +11,7 @@ class DessertBronze(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("banana", (random.randint(3, 10))), 0)
         self.inventory.setItemStack(ItemStack("watermelon", (random.randint(1, 3))), 1)
-        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 1)
+        self.inventory.setItemStack(ItemStack("lemon", (random.randint(1, 3))), 2)
         
 
     @staticmethod
@@ -39,7 +39,7 @@ class DessertSilver(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("nature_cure", 1), 0)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 1)
 
 
     @staticmethod
@@ -67,8 +67,8 @@ class DessertGold(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("croc", 1), 0)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 0)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 2)
 
 
     @staticmethod
@@ -96,8 +96,8 @@ class DessertPlat(Barrel):
         super().__init__(5, 0, 30)
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("croc", 1), 0)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 0)
+        self.inventory.setItemStack(ItemStack("wood_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("pizza_gun", 1), 2)
 
 
     @staticmethod
