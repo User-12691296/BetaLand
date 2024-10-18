@@ -114,4 +114,24 @@ class SpawningRegistry:
 
         return instructions
 
+    def getBiomeSpawn(self, biome, world_name, general=True, n=1):
+        instructions = []
+
+        world = self.getWorldTable(world_name).get("biome", {})
+        biome_data = world[biome]
+        entities = {}
+        
+        for spawning_id in biome_data.keys():
+            entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]
+
+        if general:
+            all_ = self.getWorldTable("all").get("biome", {})
+            biome_data = all_[biome]
+
+            for spawning_id in biome_data.keys():
+                entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]
+
+
+        return random.choices(entities.keys(), entities.values(), k=n)
+
 SPAWNING_REGISTRY = SpawningRegistry()

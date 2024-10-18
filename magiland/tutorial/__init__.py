@@ -123,9 +123,10 @@ class TutorialManager(events.Alpha):
 
     def returnToGame(self):
         pygame.event.post(pygame.event.Event(events.GAME_START))
-        
-    def close(self):
-        pass
+
+    def onKeyDown(self, key, mod, unicode):
+        if key == pygame.K_ESCAPE:
+            self.returnToGame()
         
     def draw(self, surface):
         if self.cooldown_to_return > 0:

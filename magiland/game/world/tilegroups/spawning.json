@@ -9,14 +9,14 @@
 
 "overworld":{
 	"biome:":{
-        "moutains":{
-            "mountain_eagle": {"chance":0.01},
-            "mountain_slime": {"chance":0.03},
-            "mountain_goat": {"chance":0.02},
-            "mountain_golem": {"chance":0.01},
-            "mountain_troll":{"chance":0.01}
-        }
-    },
+        	"moutains":{
+			"mountain_eagle": {"chance":0.01},
+			"mountain_slime": {"chance":0.03},
+			"mountain_goat": {"chance":0.02},
+			"mountain_golem": {"chance":0.01},
+			"mountain_troll":{"chance":0.01}
+		}
+	},
 	"fixed":{
 		"lava_knight":[
 			[5, 5]
