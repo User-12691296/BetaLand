@@ -5,7 +5,7 @@ from ...projectiles import PROJECTILE_CLASSES
 
 class MountainEagle(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(3, 0, 30)
 
     @staticmethod
     def getNeededAssets():
@@ -24,7 +24,7 @@ class MountainEagle(Enemy):
 
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.3)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -39,7 +39,7 @@ class MountainEagle(Enemy):
 
 class MountainGoat(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(4, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -51,7 +51,8 @@ class MountainGoat(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(1)
+                self.damage(1)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -66,7 +67,7 @@ class MountainGoat(Enemy):
 
 class MountainGolem(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(10, 0, 55)
 
     @staticmethod
     def getNeededAssets():
@@ -78,7 +79,7 @@ class MountainGolem(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -120,7 +121,7 @@ class MountainSlime(Enemy):
 
 class MountainTroll(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(4, 0, 50)
 
     @staticmethod
     def getNeededAssets():
@@ -132,7 +133,7 @@ class MountainTroll(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.5)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -158,7 +159,7 @@ class MountainBat(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
