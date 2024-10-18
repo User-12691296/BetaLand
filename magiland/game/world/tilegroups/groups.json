@@ -51,6 +51,17 @@
 "deepdark":{"type":"biome",
 	"tiles":["deepdark",
 		"darkwall"],
-	"extras":{"insanity_level":1}}
+	"extras":{"insanity_level":1}},
+
+"void":{"type":"biome",
+	"tiles":["deathvoid",
+		"walkablevoid"],
+	"extras":{"insanity_level":1}},
+
+"lobby":{"type":"biome",
+	"tiles":["shadowbrick",
+		"lobbywall",
+		"lobbyfloor"],
+	"extras":{}}
 }
 
