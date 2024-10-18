@@ -46,7 +46,7 @@ class CrabBoss (Enemy):
     def kill(self):
         super().kill()
         if self.killed_melee:
-            self.inventory.addItemStack(ItemStack("clawofcrabking", 5), 2)
+            self.inventory.addItemStack(ItemStack("clawofcrabking", 5))
         self.clearInventory()
 
     @staticmethod
