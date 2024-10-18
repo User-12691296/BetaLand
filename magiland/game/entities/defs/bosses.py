@@ -17,23 +17,6 @@ class CrabBoss (Enemy):
         self.radius = 5
         self.loadInventory()
 
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets(self):
         self.attack_pattern = 0
         self.attack_progress = 0
 
@@ -757,35 +740,6 @@ class DragonBoss (Enemy):
         self.clearInventory()
 
     @staticmethod
-    def getNeededAssets(self):
-        self.attack_pattern = 0
-        self.attack_progress = 0
-
-        self.x, self.y = 0,0
-        self.normal_movement_speed = 8
-
-        self.image = pygame.image.load(os.path.join(BOSS_PATH, "MoltenDragon.png")).convert_alpha()
-        self.image = pygame.transform.scale_by(self.image, 4)
-        self.image_rect = self.image.get_rect()
-
-        self.loadInventory()
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
     def getNeededAssets():
         return ["MoltenDragon"]
 
@@ -909,35 +863,6 @@ class WormBoss(Enemy):
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
 
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets(self):
-        self.attack_pattern = 0
-        self.attack_progress = 0
-
-        self.x, self.y = 0,0
-        self.normal_movement_speed = 8
-
-        self.image = pygame.image.load(os.path.join(BOSS_PATH, "BurrowedWorm.png")).convert_alpha()
-        self.image = pygame.transform.scale_by(self.image, 4)
-        self.image_rect = self.image.get_rect()
-
-        self.loadInventory()
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -1087,26 +1012,6 @@ class MountainBoss (Enemy):
         self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
         self.inventory.setItemStack(ItemStack("lemon", 4), 2)
 
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets():
-        return ["MountainDangerThunderBirdButNotReally"]
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
     def clearInventory(self):
         for i in range(self.inventory.size):
             self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
@@ -1252,40 +1157,6 @@ class DarknessBoss (Enemy):
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
 
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets(self):
-        self.attack_pattern = 0
-        self.attack_progress = 0
-
-        self.x, self.y = 0,0
-        self.normal_movement_speed = 8
-        self.image = pygame.image.load(os.path.join(BOSS_PATH, "DarknessCorruptedSalamander.png")).convert_alpha()
-        self.image = pygame.transform.scale_by(self.image, 4)
-        self.image_rect = self.image.get_rect()
-        self.initial_x = 0
-        self.initial_y = 0
-        self.final_x = 0
-        self.final_y = 0
-
-        self.total_time = 20
-
-        self.loadInventory()
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)

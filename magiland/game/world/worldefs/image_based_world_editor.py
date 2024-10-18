@@ -54,7 +54,13 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
 
            (167, 10): "shadowbrick",
            (250, 165): "lobbywall",
-           (225, 50): "lobbyfloor"
+           (225, 50): "lobbyfloor",
+
+            (255, 10): "bossarena",
+            (253, 10): "crystalwarp",
+            (250, 10): "snowwarp",
+            (240, 10): "deepdarkwarp",
+            (200,10): "overworldwarp"
            }
 
 
