@@ -4,7 +4,7 @@ from ..classes import Enemy
 
 class DessertKnight(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -16,7 +16,7 @@ class DessertKnight(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.15)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -31,7 +31,7 @@ class DessertKnight(Enemy):
 
 class DessertRaider(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 40)
 
     @staticmethod
     def getNeededAssets():
@@ -43,7 +43,7 @@ class DessertRaider(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -58,7 +58,7 @@ class DessertRaider(Enemy):
 
 class DessertSandWurm(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 15)
 
     @staticmethod
     def getNeededAssets():
@@ -70,7 +70,7 @@ class DessertSandWurm(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.5)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -85,7 +85,7 @@ class DessertSandWurm(Enemy):
 
 class DessertSlime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 45)
 
     @staticmethod
     def getNeededAssets():
@@ -97,7 +97,7 @@ class DessertSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
