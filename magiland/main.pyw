@@ -22,6 +22,8 @@ clean_close = False
 pygame.mixer.init()
 pygame.mixer.music.load(os.path.join("assets", "sounds", "mainmenu.mp3"))
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0)
+fade_in_cooldown = 0
 
 
 # Reroutes events and drawing commands through a manager to clean the main code
@@ -40,7 +42,8 @@ while running:
 
         main_manager.handleEvent(event)
 
-    pygame.mixer.music.set_volume(SOUND_VOLUMES["Music"]/100)
+    pygame.mixer.music.set_volume(min(fade_in_cooldown/300, 1)*SOUND_VOLUMES["Music"]/200)
+    fade_in_cooldown += 1
     
     # Tick after input
     main_manager.main_tick()

@@ -56,8 +56,8 @@ class Player(Creature):
         # Decimal number, outside -1 to +1 range causes problems, -5 to +5 is fatal
         self.defineAttribute("temperature", 0)
         self.setAttribute("temperature", 0)
-        self.defineAttribute("thermal_insulation", 6)
-        self.setAttribute("thermal_insulation", 6)
+        self.defineAttribute("thermal_insulation", 12)
+        self.setAttribute("thermal_insulation", 12)
 
         # Integer part represents its place in the bar chart
         # Rational part represents fullness
@@ -170,8 +170,7 @@ class Player(Creature):
 
         # Die when too hot or too cold
         if abs(self.getAttribute("temperature")) > 5:
-            #CHANGE BACK TO 0.2
-            self.damage(0)
+            self.damage((abs(self.getAttribute("temperature"))-5)**2)
 
     def vibesTick(self):
         vibes = self.getAttribute("vibes")

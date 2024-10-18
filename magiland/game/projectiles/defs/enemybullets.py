@@ -174,11 +174,6 @@ class IceBullet(Projectile):
         super().__init__(start, angle)
 
         self.speed = 0.3
-      #  self.tick_effect = self.ice_tick_effect
-      #  self.reverse_effect = self.reverse_ice_effect
-
-     #   self.effect_name = "Ice"
-       # self.effect_duration = 8
 
     @classmethod
     def fromStartEnd(cls, start, end):
@@ -194,12 +189,6 @@ class IceBullet(Projectile):
         if self.world.isTileOpaque(self.getTilePos()):
             self.kill()
             self.init_effect = placeholderFunction
-
-   # def ice_tick_effect(self, entity, world, tile_pos):
-        #player.setMovable(False)
-
-  #  def reverse_ice_effect(self,entity,world,tile_pos):
-      #  player.setMovable(True)
 
     def damageTick(self):
         tpos = self.getTilePos()
