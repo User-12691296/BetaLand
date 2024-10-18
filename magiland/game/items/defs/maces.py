@@ -33,7 +33,7 @@ MACES = []
 Mace("debug_sword", "sword", 1000, 2).addToGroup(MACES)
 Mace("wood_mace", "wood_mace", 15, 0, 300, 5, cooldown=20).addToGroup(MACES)
 Mace("stone_mace", "stone_mace", 15, 0, 300, 5, cooldown=10).addToGroup(MACES)
-Mace("kr1stal_mace", "kr1stal_mace", 15, 1, 300, 5, cooldown=5, amount_of_projectiles=20, laser=PROJECTILE_CLASSES.CrystalMaceProj).addToGroup(MACES)
+Mace("kr1stal_mace", "kr1stal_mace", 6, 1, 300, 5, cooldown=5, amount_of_projectiles=8, laser=PROJECTILE_CLASSES.CrystalMaceProj).addToGroup(MACES)
 Mace("lava_mace", "lava_mace", 15, 1, 300, 5, amount_of_projectiles=20,cooldown=5, laser=PROJECTILE_CLASSES.MoltenMaceProj).addToGroup(MACES)
 Mace("celestial_mace", "celestial_mace", 15, 2, 300, 5,cooldown=5, amount_of_projectiles=16, laser=PROJECTILE_CLASSES.CelestialMaceProj).addToGroup(MACES)
 Mace("cosmic_mace", "cosmic_mace", 15, 2, 300, 5, cooldown=5,amount_of_projectiles=16, laser=PROJECTILE_CLASSES.DarknessMaceProj).addToGroup(MACES) #cosmic = darkness
