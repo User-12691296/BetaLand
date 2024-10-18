@@ -105,7 +105,7 @@ class CrystalSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.5)
+                entity.damage(1.5)
                 self.damage(30)
 
     def draw(self, display, display_topleft=(0, 0)):
