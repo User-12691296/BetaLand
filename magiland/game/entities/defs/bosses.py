@@ -42,6 +42,7 @@ class CrabBoss (Enemy):
 
     def kill(self):
         super().kill()
+        
         self.clearInventory()
 
     @staticmethod
