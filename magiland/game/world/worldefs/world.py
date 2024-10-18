@@ -585,12 +585,29 @@ class World(events.EventAcceptor):
         self.moving_anim_delta = [0, 0]
 
     def getBiomeAtTile(self, player_pos):
-        current_biome = self.getGroupsWithTile(player_pos)  
-        biomes = ["crystal", "swamp", "desert", "mountain", "arctic", "deepdark", "void"]
+        if "crystal" in self.getGroupsWithTile(player_pos): 
+            return "crystal"
 
-        for biome in biomes:
-            if biome in current_biome:
-                return biome
+        elif "swamp" in self.getGroupsWithTile(player_pos): 
+            return "swamp"
+
+        elif ("desert" in self.getGroupsWithTile(player_pos) or 
+        "cooldesert" in self.getGroupsWithTile(player_pos) or 
+        "hotdesert" in self.getGroupsWithTile(player_pos) or 
+        "volcano" in self.getGroupsWithTile(player_pos)):
+            return "desert"
+
+        elif "mountain" in self.getGroupsWithTile(player_pos): 
+            return "mountain"
+
+        elif "arctic" in self.getGroupsWithTile(player_pos): 
+            return "arctic"
+
+        elif "deepdark" in self.getGroupsWithTile(player_pos): 
+            return "deepdark"
+
+        elif "void" in self.getGroupsWithTile(player_pos): 
+            return "void"
 
     def movementTick(self):
         for entity in self.getTickableEntities():
