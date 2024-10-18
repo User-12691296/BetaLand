@@ -246,6 +246,12 @@ class Player(Creature):
         self.setAttribute("fatigue", self.getAttribute("fatigue")-fatigue_delta)
         self._resting_tick_counter = 0
 
+    def FOVobstruction (self):
+        if "deepdark" in self.world.getGroupsWithTile(self.pos):
+            self.setVisionRange(3)
+        else: 
+            self.setVisionRange(12)
+
     def checkBiome (self):
         if "lobby" in self.world.getGroupsWithTile(self.getPos()) and "lobby" not in self.biome:
             self.biome.append("lobby")
@@ -324,6 +330,7 @@ class Player(Creature):
     def movementTick(self):
         super().movementTick()
         
+        self.FOVobstruction()
         self.handleMotion()
         self.updateFacing()
         
