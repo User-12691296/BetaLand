@@ -66,7 +66,7 @@ class CrystalKnight(Enemy):
 
 class CrystalScorpion(Enemy):
     def __init__(self):
-        super().__init__(8, 0, 25)
+        super().__init__(5, 0, 25)
 
     @staticmethod
     def getNeededAssets():
