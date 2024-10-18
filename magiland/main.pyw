@@ -5,14 +5,14 @@ import os, sys
 if getattr(sys, 'frozen', False):
     os.chdir(sys._MEIPASS)
 
-from .screen import Screen
+from screen import Screen
 # Create the screen
 ASPECT_RATIO = 8/5
 RESOLUTION = 1600
 SCREEN = Screen(ASPECT_RATIO, RESOLUTION)
 
-from .managers import MainWindowManager
-from .misc import events
+from managers import MainWindowManager
+from misc import events
 
 clean_close = False
 
