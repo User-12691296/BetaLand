@@ -2,6 +2,7 @@
 import pygame
 import ctypes
 import platform
+import os
 
 if platform.system() == "Windows":
     ctypes.windll.user32.SetProcessDPIAware()
@@ -9,7 +10,9 @@ if platform.system() == "Windows":
 class Screen:
     def __init__(self, aspect, resolution):
         self.screen = pygame.display.set_mode((aspect*resolution, resolution), pygame.FULLSCREEN | pygame.SCALED | pygame.NOFRAME)
-
+        pygame.display.set_caption("Shelly the Snail's Great Adventure")
+        pygame.display.set_icon(pygame.image.load(os.path.join("assets", "menus", "flame.png")).convert())
+        
         self.aspect = aspect
         self.screen_aspect = self.screen.get_width()/self.screen.get_height()
 

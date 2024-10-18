@@ -33,7 +33,7 @@ class TutorialManager(events.Alpha):
 
         self.LAYER_SIZE = [screen_size[0]//4, screen_size[1]//4]
 
-        self.max_frames = 600
+        self.max_frames = 600*60
 
         self.pause_before_return = 0
         self.cooldown_to_return = -1
@@ -82,15 +82,16 @@ class TutorialManager(events.Alpha):
         self.commands = {"clear":self.cmdClear,
                          "drawrect":self.cmdDrawRect,
                          "drawchar":self.cmdDrawChar,
-                         "drawentities":self.cmdDrawEntity,
+                         "drawentity":self.cmdDrawEntity,
                          "drawitems":self.cmdDrawItem,
                          "switchlayer":self.cmdSwitchLayers,
                          "shiftlayer":self.cmdShiftLayers,
                          "drawellipse":self.cmdDrawEllipse,
                          "drawpolygon":self.cmdDrawPoly,
-                         "drawentity":self.cmdDrawEntity,
+                         "drawtile":self.cmdDrawTile,
                          "flipdisp":self.cmdFlip,
-                         "rotatedisp":self.cmdRot}
+                         "rotatedisp":self.cmdRot,
+                         "clampregion":self.cmdClampRegion}
 
         self.parseHeader()
 
@@ -225,7 +226,7 @@ class TutorialManager(events.Alpha):
     def cmdDrawChar(self, *args):
         text = args[0]
 
-        self.chars_this_tick += 1
+        self.chars_this_tick += len(text)
         assert self.chars_this_tick <= self.CHAR_LIMIT, "Exceeded chars limit for this frame"
         
         assert 1 <= len(text) <= self.CHAR_LIMIT , text+" not valid character sequence"
@@ -264,6 +265,8 @@ class TutorialManager(events.Alpha):
         self.active_layer = int(args[0])
         assert 0 <= self.active_layer < len(self.layers), "Not valid layer"
         self.layer_offset = [0, 0]
+        self.rot = 0
+        self.flips = [False, False]
 
         self.layer_drawn_region = pygame.Rect((0, 0), self.LAYER_SIZE)
 
@@ -280,13 +283,12 @@ class TutorialManager(events.Alpha):
         self.layer_offset[1] += y
 
     def loadElite(self):
-        self.max_frames -= 60
+        self.max_frames -= 30
         self.timeCheck()
 
         self.packages.append("elite")
         
         self.LAYERS += 2
-        self.PIXELS_LAYER = float("inf")
         
 
     def loadComprehensive(self):
