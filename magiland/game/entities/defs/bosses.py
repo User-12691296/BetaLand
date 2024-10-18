@@ -277,7 +277,9 @@ class CraneBoss (Enemy):
         self.image_rect = self.image.get_rect()
 
         self.initial_tick = True
-        self.max_health = 200
+        self.max_health = 300
+        self.should_spawn_snail = False
+        self.should_spawn_whale = False
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -290,7 +292,11 @@ class CraneBoss (Enemy):
             self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
 
     def kill(self):
+        self.clearAttributes(0)
+        BOSS_CONDITIONS.setCrane(self)
+
         super().kill()
+        BOSS_CONDITIONS.setCraneAlive(False)
         self.clearInventory()
 
     @staticmethod
@@ -321,30 +327,39 @@ class CraneBoss (Enemy):
             self.setAttribute("health", self.max_health)
         super().tick()
 
-        whale_exists = False
-        snail_exists = False
-        if BOSS_CONDITIONS.getTrueBossFirstMove():
+        print(BOSS_CONDITIONS.getSnailAlive(), BOSS_CONDITIONS.getWhaleAlive())
+        if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
+            BOSS_CONDITIONS.setWhaleAlive(True)
+            self.should_spawn_whale = True
+        if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
             self.snail = EvilSnail()
-
+            BOSS_CONDITIONS.setSnailAlive(True)
+            self.should_spawn_snail = True
 
         if BOSS_CONDITIONS.getBossFirstMove():
             self.setAttribute("health", self.max_health)
             self.pos = [30,30]
+
             if BOSS_CONDITIONS.getDougSpawn():
                 self.whale.setPos([self.pos[0]+10, self.pos[1]])
                 self.whale.setFinalBoss()
-                if BOSS_CONDITIONS.getTrueBossFirstMove():
+
+                if self.should_spawn_whale:
                     self.world.addEntity(self.whale)
+
             if BOSS_CONDITIONS.getSnailSpawn():
                 self.snail.setPos([self.pos[0]-5, self.pos[1]])
-                if BOSS_CONDITIONS.getTrueBossFirstMove():
+
+                if self.should_spawn_snail:
                     self.world.addEntity(self.snail)
+
             BOSS_CONDITIONS.setBossFirstMove(False)
+            self.registerCooldown("first_move", 120)
+
 
         if BOSS_CONDITIONS.getTrueBossFirstMove():
             BOSS_CONDITIONS.setTrueBossFirstMove(False)
-            self.registerCooldown("first_move", 120)
 
         if not self.isCooldownActive("first_move"):
             BOSS_CONDITIONS.setCooldownFirstMove(False)
@@ -458,22 +473,13 @@ class WhaleBoss (Enemy):
         
         self.first_time = time.time()
 
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
     def kill(self):
         super().kill()
         self.clearInventory()
-        BOSS_CONDITIONS.setDougSpawn(False)
-        
+        if not self.isFinalBoss():
+            BOSS_CONDITIONS.setDougSpawn(False)
+        BOSS_CONDITIONS.setWhaleAlive(False)
+
     def setFinalBoss(self):
         self.final_boss = True
 
@@ -511,11 +517,10 @@ class WhaleBoss (Enemy):
         pass
 
     def tick(self):
-        if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
-            self.setAttribute("health", self.max_health)
+        # if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
+        self.setAttribute("health", self.max_health)
 
         super().tick()
-        print(time.time()-self.first_time, self)
         self.first_time = time.time()
         if self.attack_pattern == 0 and ((BOSS_CONDITIONS.getCooldownFirstMove() == False and self.final_boss == True) or not self.final_boss) and self.attack_progress == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = 1
@@ -542,7 +547,6 @@ class WhaleBoss (Enemy):
         self.attack_progress = 0
         self.attack_pattern = 0
         self.registerCooldown("attack_pattern_cooldown", cooldown)    
-        print(cooldown)    
 
     def updatePositionForPattern1(self):
         if not self.active:
@@ -636,6 +640,7 @@ class EvilSnail (Enemy):
     def kill(self):
         super().kill()
         BOSS_CONDITIONS.setBossInvincibillity(False)
+        BOSS_CONDITIONS.setSnailAlive(False)
 
     def movementTick(self):
         if self.world.changes_this_tick:

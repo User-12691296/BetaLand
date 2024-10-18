@@ -100,6 +100,11 @@ class GameManager(events.Alpha):
     def changeWorld(self, world_name):
         self.active_world = world_name
         self.player.setWorld(self.getWorld())
+        if world_name == "bossarena" and not GAME.BOSS_CONDITIONS.getCraneAlive():
+            self.player.world.addEntity(GAME.BOSS_CONDITIONS.getCrane())
+            GAME.BOSS_CONDITIONS.setCraneAlive(True)
+
+
 
     ## HELPER
     def getScreenBufferDelta(self):

@@ -45,6 +45,10 @@ class ShouldSpawnBossAndInvincibillity():
         self.true_move = True
         self.true_first_move = True
         self.cooldown_first_move = True
+        self.crane_alive = True
+        self.whale_alive = True
+        self.snail_alive = True
+        self.crane = None
 
     def setSnailSpawn(self, value):
         self.snail_spawn = value
@@ -82,5 +86,26 @@ class ShouldSpawnBossAndInvincibillity():
     def setCooldownFirstMove(self, value):
         self.cooldown_first_move = value
 
+    def getCraneAlive(self):
+        return self.crane_alive
+    def setCraneAlive(self, value):
+        self.crane_alive = value
+
+    def getWhaleAlive(self):
+        return self.whale_alive
+    
+    def setWhaleAlive(self, value):
+        self.whale_alive = value
+
+    def getSnailAlive(self):
+        return self.snail_alive
+    def setSnailAlive(self, value):
+        self.snail_alive = value
+
+    def getCrane(self):
+        return self.crane
+    
+    def setCrane(self, value): 
+        self.crane = value
 
 BOSS_CONDITIONS = ShouldSpawnBossAndInvincibillity()
