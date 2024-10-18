@@ -56,12 +56,12 @@ class TutorialManager(events.Alpha):
 
         self.stages = ["INITIAL",
                        "LOBBY",
-                       "FIRST",
-                       "SECOND",
-                       "THIRD",
-                       "FOURTH",
-                       "FIFTH",
-                       "SIXTH",
+                       "DUNGEON",
+                       "SWAMP",
+                       "DESERT",
+                       "MOUNTAINS",
+                       "ARCTIC",
+                       "DARKNESS",
                        "VOID",
                        "FINAL"]
 
@@ -112,7 +112,7 @@ class TutorialManager(events.Alpha):
         self.game_manager = game_manager
 
     def start(self, stage):
-        self.cooldown_to_return = 0
+        self.cooldown_to_return = -1
         self.cur_frame = self.frames.index("#" + self.stages[stage]) + 1
 
         if stage + 1 < len(self.stages):
@@ -133,30 +133,33 @@ class TutorialManager(events.Alpha):
             return
         elif self.cooldown_to_return == 0:
             self.returnToGame()
+            return
+
+        self.chars_this_tick = 0
+        self.shapes_this_tick = 0
+        self.entities_this_tick = 0
+        self.tiles_this_tick = 0
+        self.items_this_tick = 0
+        
         leading_frame = self.cur_frame
 
         commands = []
-
         try:
             trailing_frame = leading_frame + self.frames[leading_frame+1:self.last_frame_in_stage+1].index("#frame")
         except ValueError:
             trailing_frame = self.last_frame_in_stage
-        
         self.runCommands(self.frames[leading_frame+1:trailing_frame+1])
 
         temp = self.getActiveLayer()
         temp = pygame.transform.flip(temp, *self.flips)
         temp = pygame.transform.rotate(temp, self.rot)
-
         region = pygame.Rect(self.layer_drawn_region.left*4,
                              self.layer_drawn_region.top*4,
                              self.layer_drawn_region.width*4,
                              self.layer_drawn_region.height*4)
-
         surface.blit(pygame.transform.scale_by(temp, 4), self.layer_offset, region)
 
         self.cur_frame = trailing_frame + 1
-
         if self.cur_frame > self.last_frame_in_stage:
             self.cooldown_to_return = self.pause_before_return
         
@@ -177,9 +180,6 @@ class TutorialManager(events.Alpha):
             li += 1
 
     def runCommands(self, commands):        
-        self.chars_this_tick = 0
-        self.shapes_this_tick = 0
-
         self.frame_counter += 1
         assert self.frame_counter < self.max_frames, "Exceeded Maximum Time, Reduce Number of Frames"
 
