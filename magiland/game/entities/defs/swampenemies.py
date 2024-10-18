@@ -39,7 +39,7 @@ class SwampAnaconda(Enemy):
 
 class SwampOtter(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 25)
+        super().__init__(4, 0, 25)
 
     @staticmethod
     def getNeededAssets():
@@ -66,7 +66,7 @@ class SwampOtter(Enemy):
 
 class SwampTangler(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 35)
+        super().__init__(4, 0, 30)
 
     @staticmethod
     def getNeededAssets():
@@ -93,7 +93,7 @@ class SwampTangler(Enemy):
 
 class SwampSlime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 20)
+        super().__init__(6, 0, 20)
 
     @staticmethod
     def getNeededAssets():
