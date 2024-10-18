@@ -451,6 +451,8 @@ class Player(Creature):
         self.alive = False
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        self.manager.changeWorld("overworld")
+        
         self.setPos([461, 470])
             
     def getMapDelta(self):

@@ -338,6 +338,8 @@ class CraneBoss (Enemy):
                 entity.damage(0.2)
 
     def movementTick(self):
+        if self.isCooldownActive("first_move"):
+            return
         if self.attack_pattern == 0:
             super().movementTick()
         else:
@@ -348,10 +350,10 @@ class CraneBoss (Enemy):
             self.setAttribute("health", self.max_health)
         super().tick()
 
-        if self.initial_tick:
+        if BOSS_CONDITIONS.getBossFirstMove():
             if BOSS_CONDITIONS.getDougSpawn():
                 whale = WhaleBoss()
-                whale.setPos([self.pos[0]+5, self.pos[1]])
+                whale.setPos([self.pos[0]+10, self.pos[1]])
                 whale.setFinalBoss()
                 self.world.addEntity(whale)
             if BOSS_CONDITIONS.getSnailSpawn():
@@ -359,8 +361,12 @@ class CraneBoss (Enemy):
                 snail.setPos([self.pos[0]-5, self.pos[1]])
                 self.world.addEntity(snail)
 
-            self.initial_tick = False
+            self.registerCooldown("first_move", 200)
+            BOSS_CONDITIONS.setBossFirstMove(False)
 
+        if not self.isCooldownActive("first_move"):
+            BOSS_CONDITIONS.setTrueBossFirstMove(False)
+            return
 
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
@@ -462,9 +468,10 @@ class WhaleBoss (Enemy):
         self.image_rect = self.image.get_rect()
 
         self.final_boss = False
-        self.alpha = 0
+        self.alpha = 255
 
         self.max_health = 400
+        self.first_move = True
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -521,8 +528,13 @@ class WhaleBoss (Enemy):
     def tick(self):
         if BOSS_CONDITIONS.getBossInvincibillity() and self.isFinalBoss():
             self.setAttribute("health", self.max_health)
+
         super().tick()
-        if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
+
+        print(BOSS_CONDITIONS.getBossFirstMove())
+        if self.attack_pattern == 0 and (BOSS_CONDITIONS.getTrueBossFirstMove() == False):
+            if self.alpha >= 255:
+                self.alpha = 0
             self.attack_pattern = random.randint(1, 1)
             self.attack_progress = 1
             self.initial_player_pos = self.world.getPlayer().getPos().copy()

@@ -433,7 +433,7 @@
 "bossarena":{
     "biome:":{},
     "fixed":{
-        "crane_boss":[[10,10]]
+        "crane_boss":[[30,30]]
     }    
 }
 }
