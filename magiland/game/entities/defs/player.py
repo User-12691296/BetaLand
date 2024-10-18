@@ -17,7 +17,7 @@ class Player(Creature):
         self.loadInventory()
         self.initAttributes()
 
-        self.pos = [2,10]
+        self.pos = [461,470]
 
         self.disp = False
 
@@ -279,7 +279,7 @@ class Player(Creature):
         super().tick()
 
         self.inventory.tick(self, self.world)
-        print(self.pos)
+        # print(self.pos)
         self.tickAllAttributes()
 
     def movementTick(self):
