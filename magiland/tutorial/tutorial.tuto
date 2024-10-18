@@ -4,6 +4,7 @@ buy entities
 buy control
 buy items
 buy tiles
+pausebeforereturn 30
 #FRAMES
 #INITIAL
 #frame
@@ -14,19 +15,21 @@ buy tiles
 #frame
 drawentity swampotter 450 75
 #frame
-shiftlayer -10 0
+drawentity swampotter 430 75
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+drawentity swampotter 410 75
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+shiftlayer -20 0
 #frame
-shiftlayer -10 0
+shiftlayer -20 0
 #frame
 shiftlayer -10 0
 #frame
@@ -218,8 +221,9 @@ drawentity player1 100 75
 #frame
 flipdisp X #
 #LOBBY
-#FIRST
-#SECOND
+#frame
+#DUNGEON
+#SWAMP
 #THIRD
 #FOURTH
 #FIFTH

@@ -28,7 +28,7 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
-                pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=0))
+                pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=1))
 
         main_manager.handleEvent(event)
 
