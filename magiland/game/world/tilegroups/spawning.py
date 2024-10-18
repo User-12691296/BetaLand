@@ -4,8 +4,10 @@ from ...entities import ENTITY_CLASSES as EC
 
 
 
-SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
-                "desert_raiders":   EC.DessertRaider,
+SPAWNING_IDS = {"lava_knight": EC.DessertKnight,
+                "desert_raiders": EC.DessertRaider,
+                "desert_sandwurm": EC.DessertSandWurm,
+                "desert_slime": EC.DessertSlime,
                 
                 "darknessbronze_barrel": EC.DarknessBronze,
                 "darknesssilver_barrel": EC.DarknessSilver,
@@ -51,6 +53,11 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "frozen_troll": EC.FrozenTroll,
                 "frozen_slime": EC.FrozenSlime,
                 "frozen_wolf": EC.FrozenWolf,
+
+                "swamp_anaconda": EC.SwampAnaconda,
+                "swamp_otter": EC.SwampOtter,
+                "swamp_tangler": EC.SwampTangler,
+                "swamp_slime": EC.SwampSlime,
                 
                 "crab_boss": EC.CrabBoss,
                 "medusa": EC.MedusaBoss,

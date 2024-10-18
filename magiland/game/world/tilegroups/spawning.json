@@ -9,13 +9,53 @@
 
 "overworld":{
 	"biome:":{
-        	"moutains":{
-			"mountain_eagle": {"chance":0.01},
-			"mountain_slime": {"chance":0.03},
-			"mountain_goat": {"chance":0.02},
-			"mountain_golem": {"chance":0.01},
-			"mountain_troll":{"chance":0.01}
-		}
+        	"mountain":{
+				"mountain_eagle": {"chance":0.01},
+				"mountain_slime": {"chance":0.03},
+				"mountain_goat": {"chance":0.02},
+				"mountain_golem": {"chance":0.01},
+				"mountain_troll":{"chance":0.01}
+			},
+	
+			"deepdark":{
+				"darkness_ghost": {"chance":0.03},
+				"darkness_gravetrapper": {"chance":0.02},
+				"darkness_jumpscare": {"chance":0.02},
+				"darkness_knightmare1": {"chance":0.01},
+				"darkness_knightmare2": {"chance":0.01},
+				"darkness_spreader": {"chance":0.01},
+				"darkness_bat": {"chance":0.03}
+			},
+
+			"crystal":{
+				"crystal_golem": {"chance":0.01},
+				"crystal_knight": {"chance":0.01},
+				"crystal_scorpion": {"chance":0.01},
+				"crystal_slime": {"chance":0.03},
+				"crystal_bat": {"chance":0.02}
+			},
+
+			"arctic":{
+				"frozen_knight": {"chance":0.01},
+				"frozen_pufferfish": {"chance":0.01},
+				"frozen_troll": {"chance":0.01},
+				"frozen_slime": {"chance":0.03},
+				"frozen_wolf": {"chance":0.02}
+			},
+
+			"swamp":{
+				"swamp_anaconda": {"chance":0.01},
+				"swamp_otter": {"chance":0.02},
+				"swamp_tangler": {"chance":0.01},
+				"swamp_slime": {"chance":0.03}
+			},
+
+			"desert":{
+				"lava_knight": {"chance":0.02},
+				"desert_raiders": {"chance":0.01},
+				"desert_sandwurm": {"chance":0.01},
+				"desert_slime": {"chance":0.03}
+			}
 	},
 	"fixed":{
 		"lava_knight":[
@@ -433,7 +473,7 @@
 "bossarena":{
     "biome:":{},
     "fixed":{
-        "crane_boss":[[10,10]]
+        "crane_boss":[[30,30]]
     }    
 }
 }

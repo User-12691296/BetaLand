@@ -80,6 +80,11 @@ class Dynamite(Item):
         for entity in world.getEntitiesInRangeOfTile(tile_pos, self.range):
             if not entity.isPlayer():
                 entity.damage(self.damage)
+        for i in range(tile_pos[0]-self.range, tile_pos[0]+self.range):
+            for j in range (tile_pos[1]-self.range, tile_pos[1]+self.range):
+                if world.getTileID((i,j)) == "lobbywall":
+                    world.setTileID((i,j), "lobbyfloor")
+                    world.setTileElevation((i,j), 0)
 
         data["stack"].consume()
         data["detonated"] = False
