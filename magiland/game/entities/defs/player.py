@@ -345,9 +345,12 @@ class Player(Creature):
         self.inventory.damageTick(self, self.world)
         
     def finalTick(self):
-        self.checkBiome()
         super().finalTick()
+        
+        self.checkBiome()
 
+        self.inventory.finalTick(self, self.world)
+        
     def move(self, delta):
         super().move(delta)
         
@@ -452,10 +455,6 @@ class Player(Creature):
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
         self.manager.changeWorld("overworld")
-<<<<<<< HEAD
-=======
-        
->>>>>>> ac660979ef74a25baaac91f26ce52dd3171efec1
         self.setPos([461, 470])
             
     def getMapDelta(self):

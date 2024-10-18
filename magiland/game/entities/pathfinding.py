@@ -51,6 +51,9 @@ class PathFinder:
         right = max(start[0], end[0]) + 1
         bottom = max(start[1], end[1]) + 1
 
+        if left < 0 or top < 0 or right >= self.map_size[0] or bottom >= self.map_size[1]:
+            return
+
         ops = np.ascontiguousarray(self.opaques[top:bottom, left:right], dtype=np.int32)
         
         length = aStarSearch(ops,
