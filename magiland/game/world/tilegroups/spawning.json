@@ -8,7 +8,7 @@
 	},
 
 "overworld":{
-	"biome:":{
+	"biome":{
         	"mountain":{
 				"mountain_eagle": {"chance":0.01},
 				"mountain_slime": {"chance":0.03},

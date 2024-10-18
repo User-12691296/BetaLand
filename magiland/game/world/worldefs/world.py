@@ -343,6 +343,7 @@ class World(events.EventAcceptor):
             self.tiles[tileClass.getTileID()] = tileClass
 
         self.entities = []
+        self.spawned_entities = [] 
 
         self.projectiles = []
 
@@ -535,6 +536,17 @@ class World(events.EventAcceptor):
         
     def registerChange(self):
         self.changes_this_tick = True
+    
+    def cullOutOfRangeSpawns(self):
+        for spawn in self.spawned_entities:
+            if spawn.distanceTo2(self.player.pos) > 400:
+                self.spawned_entities.remove(spawn)
+                self.entities.remove(spawn)
+    
+    def wipeSpawns(self):
+        for spawn in self.spawned_entities:
+            self.entities.remove(spawn)
+        self.spawned_entities = []
 
     def tick(self):
         self.genOpaquesFromElevCutoff(GAME.WALKING_TILE_ELEV_DELTA)
@@ -547,21 +559,35 @@ class World(events.EventAcceptor):
             projectile.tick()
 
          # debug spawning
-        x = random.randrange(-20, 21)
-        y = random.randrange(-20, 21)
+        spawns = len(self.spawned_entities)
 
-        ppos = [*self.player.getPos()]
-        ppos[0] += x
-        ppos[1] += y
+        if spawns < 20:
+            spawn_poll = random.random()
+            if spawn_poll > 0.95:
+                entities = SPAWNING_REGISTRY.getBiomeSpawn(self.getBiomeAtTile(self.player.pos), self.world_name, 2)
+                for entity in entities:
+                    ppos = self.player.pos
+                    x = ppos[0] + random.randrange(-15, 15)
+                    y = ppos[1] + random.randrange(-15, 15)
 
-        if random.random()>0.9 and (0 <= ppos[0] < self.size[0]) and (0 <= ppos[1] < self.size[1]) and (len(self.entities)<10):
-            eagle = ENTITY_CLASSES.CrystalGolem()
-            eagle.setPos((ppos[0] + x, ppos[1] + y))
-            self.addEntity(eagle)
+                    if (0 <= x < self.size[0]) and (0 <= y < self.size[1]):
+                        entity = entity()
+                        entity.setPos((x, y))
+                        self.addEntity(entity)
+                        self.spawned_entities.append(entity)
+        
 
         self.changes_this_tick = self.first_tick
 
         self.moving_anim_delta = [0, 0]
+
+    def getBiomeAtTile(self, player_pos):
+        current_biome = self.getGroupsWithTile(player_pos)  
+        biomes = ["crystal", "swamp", "desert", "mountain", "arctic", "deepdark", "void"]
+
+        for biome in biomes:
+            if biome in current_biome:
+                return biome
 
     def movementTick(self):
         for entity in self.getTickableEntities():
@@ -591,6 +617,7 @@ class World(events.EventAcceptor):
 
         self.cullDeadEntities()
         self.cullDeadProjectiles()
+        self.cullOutOfRangeSpawns()
 
         if GAME.SMOOTH_PLAYER_MOTION:
             self.updateMovingAnimation()
