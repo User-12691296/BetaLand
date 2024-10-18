@@ -7,7 +7,7 @@ SWING_FRAMES = 10
 
 class SigWeapon(Sword):
 
-    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0, amount_of_projectiles=16, laser = PROJECTILE_CLASSES.CrystalLaserShot, cooldown=0):
+    def __init__(self, itemid, tex_name, damage, size, swing_angle=60, swing_range=None, player_damage_on_hit=0, amount_of_projectiles=16, laser = PROJECTILE_CLASSES.CrystalMaceProj, cooldown=0):
         super().__init__(itemid, tex_name, damage, size, swing_angle, swing_range, player_damage_on_hit)
 
         self.angles = []
@@ -30,6 +30,6 @@ class SigWeapon(Sword):
             data["animations"].create("cooldown", self.cooldown)
                                     
 SIGWEAPONS = []
-SigWeapon("clawofcrabking", "clawofcrabking", 100, 2, 360, cooldown=20).addToGroup(SIGWEAPONS)
-SigWeapon("clawofsnakequeen", "clawnofsnakequeen", 100, 2, 360, cooldown=20).addToGroup(SIGWEAPONS)
-SigWeapon("scissors", "scissors", 100,2,360,cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("clawofcrabking", "clawofcrabking", 35, 2, 360, laser=PROJECTILE_CLASSES.CelestialMaceProj, cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("clawofsnakequeen", "clawnofsnakequeen", 35, 2, 360, laser=PROJECTILE_CLASSES.PoisonDart, cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("scissors", "scissors", 35,2,360,cooldown=20).addToGroup(SIGWEAPONS)

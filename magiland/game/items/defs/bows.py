@@ -41,12 +41,12 @@ class Bow(Item):
 # Do we need separate for crossbow?
 
 BOWS = []
-Bow("basic_crossbow", "basic_crossbow", 1, 30).addToGroup(BOWS)
-Bow("desert_bow", "desert_bow", 0, 40, arrow=PROJECTILE_CLASSES.MoltenArrow).addToGroup(BOWS)
+Bow("basic_crossbow", "basic_crossbow", 1, 50).addToGroup(BOWS)
+Bow("desert_bow", "desert_bow", 0, 25, arrow=PROJECTILE_CLASSES.MoltenArrow).addToGroup(BOWS)
 Bow("frozen_bow", "frozen_bow", 0, 20, arrow=PROJECTILE_CLASSES.IceArrow).addToGroup(BOWS)
-Bow("swamp_bow", "swamp_bow", 0, 20).addToGroup(BOWS)
-Bow("wood_bow", "wood_bow", 0, 10).addToGroup(BOWS)
-Bow("mountain_bow", "mountain_bow", 0, 20).addToGroup(BOWS)
-Bow("darkness_bow", "darkness_bow", 0, 30).addToGroup(BOWS)
+Bow("swamp_bow", "swamp_bow", 0, 30).addToGroup(BOWS)
+Bow("wood_bow", "wood_bow", 0, 60).addToGroup(BOWS)
+Bow("mountain_bow", "mountain_bow", 0, 5).addToGroup(BOWS)
+Bow("darkness_bow", "darkness_bow", 0, 5).addToGroup(BOWS)
 
 
