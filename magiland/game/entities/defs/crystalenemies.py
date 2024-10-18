@@ -52,7 +52,7 @@ class CrystalKnight(Enemy):
 
     def damageTick(self):
         if self.world.player.diagonalTo(self.pos) <= 8 and not self.isCooldownActive("laser"):
-            laser = PROJECTILE_CLASSES.CrystalLaserShot.fromStartEnd(self.pos, self.world.player.getPos())
+            laser = PROJECTILE_CLASSES.CrystalBullet.fromStartEnd(self.pos, self.world.player.getPos())
             laser.giveImmunity(self)
             self.world.addProjectile(laser)
             self.registerCooldown("laser", 50)
