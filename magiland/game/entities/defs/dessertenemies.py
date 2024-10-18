@@ -4,7 +4,7 @@ from ..classes import Enemy
 
 class DessertKnight(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 35)
+        super().__init__(6, 0, 40)
 
     @staticmethod
     def getNeededAssets():
@@ -31,7 +31,7 @@ class DessertKnight(Enemy):
 
 class DessertRaider(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 40)
+        super().__init__(4, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -58,7 +58,7 @@ class DessertRaider(Enemy):
 
 class DessertSandWurm(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 15)
+        super().__init__(3, 0, 15)
 
     @staticmethod
     def getNeededAssets():
