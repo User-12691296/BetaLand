@@ -8,6 +8,9 @@ class DamageTile(BasicTile):
         
     def onWalk(self, world, tile_pos):
         player = world.getPlayer()
-
+        damage = self.damage_value
+        if player.inventory.getItemStack(24) != None:
+            if player.inventory.getItemStack(-1).item.getItemID() == "dragon_hide" and "desert" in world.getGroupsWithTile(player.getPos()):
+                damage = 0
         
-        player.damage(self.damage_value)
+        player.damage(damage)
