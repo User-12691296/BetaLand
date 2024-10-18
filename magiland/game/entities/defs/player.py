@@ -452,11 +452,9 @@ class Player(Creature):
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
         self.manager.changeWorld("overworld")
-<<<<<<< HEAD
-=======
-        
->>>>>>> ac660979ef74a25baaac91f26ce52dd3171efec1
         self.setPos([461, 470])
+        GAME.BOSS_CONDITIONS.setBossFirstMove(True)
+        GAME.BOSS_CONDITIONS.setCooldownFirstMove(True)
             
     def getMapDelta(self):
         bpos = self.getBufferPos()
