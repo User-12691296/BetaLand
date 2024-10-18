@@ -55,6 +55,7 @@ class Sword(Item):
 
                 if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
                     entity.damage(self.damage * (1 + data["rarity"]), "slicing")
+                    print("entity hit")
                     data["entities_hit"].append(entity)
                             
 
