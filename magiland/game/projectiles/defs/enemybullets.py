@@ -238,5 +238,10 @@ class CrystalBullet(Projectile):
         self.stdDraw(display, "GenericSilverBullet", display_topleft)
 
 ENEMYBULLETS = []
+CrystalBullet.addToGroup(ENEMYBULLETS)  
+IceBullet.addToGroup(ENEMYBULLETS)
+DarknessBullet.addToGroup(ENEMYBULLETS)
+DesertBullet.addToGroup(ENEMYBULLETS)
+SwampBullet.addToGroup(ENEMYBULLETS)
 PoisonDart.addToGroup(ENEMYBULLETS)
 Feather.addToGroup(ENEMYBULLETS)
