@@ -31,7 +31,7 @@ class DarknessGhost(Enemy):
 
 class DarknessGraveTrapper(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 40)
+        super().__init__(4, 0, 40)
 
     @staticmethod
     def getNeededAssets():
@@ -58,7 +58,7 @@ class DarknessGraveTrapper(Enemy):
 
 class DarknessJumpscare(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 20)
+        super().__init__(6, 0, 20)
 
     @staticmethod
     def getNeededAssets():
@@ -70,7 +70,7 @@ class DarknessJumpscare(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.5)
+                entity.damage(0.6)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -166,7 +166,7 @@ class DarknessSpreader(Enemy):
 
 class DarknessBat(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(4, 0, 30)
 
     @staticmethod
     def getNeededAssets():
