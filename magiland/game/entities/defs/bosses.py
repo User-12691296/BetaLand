@@ -32,7 +32,7 @@ class CrabBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("crystal_armour", 1), 0)
+        self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
         self.inventory.setItemStack(ItemStack("dynamite_string", 1), 1)
         self.inventory.setItemStack(ItemStack("clawofcrabking", 5), 2)
         self.inventory.setItemStack(ItemStack("lemon", 2), 3)
