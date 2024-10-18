@@ -41,6 +41,8 @@ class ShouldSpawnBossAndInvincibillity():
         self.snail_spawn = True
         self.doug_spawn = True
         self.boss_invincibillity = True
+        self.first_move = True
+        self.true_move = True
 
     def setSnailSpawn(self, value):
         self.snail_spawn = value
@@ -60,4 +62,16 @@ class ShouldSpawnBossAndInvincibillity():
     def getBossInvincibillity(self):
         return self.boss_invincibillity
     
+    def getBossFirstMove(self):
+        return self.first_move
+    
+    def setBossFirstMove(self, value):
+        self.first_move = value
+    
+    def getTrueBossFirstMove(self):
+        return self.first_move
+    
+    def setTrueBossFirstMove(self, value):
+        self.first_move = value
+
 BOSS_CONDITIONS = ShouldSpawnBossAndInvincibillity()

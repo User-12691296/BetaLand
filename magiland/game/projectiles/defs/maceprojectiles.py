@@ -25,7 +25,7 @@ class CelestialMaceProj(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(2)
+                entity.damage(0.2)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
@@ -58,7 +58,7 @@ class CrystalMaceProj(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(2)
+                entity.damage(0.2)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
@@ -90,7 +90,7 @@ class DarknessMaceProj(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(2)
+                entity.damage(0.2)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
@@ -123,7 +123,7 @@ class MoltenMaceProj(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(2)
+                entity.damage(0.2)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):

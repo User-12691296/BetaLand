@@ -29,7 +29,7 @@ class Player(Creature):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
-        self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
+        self.inventory.setItemStack(ItemStack("dynamite_string", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
         self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
@@ -43,7 +43,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("frozen_bow",1),16)
         self.inventory.setItemStack(ItemStack("dynamite",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
-        self.inventory.setItemStack(ItemStack("basic_crossbow",1),17)
+        self.inventory.setItemStack(ItemStack("greengem",1),17)
         self.inventory.setItemStack(ItemStack("lemon",1),18)
         self.inventory.setItemStack(ItemStack("apple",1),19)
         self.inventory.setItemStack(ItemStack("dragon_hide",1),0)
@@ -451,6 +451,12 @@ class Player(Creature):
         self.alive = False
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        self.manager.changeWorld("overworld")
+<<<<<<< HEAD
+=======
+        
+>>>>>>> ac660979ef74a25baaac91f26ce52dd3171efec1
+        self.setPos([461, 470])
             
     def getMapDelta(self):
         bpos = self.getBufferPos()

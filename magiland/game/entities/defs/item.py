@@ -1,6 +1,6 @@
 import random
 
-from ..classes import Entity
+from ..classes import Entity, ItemStack
 
 from constants import GAME
 
@@ -24,6 +24,9 @@ class ItemEntity(Entity):
         self.setPos(real_pos)
 
         world.addEntity(self)
+        if self.world.getTileID(self.pos) == "volcanolava" and self.stack.getItemID() == "dynamite_string":
+            self.stack = ItemStack("dynamite", self.stack.getCount())
+
 
     def draw(self, display, display_topleft=(0, 0)):
         super().draw(display, display_topleft)
