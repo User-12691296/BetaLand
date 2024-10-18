@@ -54,7 +54,7 @@ class Sword(Item):
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
                 if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
-                    entity.damage(self.damage * (1 + data["rarity"]), "slicing")
+                    entity.damage(self.damage * (1 + data["rarity"]))
                     data["entities_hit"].append(entity)
                             
 
@@ -72,24 +72,23 @@ class Sword(Item):
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
-        print(data["rarity"])
         return True
 
-    def isUpgradeable(self):
+    def isUpgradeable(self, data, player, world):
         return True
 
         
 SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
 Sword("epic_sword", "emerald_studded_sword", 15, 2, 300, 5).addToGroup(SWORDS)
-Sword("cool_sword", "ruby_studded_sword", 4, 0, 90, 3).addToGroup(SWORDS)
-Sword("lil_sword", "sapphire_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
-Sword("golf_club", "golf_club", 7, 0, 300, 5, 1).addToGroup(SWORDS)
-Sword ("knightmare_scythe", "knightmare_scythe", 12, 2, 360, 6, 0.2).addToGroup(SWORDS)
-Sword ("ice_blade", "ice_blade", 7, 2, 75, 4).addToGroup(SWORDS)
-Sword ("nature_cure", "nature_cure", 4, 0, 90, 3, -0.2).addToGroup(SWORDS)
-Sword("sanguine_slasher","sanguine_slasher", 18, 1, 120, 4, 0.5).addToGroup(SWORDS)
-Sword("candy_cane","candy_cane", 8, 0, 300, 3, -0.1).addToGroup(SWORDS)
-Sword("paper_straw","paper_straw", 4, 0, 100, 3, 0.1).addToGroup(SWORDS)
+Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
+Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
+Sword("golf_club", "golf_club", 8, 0, 300, 5, 1).addToGroup(SWORDS)
+Sword ("knightmare_scythe", "knightmare_scythe", 15, 2, 360, 6, 0.2).addToGroup(SWORDS)
+Sword ("ice_blade", "ice_blade", 5, 2, 75, 4).addToGroup(SWORDS)
+Sword ("nature_cure", "nature_cure", 3, 0, 90, 3, -0.2).addToGroup(SWORDS)
+Sword("sanguine_slasher","sanguine_slasher", 20, 1, 120, 4, 2).addToGroup(SWORDS)
+Sword("candy_cane","candy_cane", 10, 0, 300, 3, -0.1).addToGroup(SWORDS)
+Sword("paper_straw","paper_straw", 3, 0, 100, 3, 0.1).addToGroup(SWORDS)
 
 

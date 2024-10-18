@@ -35,7 +35,7 @@ class CrabBoss (Enemy):
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
         self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
-        self.inventory.setItemStack(ItemStack("dynamite_string", 1), 1)
+        self.inventory.setItemStack(ItemStack("dynamite_string", 100), 1)
         self.inventory.setItemStack(ItemStack("lemon", 2), 3)
         self.inventory.setItemStack(ItemStack("bomb", 1), 4)
 
@@ -151,7 +151,7 @@ class CrabBoss (Enemy):
 
 class MedusaBoss (Enemy):
     def __init__(self):
-        super().__init__(75, 3, 10)
+        super().__init__(125, 3, 10)
         self.size = (3,3)
         self.radius = 3
         self.attack_pattern = 0
@@ -164,11 +164,13 @@ class MedusaBoss (Enemy):
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
 
+        self.killed_melee = False
+
         self.loadInventory()
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
+        self.inventory.setItemStack(ItemStack("croc", 1), 0)
         self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
         self.inventory.setItemStack(ItemStack("lemon", 4), 2)
 
@@ -179,23 +181,8 @@ class MedusaBoss (Enemy):
 
     def kill(self):
         super().kill()
-        self.clearInventory()
-
-        self.loadInventory()
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
+        if self.killed_melee:
+            self.inventory.setItemStack(ItemStack("clawofsnakequeen"), 3)
         self.clearInventory()
 
     @staticmethod
@@ -217,11 +204,12 @@ class MedusaBoss (Enemy):
         super().movementTick()
 
     def tick(self):
+        print(self.pos)
         super().tick()
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
             self.attack_pattern = random.randint(1, 2)
             self.attack_progress = 1
-            self.initial_player_pos = self.world.getPlayer().getPos().copy()
+            self.initial_player_pos = list(self.world.getPlayer().getPos()).copy()
             
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -241,6 +229,27 @@ class MedusaBoss (Enemy):
         self.attack_pattern = 0
         self.registerCooldown("attack_pattern_cooldown", cooldown)        
 
+    def sumDamage(self):
+        total_damage = 0
+
+        dtt = 0
+
+        while self.damages_this_tick:
+            damage = max(self.damages_this_tick, key=lambda d: d[0])
+            self.damages_this_tick.remove(damage)
+
+            damage, source = damage
+            true_damage = self.calcDamageModifiers(damage, dtt)
+            total_damage += true_damage
+
+            if total_damage >= self.getAttribute("health") and source == "slicing":
+                self.killed_melee = True
+
+            dtt += 1
+        
+        self.changeHealth(-total_damage)
+
+
     def updatePositionForPattern1(self):
         pass
 
@@ -257,18 +266,20 @@ class MedusaBoss (Enemy):
     def handleAttacksForPattern2(self):
         if self.attack_progress % 25 == 0:
             eagle = SwampAnaconda()
-            eagle.setPos((self.pos[0] + random.randint(2,5)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(2,5)*(random.randint(0,1)*2-1)))
+            eagle.setPos([self.pos[0] + random.randint(2,5)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(2,5)*(random.randint(0,1)*2-1)])
             self.world.addEntity(eagle)
         
         if self.attack_progress > 80:
             self.clearAttributes(100)
 
 
+
     def updatePositionForPattern2(self):
         pass    
 
     def draw(self, display, display_topleft=(0, 0)):
-        self.hitbox.center = self.getPos().copy()
+        self.updateHitbox()
+        self.radius = 5
         bpos = self.world.tilePosToBufferPos(self.pos)
         spos = self.bufferPosToDisplayPos(bpos, display_topleft)
 
@@ -277,10 +288,13 @@ class MedusaBoss (Enemy):
         final_rect = rotated_image.get_rect(center=spos)
         # final_texture = pygame.transform.scale(rotated_texture, (self.size[0]*TILE_SIZE, self.size[1]*TILE_SIZE))
 
-        self.drawHealthBar(display, display_topleft)
-
         # final_rect = final_texture.get_rect(center=spos)
         display.blit(rotated_image, final_rect)
+
+        self.drawHealthBar(display, display_topleft)
+
+        HELP = self.bufferPosToDisplayPos(self.world.tilePosToBufferPos(self.hitbox.topleft), display_topleft)
+        # pygame.draw.rect(display, (255,0,0,0.2), pygame.rect.Rect(HELP[0], HELP[1], 5*TILE_SIZE, 5*TILE_SIZE))
 
 
 # FINAL BOSSES
@@ -308,9 +322,8 @@ class CraneBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 0)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 1)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -445,7 +458,7 @@ class CraneBoss (Enemy):
         speed = 1
         self.x = self.initial_player_pos[0]-20 + self.attack_progress//speed
         self.y = self.initial_player_pos[1]
-        self.setPos((self.x, self.y))
+        self.setPos([self.x, self.y])
         if self.attack_progress > 40*speed:
             self.clearAttributes(100)
 
@@ -516,9 +529,8 @@ class WhaleBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 0)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 1)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -598,7 +610,7 @@ class WhaleBoss (Enemy):
             self.world.addProjectile(self.projectile)
         if self.alpha % 60 == 0:
             eagle = DarknessKnightmare1()
-            eagle.setPos((self.pos[0] + random.randint(5,10)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(5,10)*(random.randint(0,1)*2-1)))
+            eagle.setPos([self.pos[0] + random.randint(5,10)*(random.randint(0,1)*2-1), self.pos[1]+random.randint(5,10)*(random.randint(0,1)*2-1)])
             self.world.addEntity(eagle)
         
 
@@ -736,7 +748,7 @@ class EvilSnail (Enemy):
 
 class DragonBoss (Enemy):
     def __init__(self):
-        super().__init__(150, 2, 8)
+        super().__init__(200, 2, 8)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
@@ -849,7 +861,7 @@ class DragonBoss (Enemy):
         speed = 2
         self.x = self.initial_player_pos[0]-20 + self.attack_progress//speed
         self.y = self.initial_player_pos[1]
-        self.setPos((self.x, self.y))
+        self.setPos([self.x, self.y])
         if self.attack_progress > 40*speed:
             self.clearAttributes(100)
 
@@ -876,7 +888,7 @@ class DragonBoss (Enemy):
 
 class WormBoss(Enemy):
     def __init__(self):
-        super().__init__(150, 2, 6)
+        super().__init__(250, 2, 6)
         self.size = (3,3)
         self.radius = 2
         self.loadInventory()
@@ -894,9 +906,8 @@ class WormBoss(Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 0)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 1)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -991,7 +1002,7 @@ class WormBoss(Enemy):
         speed = 2
         self.x = self.initial_player_pos[0]-20 + self.attack_progress//speed
         self.y = self.initial_player_pos[1]
-        self.setPos((self.x, self.y))
+        self.setPos([self.x, self.y])
         if self.attack_progress > 40*speed:
             self.clearAttributes(100)
 
@@ -1018,7 +1029,7 @@ class WormBoss(Enemy):
 
 class MountainBoss (Enemy):
     def __init__(self):
-        super().__init__(300, 2, 8)
+        super().__init__(250, 2, 8)
         self.size = (5,5)
         self.radius = 2
         self.attack_pattern = 0
@@ -1030,15 +1041,14 @@ class MountainBoss (Enemy):
         self.image = pygame.image.load(os.path.join(BOSS_PATH, "MountainDangerThunderBirdButNotReally.png")).convert_alpha()
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
-
+        self.killed_melee = False
         self.loadInventory()
 
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 0)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 1)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -1046,6 +1056,7 @@ class MountainBoss (Enemy):
 
     def kill(self):
         super().kill()
+        self.inventory.setItemStack(ItemStack("scissors", 1), 2)
         self.clearInventory()
 
     @staticmethod
@@ -1093,6 +1104,25 @@ class MountainBoss (Enemy):
             self.attack_progress += 1
 
         # print(self.attack_progress, self.attack_pattern, self.getCooldownFrame("attack_pattern_cooldown"))
+    def sumDamage(self):
+        total_damage = 0
+
+        dtt = 0
+
+        while self.damages_this_tick:
+            damage = max(self.damages_this_tick, key=lambda d: d[0])
+            self.damages_this_tick.remove(damage)
+
+            damage, source = damage
+            true_damage = self.calcDamageModifiers(damage, dtt)
+            total_damage += true_damage
+
+            if total_damage >= self.getAttribute("health") and source == "slicing":
+                self.killed_melee = True
+
+            dtt += 1
+        
+        self.changeHealth(-total_damage)
 
     def updatePositionForPattern1(self):
         speed = 2
@@ -1170,7 +1200,7 @@ class MountainBoss (Enemy):
     
 class DarknessBoss (Enemy):
     def __init__(self):
-        super().__init__(200, 2, 8)
+        super().__init__(250, 2, 8)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
@@ -1188,17 +1218,12 @@ class DarknessBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("watermelon", 4), 0)
+        self.inventory.setItemStack(ItemStack("lemon", 4), 1)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
             self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
 
     @staticmethod
     def getNeededAssets():
@@ -1234,7 +1259,8 @@ class DarknessBoss (Enemy):
             self.final_x = self.initial_player_pos[0]-10*math.cos(math.radians(angle))
             self.final_y = self.initial_player_pos[1]-10*math.sin(math.radians(angle))
 
-            
+
+
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
             self.handleAttacksForPattern1()

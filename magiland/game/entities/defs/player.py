@@ -326,7 +326,7 @@ class Player(Creature):
 
     def tick(self):
         super().tick()
-
+        print(self.pos)
         self.inventory.tick(self, self.world)
         # print(self.pos)
         self.tickAllAttributes()
