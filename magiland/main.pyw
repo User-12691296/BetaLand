@@ -1,6 +1,10 @@
 import pygame
 pygame.init()
 
+import os, sys
+if getattr(sys, 'frozen', False):
+    os.chdir(sys._MEIPASS)
+
 from screen import Screen
 # Create the screen
 ASPECT_RATIO = 8/5

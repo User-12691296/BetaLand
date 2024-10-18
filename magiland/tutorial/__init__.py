@@ -9,7 +9,8 @@ FOLDER = "tutorial"
 FILEPATH = os.path.join(FOLDER, "tutorial.tuto")
 
 class TutorialManager(events.Alpha):
-    CHAR_LIMIT = 3
+    CHAR_LIMIT = 1
+    MAX_CHARS = 10
     SHAPES_LIMIT = 4
     TILES_LIMIT = 2
     ENTITIES_LIMIT = 2
@@ -98,6 +99,7 @@ class TutorialManager(events.Alpha):
         self.layer_offset = [0, 0]
 
         self.chars_this_tick = 0
+        self.chars_since_clear = 0
         self.shapes_this_tick = 0
         self.entities_this_tick = 0
         self.tiles_this_tick = 0
@@ -209,6 +211,8 @@ class TutorialManager(events.Alpha):
         else:
             self.getActiveLayer().fill((0, 0, 0))
 
+        self.chars_since_clear = 0
+
     def cmdDrawRect(self, *args):
         self.shapes_this_tick += 1
         assert self.shapes_this_tick <= self.SHAPES_LIMIT, "Exceeded shapes limit for this frame"
@@ -224,7 +228,7 @@ class TutorialManager(events.Alpha):
         self.chars_this_tick += 1
         assert self.chars_this_tick <= self.CHAR_LIMIT, "Exceeded chars limit for this frame"
         
-        assert len(text) == 1, "Not valid character"
+        assert 1 <= len(text) <= self.CHAR_LIMIT , text+" not valid character sequence"
 
         pos = int(args[1]), int(args[2])
         if self.hasPackage("talkative"):
@@ -298,7 +302,8 @@ class TutorialManager(events.Alpha):
         self.max_frames -= 60
         self.timeCheck()
 
-        self.CHAR_LIMIT += 7
+        self.CHAR_LIMIT += 4
+        self.MAX_CHARS += 15
 
         self.packages.append("talkative")
         
