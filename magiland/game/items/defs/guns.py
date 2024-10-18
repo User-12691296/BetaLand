@@ -39,4 +39,5 @@ Gun("cold_barrel_gun", "cold_barrel_gun", 2, 15, bullet=PROJECTILE_CLASSES.ColdD
 Gun("thunder_cannon", "thunder_cannon", 1, 15, bullet=PROJECTILE_CLASSES.ThunderSpark).addToGroup(GUNS)
 Gun("barrel_of_doug", "barrel_of_doug", 2, 15, bullet=PROJECTILE_CLASSES.FrogBullet).addToGroup(GUNS)
 Gun("dart_gun", "dart_gun", 0, 15, bullet=PROJECTILE_CLASSES.DartProjectile).addToGroup(GUNS)
+Gun("cannon", "cannon", 0, 120, bullet=PROJECTILE_CLASSES.CannonBall).addToGroup(GUNS)
 
