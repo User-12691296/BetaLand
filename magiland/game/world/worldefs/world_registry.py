@@ -56,6 +56,9 @@ class bossarena(World):
         self.world_name = "bossarena"
         
         super().__init__(ALL_TILES)
+    
+    def start(self):
+        super(),start()
 
 
 # LOADABLE_WORLDS = (Overworld, Level1, CrystalLevel, DeepDarkLevel, MazeLevel, Level3)
