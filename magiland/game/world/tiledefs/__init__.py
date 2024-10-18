@@ -16,6 +16,9 @@ SandDarkTile().addTileToList(OVERWORLD_TILES)
 SwampWater().addTileToList(OVERWORLD_TILES)
 BasicTile("bloodstone", "bloodstone").addTileToList(OVERWORLD_TILES)
 
+BasicTile("lobbyfloor", "lobbyfloor", False).addTileToList(OVERWORLD_TILES)
+BasicTile("lobbywall", "lobbywall", False).addTileToList(OVERWORLD_TILES)
+
 BasicTile("sand", "sand").addTileToList(OVERWORLD_TILES)
 BasicTile("sandlight", "sandlight").addTileToList(OVERWORLD_TILES)
 SlowTile("sandoasis", "sandoasis",2, False).addTileToList(OVERWORLD_TILES)
@@ -41,7 +44,7 @@ BasicTile("mountainlight", "mountainlight").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainmoss", "mountainmoss").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnowmoss", "mountainsnowmoss").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
-BasicTile("shadowbrick", "shadowbrick").addTileToList(OVERWORLD_TILES)
+BasicTile("shadowbrick", "shadowbrick", False).addTileToList(OVERWORLD_TILES)
 
 BasicTile("volcano", "volcano").addTileToList(OVERWORLD_TILES)
 DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)

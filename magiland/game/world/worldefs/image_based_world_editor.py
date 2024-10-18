@@ -49,7 +49,12 @@ RG_DEFS = {(0, 0): IGNORE_TILE_VAL,
            (0, 200): "volcanomolten",
 
            (64, 64): "deathvoid",
-           (125, 125): "walkablevoid"
+           (125, 125): "walkablevoid",
+
+
+           (167, 10): "shadowbrick",
+           (250, 165): "lobbywall",
+           (225, 50): "lobbyfloor"
            }
 
 
