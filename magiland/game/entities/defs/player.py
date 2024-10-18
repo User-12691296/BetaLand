@@ -310,7 +310,6 @@ class Player(Creature):
 
     def tick(self):
         super().tick()
-
         self.inventory.tick(self, self.world)
         # print(self.pos)
         self.tickAllAttributes()
@@ -445,7 +444,6 @@ class Player(Creature):
         GAME.BOSS_CONDITIONS.setBossFirstMove(True)
         GAME.BOSS_CONDITIONS.setCooldownFirstMove(True)
         if self.manager.getWorld().world_name == "bossarena" and GAME.BOSS_CONDITIONS.getCraneAlive() == False:
-            print(GAME.BOSS_CONDITIONS.getCrane())
             crane = GAME.BOSS_CONDITIONS.getCrane()
             crane.setPos([30,30])
 

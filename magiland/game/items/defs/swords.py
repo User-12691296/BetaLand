@@ -54,7 +54,7 @@ class Sword(Item):
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
                 if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
-                    entity.damage(self.damage * (1 + data["rarity"]), "slicing")
+                    entity.damage(self.damage * (1 + data["rarity"]))
                     data["entities_hit"].append(entity)
                             
 
@@ -72,10 +72,9 @@ class Sword(Item):
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
-        print(data["rarity"])
         return True
 
-    def isUpgradeable(self):
+    def isUpgradeable(self, data, player, world):
         return True
 
         
