@@ -1,6 +1,8 @@
 import pygame
 
 from ..classes import Enemy
+from ...projectiles import PROJECTILE_CLASSES
+
 
 class DessertKnight(Enemy):
     def __init__(self):
