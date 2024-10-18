@@ -32,6 +32,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
         self.inventory.setItemStack(ItemStack("apple",3),2)
+        self.inventory.setItemStack(ItemStack("dynamite", 3), 2)
 
     def initAttributes(self):
         # Frames per movement
@@ -235,9 +236,17 @@ class Player(Creature):
 
     def FOVobstruction (self):
         if "deepdark" in self.world.getGroupsWithTile(self.pos):
-            self.setVisionRange(3)
+            if self.inventory.getSelectedStack() != None:
+                if self.inventory.getSelectedStack().getItemID() == "lantern":
+                    self.setVisionRange(12)
+                else:
+                    self.setVisionRange(3)
         else: 
-            self.setVisionRange(12)
+            if self.inventory.getSelectedStack() != None:
+                if self.inventory.getSelectedStack().getItemID() == "lantern":
+                    self.setVisionRange(14)
+                else:
+                    self.setVisionRange(12)
 
     def checkBiome (self):
         if "lobby" in self.world.getGroupsWithTile(self.getPos()) and "lobby" not in self.biome:
