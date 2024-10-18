@@ -15,7 +15,7 @@ class WalkableVoidTile(BasicTile):
 
 class DeathVoidTile(BasicTile):
     def __init__(self):
-        super().__init__("deathvoid", "volcanolava", True)
+        super().__init__("deathvoid", "deathvoid", True)
 
     def onWalk(self, world, tile_pos):
         player = world.getPlayer()
