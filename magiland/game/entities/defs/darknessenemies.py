@@ -1,6 +1,7 @@
 import pygame
 
 from ..classes import Enemy
+from ...projectiles import PROJECTILE_CLASSES
 
 class DarknessGhost(Enemy):
     def __init__(self):
