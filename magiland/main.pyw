@@ -13,8 +13,16 @@ SCREEN = Screen(ASPECT_RATIO, RESOLUTION)
 
 from managers import MainWindowManager
 from misc import events
+from constants.game import SOUND_VOLUMES
 
 clean_close = False
+
+
+# Load music
+pygame.mixer.init()
+pygame.mixer.music.load(os.path.join("assets", "sounds", "mainmenu.mp3"))
+pygame.mixer.music.play(-1)
+
 
 # Reroutes events and drawing commands through a manager to clean the main code
 main_manager = MainWindowManager(SCREEN)
@@ -32,6 +40,8 @@ while running:
 
         main_manager.handleEvent(event)
 
+    pygame.mixer.music.set_volume(SOUND_VOLUMES["Music"]/100)
+    
     # Tick after input
     main_manager.main_tick()
 
