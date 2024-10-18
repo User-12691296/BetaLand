@@ -4,7 +4,7 @@ from ..classes import Enemy
 
 class CrystalGolem(Enemy):
     def __init__(self):
-        super().__init__(3, 0, 40)
+        super().__init__(7, 0, 40)
         """ CODE FOR MOB DROPS
         self.loadInventory() """
 
@@ -66,7 +66,7 @@ class CrystalKnight(Enemy):
 
 class CrystalScorpion(Enemy):
     def __init__(self):
-        super().__init__(8, 0, 25)
+        super().__init__(3, 0, 25)
 
     @staticmethod
     def getNeededAssets():
@@ -93,7 +93,7 @@ class CrystalScorpion(Enemy):
 
 class CrystalSlime(Enemy):
     def __init__(self):
-        super().__init__(4, 0, 1)
+        super().__init__(5, 0, 30)
 
     @staticmethod
     def getNeededAssets():
@@ -105,8 +105,8 @@ class CrystalSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.5)
-                self.damage(1)
+                entity.damage(1.5)
+                self.damage(30)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -121,7 +121,7 @@ class CrystalSlime(Enemy):
 
 class CrystalBat(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 25)
+        super().__init__(6, 0, 25)
 
     @staticmethod
     def getNeededAssets():
