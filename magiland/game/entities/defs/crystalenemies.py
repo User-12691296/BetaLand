@@ -106,7 +106,7 @@ class CrystalSlime(Enemy):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
                 entity.damage(0.5)
-                self.damage(1)
+                self.damage(0.1)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
