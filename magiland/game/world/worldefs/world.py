@@ -660,6 +660,7 @@ class World(events.EventAcceptor):
         if clicked_tile != None:
             if button == pygame.BUTTON_LEFT:
                 clicked_tile.onLeft(self, world_pos)
+                print(clicked_tile)
 
             elif button == pygame.BUTTON_RIGHT:
                 clicked_tile.onRight(self, world_pos)

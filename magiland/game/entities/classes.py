@@ -162,7 +162,7 @@ class Entity(events.EventAcceptor):
     
     def draw(self, display, display_topleft=(0, 0)): pass
 
-    def damage(x,y): pass
+    def damage(*args): pass
 
 class Creature(Entity):
     def __init__(self, health, size=(1, 1)):

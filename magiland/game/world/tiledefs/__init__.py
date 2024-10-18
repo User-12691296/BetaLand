@@ -61,8 +61,8 @@ BasicTile("shadowbrick", "shadowbrick", False).addTileToList(OVERWORLD_TILES)
 BasicTile("icewall", "icewall", False).addTileToList(OVERWORLD_TILES)
 
 BasicTile("volcano", "volcano").addTileToList(OVERWORLD_TILES)
-DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)
-DamageTile("volcanomolten", "volcanomolten", 0.1).addTileToList(OVERWORLD_TILES)
+# DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)
+# DamageTile("volcanomolten", "volcanomolten", 0.1).addTileToList(OVERWORLD_TILES)
 
 WalkableVoidTile().addTileToList(OVERWORLD_TILES)
 DeathVoidTile().addTileToList(OVERWORLD_TILES)

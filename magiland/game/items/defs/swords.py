@@ -75,7 +75,7 @@ class Sword(Item):
         print(data["rarity"])
         return True
 
-    def isUpgradeable(self, data, player, world):
+    def isUpgradeable(self):
         return True
 
         

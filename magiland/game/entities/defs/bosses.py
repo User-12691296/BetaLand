@@ -21,6 +21,8 @@ class CrabBoss (Enemy):
         self.attack_pattern = 0
         self.attack_progress = 0
 
+        self.killed_melee = False
+
         self.x, self.y = 0,0
         self.normal_movement_speed = 8
 
@@ -34,7 +36,6 @@ class CrabBoss (Enemy):
         self.inventory = Inventory(5,1,1)
         self.inventory.setItemStack(ItemStack("crystal_armor", 1), 0)
         self.inventory.setItemStack(ItemStack("dynamite_string", 1), 1)
-        self.inventory.setItemStack(ItemStack("clawofcrabking", 5), 2)
         self.inventory.setItemStack(ItemStack("lemon", 2), 3)
         self.inventory.setItemStack(ItemStack("bomb", 1), 4)
 
@@ -44,7 +45,8 @@ class CrabBoss (Enemy):
 
     def kill(self):
         super().kill()
-        
+        if self.killed_melee:
+            self.inventory.addItemStack(ItemStack("clawofcrabking", 5))
         self.clearInventory()
 
     @staticmethod
@@ -56,6 +58,26 @@ class CrabBoss (Enemy):
     
     def isBoss(self):
         return True
+
+    def sumDamage(self):
+        total_damage = 0
+
+        dtt = 0
+
+        while self.damages_this_tick:
+            damage = max(self.damages_this_tick, key=lambda d: d[0])
+            self.damages_this_tick.remove(damage)
+
+            damage, source = damage
+            true_damage = self.calcDamageModifiers(damage, dtt)
+            total_damage += true_damage
+
+            if total_damage >= self.getAttribute("health") and source == "slicing":
+                self.killed_melee = True
+
+            dtt += 1
+        
+        self.changeHealth(-total_damage)
 
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, self.size[0]-1):
@@ -332,6 +354,7 @@ class CraneBoss (Enemy):
 
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
+            print("hi")
             BOSS_CONDITIONS.setWhaleAlive(True)
             self.should_spawn_whale = True
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
@@ -349,12 +372,14 @@ class CraneBoss (Enemy):
 
                 if self.should_spawn_whale:
                     self.world.addEntity(self.whale)
+                    self.should_spawn_whale = False
 
             if BOSS_CONDITIONS.getSnailSpawn():
                 self.snail.setPos([self.pos[0]-5, self.pos[1]])
 
                 if self.should_spawn_snail:
                     self.world.addEntity(self.snail)
+                    self.should_spawn_snail = True
 
             BOSS_CONDITIONS.setBossFirstMove(False)
             self.registerCooldown("first_move", 120)
