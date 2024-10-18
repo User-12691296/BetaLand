@@ -8,4 +8,6 @@ class DamageTile(BasicTile):
         
     def onWalk(self, world, tile_pos):
         player = world.getPlayer()
+
+        
         player.damage(self.damage_value)
