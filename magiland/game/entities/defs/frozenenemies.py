@@ -1,5 +1,6 @@
 import pygame
 
+from ...projectiles import PROJECTILE_CLASSES
 from ..classes import Enemy
 
 class FrozenKnight(Enemy):

@@ -125,5 +125,6 @@ class IceArrow(BasicProjectileWithEffects):
 
 PLAYERARROWS = []
 Arrow.addToGroup(PLAYERARROWS)
+BasicProjectileWithEffects.addToGroup(PLAYERARROWS)
 MoltenArrow.addToGroup(PLAYERARROWS)
 IceArrow.addToGroup(PLAYERARROWS)
