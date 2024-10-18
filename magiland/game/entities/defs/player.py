@@ -42,7 +42,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("barrel_of_doug",1),22)
         self.inventory.setItemStack(ItemStack("bluegem",1),24)
         self.inventory.setItemStack(ItemStack("redgem",1),16)
-        self.inventory.setItemStack(ItemStack("dynamite",1),6)
+        self.inventory.setItemStack(ItemStack("lantern",1),6)
         self.inventory.setItemStack(ItemStack("bomb", 121), 7)
         self.inventory.setItemStack(ItemStack("greengem",1),17)
         self.inventory.setItemStack(ItemStack("lemon",1),18)
@@ -252,9 +252,17 @@ class Player(Creature):
 
     def FOVobstruction (self):
         if "deepdark" in self.world.getGroupsWithTile(self.pos):
-            self.setVisionRange(3)
+            if self.inventory.getSelectedStack() != None:
+                if self.inventory.getSelectedStack().getItemID() == "lantern":
+                    self.setVisionRange(12)
+                else:
+                    self.setVisionRange(3)
         else: 
-            self.setVisionRange(12)
+            if self.inventory.getSelectedStack() != None:
+                if self.inventory.getSelectedStack().getItemID() == "lantern":
+                    self.setVisionRange(14)
+                else:
+                    self.setVisionRange(12)
 
     def checkBiome (self):
         if "lobby" in self.world.getGroupsWithTile(self.getPos()) and "lobby" not in self.biome:

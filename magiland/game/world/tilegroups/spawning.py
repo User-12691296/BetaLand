@@ -76,7 +76,9 @@ SPAWNING_IDS = {"lava_knight": EC.DessertKnight,
                 "mountain_slime": EC.MountainSlime,
                 "mountain_goat": EC.MountainGoat,
                 "mountain_golem": EC.MountainGolem,
-                "mountain_troll": EC.MountainTroll
+                "mountain_troll": EC.MountainTroll,
+
+                "lantern": EC.LanternEntity
 }
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")

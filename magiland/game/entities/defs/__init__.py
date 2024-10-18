@@ -17,11 +17,14 @@ from .swampbarrel import *
 from .item import ItemEntity
 from .bosses import *
 from .crystals import *
+from .LanternEntity import LanternEntity
 
 ALL_ENTITY_CLASSES = []
 
 ALL_ENTITY_CLASSES.append(Player)
 ALL_ENTITY_CLASSES.append(ItemEntity)
+ALL_ENTITY_CLASSES.append(LanternEntity)
+
 
 ALL_ENTITY_CLASSES += CRYSTALBRONZE
 ALL_ENTITY_CLASSES += CRYSTALSILVER
