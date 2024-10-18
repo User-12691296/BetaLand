@@ -23,6 +23,9 @@ class Bow(Item):
         data["rot"] = -(player.getFacing()+90)
         data["rot"] = data["rot"] % 360
 
+    def isUpgradeable(self):
+        return True
+
     def fireInTheHole(self, data, player, world, tile_pos, tile):
         if not data["animations"].exists("cooldown"):
             arrow = self.arrow(player.pos, -data["rot"]-45)
