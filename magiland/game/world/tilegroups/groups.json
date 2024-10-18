@@ -17,4 +17,9 @@
 
 "deepdark":{"type":"biome",
 	"tiles":["deepdark"],
-	"extras":{"insanity_level":1}}}
+	"extras":{"insanity_level":1}},
+"mountains":{"type":"biome",
+    "tiles":["mountainsnow",
+            "mountainsnowmoss"],
+    "extras":{}}
+}

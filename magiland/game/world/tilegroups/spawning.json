@@ -8,7 +8,15 @@
 	},
 
 "overworld":{
-	"biome:":{},
+	"biome:":{
+        "moutains":{
+            "mountain_eagle": {"chance":0.01},
+            "mountain_slime": {"chance":0.03},
+            "mountain_goat": {"chance":0.02},
+            "mountain_golem": {"chance":0.01},
+            "mountain_troll":{"chance":0.01}
+        }
+    },
 	"fixed":{
 		"lava_knight":[
 			[5, 5]
@@ -18,6 +26,12 @@
 			],
         "whale_boss":[
             [838,8]
+        ],
+        "dragon_boss":[
+            [209,392]
+        ],
+        "mountain_boss":[
+            [768,22]
         ]
 		}
 	},
@@ -98,7 +112,12 @@
 		"crystalplatinum_barrel":[
 			[138, 73]
 			]
-		}
+		
+        ,
+        "crab_boss":[
+            [170,35]
+        ]
+    }
 	},
 
 "deep_dark_level":{
@@ -273,6 +292,11 @@
 			[40, 17], [10, 153], [190, 88], [162, 179]
 			]
 		}
+        ,
+
+        "worm_boss":[
+            [98,221]
+        ]
 	},
 "bossarena":{
     "biome:":{},

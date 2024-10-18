@@ -3,6 +3,7 @@ import os
 from ...entities import ENTITY_CLASSES as EC
 
 
+
 SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "desert_raiders":   EC.DessertRaider,
                 "darknessbronze_barrel": EC.DarknessBronze,
@@ -61,7 +62,13 @@ SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "whale_boss": EC.WhaleBoss,
                 "crane_boss": EC.CraneBoss,
                 "crab_boss": EC.WormBoss,
-                "hunger_crystal": EC.HungerCrystal
+                "hunger_crystal": EC.HungerCrystal,
+
+                "mountain_eagle": EC.MountainEagle,
+                "mountain_slime": EC.MountainSlime,
+                "mountain_goat": EC.MountainGoat,
+                "mountain_golem": EC.MountainGolem,
+                "mountain_troll": EC.MountainTroll
 }
 
 SPAWNING_TABLES_FILE = os.path.join("game", "world", "tilegroups", "spawning.json")

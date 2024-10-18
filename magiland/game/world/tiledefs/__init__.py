@@ -41,6 +41,7 @@ BasicTile("mountainlight", "mountainlight").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainmoss", "mountainmoss").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnowmoss", "mountainsnowmoss").addTileToList(OVERWORLD_TILES)
 BasicTile("mountainsnow", "mountainsnow").addTileToList(OVERWORLD_TILES)
+BasicTile("shadowbrick", "shadowbrick").addTileToList(OVERWORLD_TILES)
 
 BasicTile("volcano", "volcano").addTileToList(OVERWORLD_TILES)
 DamageTile("volcanolava", "volcanolava", 0.2, False).addTileToList(OVERWORLD_TILES)

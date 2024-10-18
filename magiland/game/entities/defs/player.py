@@ -279,7 +279,7 @@ class Player(Creature):
         super().tick()
 
         self.inventory.tick(self, self.world)
-
+        print(self.pos)
         self.tickAllAttributes()
 
     def movementTick(self):
