@@ -23,3 +23,4 @@ Geode("gold_geode", "gold_geode", 0).addToGroup(GEODES)
 Geode("purifying_mirror", "purifying_mirror",0).addToGroup(GEODES)
 Geode("rusty_mirror", "rusty_mirror",0).addToGroup(GEODES)
 
+Geode("dynamite_string", "dynamite_string",0).addToGroup(GEODES)
