@@ -108,4 +108,20 @@ class ShouldSpawnBossAndInvincibillity():
     def setCrane(self, value): 
         self.crane = value
 
+    def hasWon (self):
+        return not self.whale_alive and not self.snail_alive and not self.crane_alive
+    
+    def reset(self):
+        self.snail_spawn = True
+        self.doug_spawn = True
+        self.boss_invincibillity = True
+        self.first_move = True
+        self.true_move = True
+        self.true_first_move = True
+        self.cooldown_first_move = True
+        self.crane_alive = True
+        self.whale_alive = True
+        self.snail_alive = True
+
+
 BOSS_CONDITIONS = ShouldSpawnBossAndInvincibillity()
