@@ -6,6 +6,7 @@ from ...entities import ENTITY_CLASSES as EC
 
 SPAWNING_IDS = {"lava_knight":      EC.DessertKnight,
                 "desert_raiders":   EC.DessertRaider,
+                
                 "darknessbronze_barrel": EC.DarknessBronze,
                 "darknesssilver_barrel": EC.DarknessSilver,
                 "darknessgold_barrel": EC.DarknessGold,

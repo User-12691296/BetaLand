@@ -18,6 +18,7 @@ class Player(Creature):
         self.initAttributes()
 
         self.pos = [461,470]
+        self.biome = []
 
         self.disp = False
 
@@ -240,9 +241,47 @@ class Player(Creature):
         if self._resting_tick_counter > 60*60 and fatigue > 0:
             self.setAttribute("fatigue", fatigue-1)
             self._resting_tick_counter = 0
+
     def tire(self, fatigue_delta):
         self.setAttribute("fatigue", self.getAttribute("fatigue")-fatigue_delta)
         self._resting_tick_counter = 0
+
+    def checkBiome (self):
+        if "lobby" in self.world.getGroupsWithTile(self.getPos()) and "lobby" not in self.biome:
+            self.biome.append("lobby")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=0))
+        
+        elif "crystal" in self.world.getGroupsWithTile(self.getPos()) and "crystal" not in self.biome: 
+            self.biome.append("crystal")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=1))
+
+        elif "swamp" in self.world.getGroupsWithTile(self.getPos()) and "swamp" not in self.biome: 
+            self.biome.append("swamp")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=3))
+
+        elif ("desert" in self.world.getGroupsWithTile(self.getPos()) or 
+        "cooldesert" in self.world.getGroupsWithTile(self.getPos()) or 
+        "hotdesert" in self.world.getGroupsWithTile(self.getPos()) or 
+        "volcano" in self.world.getGroupsWithTile(self.getPos())) and "desert" not in self.biome:
+            self.biome.append("desert")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=4))
+
+        elif "mountain" in self.world.getGroupsWithTile(self.getPos()) and "mountain" not in self.biome: 
+            self.biome.append("mountain")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=5))
+
+        elif "arctic" in self.world.getGroupsWithTile(self.getPos()) and "arctic" not in self.biome: 
+            self.biome.append("arctic")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=6))    
+
+        elif "deepdark" in self.world.getGroupsWithTile(self.getPos()) and "deepdark" not in self.biome: 
+            self.biome.append("deepdark")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=7))    
+
+        elif "void" in self.world.getGroupsWithTile(self.getPos()) and "void" not in self.biome: 
+            self.biome.append("void")
+            pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=8))    
+
 
     def insanityTick(self):
         intern_insanity = self.getAttribute("insanity")
@@ -299,6 +338,7 @@ class Player(Creature):
         self.inventory.damageTick(self, self.world)
         
     def finalTick(self):
+        self.checkBiome()
         super().finalTick()
 
     def move(self, delta):

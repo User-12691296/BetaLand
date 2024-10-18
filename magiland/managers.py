@@ -3,6 +3,7 @@ import pygame
 from misc import events
 import game
 import menus
+import tutorial
 
 class MainWindowManager(events.EventAcceptor):
     def __init__(self, screen):
@@ -13,7 +14,10 @@ class MainWindowManager(events.EventAcceptor):
         screen_size = self.screen.get_size()
         self.alphas = {"main-menu": menus.MainMenu(screen_size),
                        "settings-menu": menus.SettingsMenu(screen_size),
-                       "game": game.GameManager(screen_size)}
+                       "game": game.GameManager(screen_size),
+                       "tutorial": tutorial.TutorialManager(screen_size)}
+
+        self.alphas["tutorial"].setGameManager(self.alphas["game"])
     
 
     def callOnAllAlphas(self, action):
@@ -38,6 +42,11 @@ class MainWindowManager(events.EventAcceptor):
             self.alphas[self.active_alpha].close()
             self.active_alpha = "settings-menu"
             self.alphas[self.active_alpha].start()
+
+        if event.type == events.RUN_TUTORIAL:
+            self.alphas[self.active_alpha].close()
+            self.active_alpha = "tutorial"
+            self.alphas[self.active_alpha].start(event.stage)
             
         if event.type == pygame.MOUSEMOTION:
             self.callOnActiveAlpha(lambda alpha: alpha.onMouseMotion(self.screen.translatePointFromScreen(event.pos)))

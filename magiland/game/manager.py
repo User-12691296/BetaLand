@@ -14,7 +14,6 @@ from .world import initialiseWorlds
 
 from constants import GAME
 from constants import assets
-from misc.events import ButtonShell
 
 
 ASSETS = os.path.join("assets", "game")
@@ -24,7 +23,7 @@ PAUSE_TITLE_FONT = pygame.font.Font(os.path.join(assets.FONT_PATH, assets.NOTABL
 RETURN_FONT = pygame.font.Font(os.path.join(assets.FONT_PATH, assets.NOTABLE_FONT), 40)
 
 
-class ExitButton(ButtonShell):
+class ExitButton(events.ButtonShell):
     def __init__(self, action, button=pygame.BUTTON_LEFT):
         super().__init__(action, button)
         self.font = PAUSE_FONT.render("Exit to Menu", False, "white")
@@ -64,6 +63,8 @@ class GameManager(events.Alpha):
         self.paused = False
         self.pause_exit = ExitButton(self.exitButtonAction)
         self.died = False
+
+        self.first = True
 
     def exitButtonAction(self):
         self.paused = False
@@ -143,6 +144,13 @@ class GameManager(events.Alpha):
         self.player.setAttribute("health", self.player.getAttribute("max_health"))
         self.player.alive = True
         self.first_tick()
+
+        if self.first:
+            self.runTutorial(0) #Initial
+            self.first = False
+
+    def runTutorial(self, stage):
+        pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=stage))
 
     def onKeyDown(self, key, unicode, mod):
         global world_set, world_counter

@@ -8,8 +8,11 @@ from misc.textures import TextureAtlas
 from . import registry
 from .classes import *
 
+REGISTRY = None
         
 def initialiseItems(item_entity_class):
+    global REGISTRY
+    
     REGISTRY = registry.ItemRegistry()
     REGISTRY.loadAtlas()
 

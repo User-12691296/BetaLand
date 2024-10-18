@@ -1,0 +1,228 @@
+#HEADER
+buy advanced
+buy entities
+buy control
+buy items
+buy tiles
+#FRAMES
+#INITIAL
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+drawentity swampotter 450 75
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+shiftlayer -10 0
+#frame
+drawentity player1 100 75
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+#frame
+flipdisp X #
+#LOBBY
+#FIRST
+#SECOND
+#THIRD
+#FOURTH
+#FIFTH
+#SIXTH
+#VOID
+#FINAL
