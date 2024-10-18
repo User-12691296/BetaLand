@@ -28,11 +28,6 @@ class VolcanoLava(DamageTile):
                 entity.setRarity(2)
             if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
                 entity.setRarity(3)
-
-    def onRight(self, world, tile_pos):
-        blob = ENTITY_CLASSES.Blob()
-        blob.setPos(tile_pos)
-        world.addEntity(blob)
             
 class VolcanoMolten(DamageTile):
     def __init__(self):
@@ -58,7 +53,3 @@ class VolcanoMolten(DamageTile):
             if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
                 entity.setRarity(3)
 
-    def onRight(self, world, tile_pos):
-        blob = ENTITY_CLASSES.Blob()
-        blob.setPos(tile_pos)
-        world.addEntity(blob)

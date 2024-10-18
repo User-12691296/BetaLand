@@ -29,7 +29,7 @@ class Player(Creature):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
         self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
-        self.inventory.setItemStack(ItemStack("epic_sword", 35), 11)
+        self.inventory.setItemStack(ItemStack("dynamite_string", 35), 11)
         self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
         self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
@@ -451,6 +451,7 @@ class Player(Creature):
         self.alive = False
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        self.setPos([461, 470])
             
     def getMapDelta(self):
         bpos = self.getBufferPos()

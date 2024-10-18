@@ -44,7 +44,6 @@ class ExitButton(events.ButtonShell):
 DEFAULT_WORLD = "overworld"
 # world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["maze_level", [1,1]], ["level_3", [1,1]]]
 world_set = [["overworld", [1,1]], ["level_1", [1,1]], ["crystal_level", [10,50]], ["deep_dark_level", [125,15]], ["level_3", [100,10]], ["bossarena", [10,10]]]
-world_counter = 0 # 0 is overworld, 1 is level_1, 2 is crystal_level, 3 is deep_dark_level, 4 is maze_level, 5 is level_3
 
 class GameManager(events.Alpha):
     def __init__(self, screen_size):
@@ -159,19 +158,6 @@ class GameManager(events.Alpha):
             self.switchPause()
 
         if not self.paused:
-
-            if key == pygame.K_SPACE:
-                world_set[world_counter].pop(1)
-                world_set[world_counter].append(self.player.getPos())
-
-                world_counter += 1  
-                self.changeWorld(world_set[world_counter][0])
-                self.player.setPos(world_set[world_counter][1])
-                
-                if world_counter == len(world_set)-1:
-                    world_counter = -1 # Reset the counter
-
-                return
             
             self.player.onKeyDown(key, unicode, mod)
             self.getWorld().onKeyDown(key, unicode, mod)
