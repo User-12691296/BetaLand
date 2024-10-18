@@ -32,9 +32,11 @@ class CrabBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("crystal_armour", 1), 0)
+        self.inventory.setItemStack(ItemStack("dynamite_string", 1), 1)
+        self.inventory.setItemStack(ItemStack("clawofcrabking", 5), 2)
+        self.inventory.setItemStack(ItemStack("lemon", 2), 3)
+        self.inventory.setItemStack(ItemStack("bomb", 1), 4)
 
     def clearInventory(self):
         for i in range(self.inventory.size):
@@ -726,9 +728,9 @@ class DragonBoss (Enemy):
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
+        self.inventory.setItemStack(ItemStack("dragon_hide", 1), 0)
+        self.inventory.setItemStack(ItemStack("watermelon", 10), 1)
+        self.inventory.setItemStack(ItemStack("lemon", 5), 2)
 
 
     def clearInventory(self):
