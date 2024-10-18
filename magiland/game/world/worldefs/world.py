@@ -564,7 +564,7 @@ class World(events.EventAcceptor):
          # debug spawning
         spawns = len(self.spawned_entities)
 
-        if spawns < 20:
+        if spawns < 15:
             spawn_poll = random.random()
             if spawn_poll > 0.95:
                 entities = SPAWNING_REGISTRY.getBiomeSpawn(self.getBiomeAtTile(self.player.pos), self.world_name, 2)
