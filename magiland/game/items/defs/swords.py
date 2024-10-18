@@ -80,14 +80,14 @@ class Sword(Item):
         
 SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
-Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
+Sword("epic_sword", "emerald_studded_sword", 15, 2, 300, 5).addToGroup(SWORDS)
 Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
-Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 5).addToGroup(SWORDS)
-Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
+Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
+Sword("golf_club", "golf_club", 8, 0, 300, 5, 1).addToGroup(SWORDS)
 Sword ("knightmare_scythe", "knightmare_scythe", 15, 2, 360, 6, 0.2).addToGroup(SWORDS)
 Sword ("ice_blade", "ice_blade", 5, 2, 75, 4).addToGroup(SWORDS)
 Sword ("nature_cure", "nature_cure", 3, 0, 90, 3, -0.2).addToGroup(SWORDS)
-Sword("sanguine_slasher","sanguine_slasher", 30, 1, 120, 4, 2).addToGroup(SWORDS)
+Sword("sanguine_slasher","sanguine_slasher", 20, 1, 120, 4, 2).addToGroup(SWORDS)
 Sword("candy_cane","candy_cane", 10, 0, 300, 3, -0.1).addToGroup(SWORDS)
 Sword("paper_straw","paper_straw", 3, 0, 100, 3, 0.1).addToGroup(SWORDS)
 
