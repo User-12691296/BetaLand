@@ -8,7 +8,6 @@ class VolcanoLava(DamageTile):
     def __init__(self):
         super().__init__("volcanolava", "volcanolava", 0.2)
         self.items = {}
-        print("Hello")
 
     def gatherAllIDS(self, world, tile_pos):
         self.items = {}
@@ -25,8 +24,6 @@ class VolcanoLava(DamageTile):
         for item in self.items:
             stack = ItemStack(item, self.items[item])
             entity = ItemStack(item, self.items[item]).item
-
-            print(entity)
 
             if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "redgem" and stack.getRarity() == 0:
                 stack.setRarity(1)

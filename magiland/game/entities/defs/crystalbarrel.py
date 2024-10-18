@@ -38,8 +38,8 @@ class CrystalSilver(Barrel):
     def __init__(self):
         super().__init__(5, 0, 30)
         self.loadInventory()
-        self.inventory.setItemStack(ItemStack("cool_sword", 1), 0)
-        self.inventory.setItemStack(ItemStack("kr1stal_mace", 1), 1)
+        self.inventory.setItemStack(ItemStack("crystal_raygun", 1), 0)
+        self.inventory.setItemStack(ItemStack("crystal_armor", 1), 1)
 
 
     @staticmethod

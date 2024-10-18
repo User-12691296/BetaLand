@@ -29,25 +29,9 @@ class Player(Creature):
     def loadInventory(self):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
-        self.inventory.setItemStack(ItemStack("lil_sword", 45), 10)
-        self.inventory.setItemStack(ItemStack("dynamite_string", 35), 11)
-        self.inventory.setItemStack(ItemStack("cool_sword", 12), 12)
+        self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
-        self.inventory.setItemStack(ItemStack("knightmare_scythe",1),2)
-        self.inventory.setItemStack(ItemStack("scissors",1),3)
-        self.inventory.setItemStack(ItemStack("desert_bow",1),4)
-        self.inventory.setItemStack(ItemStack("clawofsnakequeen",1),5)
-        self.inventory.setItemStack(ItemStack("snake_mace",1),20)
-        self.inventory.setItemStack(ItemStack("celestial_mace",1),21)
-        self.inventory.setItemStack(ItemStack("barrel_of_doug",1),22)
-        self.inventory.setItemStack(ItemStack("bluegem",1),24)
-        self.inventory.setItemStack(ItemStack("redgem",1),16)
-        self.inventory.setItemStack(ItemStack("dynamite",1),6)
-        self.inventory.setItemStack(ItemStack("bomb", 121), 7)
-        self.inventory.setItemStack(ItemStack("greengem",1),17)
-        self.inventory.setItemStack(ItemStack("lemon",1),18)
-        self.inventory.setItemStack(ItemStack("apple",1),19)
-        self.inventory.setItemStack(ItemStack("dragon_hide",1),0)
+        self.inventory.setItemStack(ItemStack("apple",3),2)
 
     def initAttributes(self):
         # Frames per movement
@@ -72,8 +56,8 @@ class Player(Creature):
         # Decimal number, outside -1 to +1 range causes problems, -5 to +5 is fatal
         self.defineAttribute("temperature", 0)
         self.setAttribute("temperature", 0)
-        self.defineAttribute("thermal_insulation", 6)
-        self.setAttribute("thermal_insulation", 6)
+        self.defineAttribute("thermal_insulation", 12)
+        self.setAttribute("thermal_insulation", 12)
 
         # Integer part represents its place in the bar chart
         # Rational part represents fullness
@@ -186,8 +170,7 @@ class Player(Creature):
 
         # Die when too hot or too cold
         if abs(self.getAttribute("temperature")) > 5:
-            #CHANGE BACK TO 0.2
-            self.damage(0)
+            self.damage((abs(self.getAttribute("temperature"))-5)**2)
 
     def vibesTick(self):
         vibes = self.getAttribute("vibes")
@@ -326,7 +309,6 @@ class Player(Creature):
 
     def tick(self):
         super().tick()
-
         self.inventory.tick(self, self.world)
         # print(self.pos)
         self.tickAllAttributes()
@@ -461,7 +443,6 @@ class Player(Creature):
         GAME.BOSS_CONDITIONS.setBossFirstMove(True)
         GAME.BOSS_CONDITIONS.setCooldownFirstMove(True)
         if self.manager.getWorld().world_name == "bossarena" and GAME.BOSS_CONDITIONS.getCraneAlive() == False:
-            print(GAME.BOSS_CONDITIONS.getCrane())
             crane = GAME.BOSS_CONDITIONS.getCrane()
             crane.setPos([30,30])
 
