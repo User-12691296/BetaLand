@@ -54,7 +54,7 @@ class Sword(Item):
                 angle_to = (180-round(math.degrees(math.atan2(player.pos[1]-entity.pos[1], player.pos[0]-entity.pos[0]))))%360
 
                 if self.isAngleBetween(angle_to, data["rot"]-delta+45, data["rot"]+45):
-                    entity.damage(self.damage * (1 + data["rarity"] * 0.1))
+                    entity.damage(self.damage * (1 + data["rarity"]))
                     data["entities_hit"].append(entity)
                             
 
@@ -82,7 +82,7 @@ SWORDS = []
 Sword("debug_sword", "sword", 1000, 2).addToGroup(SWORDS)
 Sword("epic_sword", "emerald_studded_sword", 20, 2, 300, 5).addToGroup(SWORDS)
 Sword("cool_sword", "ruby_studded_sword", 3, 0, 90, 3).addToGroup(SWORDS)
-Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 2).addToGroup(SWORDS)
+Sword("lil_sword", "sapphire_studded_sword", 2, 0, 20, 5).addToGroup(SWORDS)
 Sword("golf_club", "golf_club", 20, 0, 300, 5, 1).addToGroup(SWORDS)
 Sword ("knightmare_scythe", "knightmare_scythe", 15, 2, 360, 6, 0.2).addToGroup(SWORDS)
 Sword ("ice_blade", "ice_blade", 5, 2, 75, 4).addToGroup(SWORDS)

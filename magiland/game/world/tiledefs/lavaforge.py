@@ -6,21 +6,59 @@ from ...projectiles import PROJECTILE_CLASSES
 class VolcanoLava(DamageTile):
     def __init__(self):
         super().__init__("volcanolava", "volcanolava", 0.2)
+        self.items = {}
 
-    def onLeft(self, world, tile_pos):pass
-##        player=world.getPlayer()
-##        if player.inventory.getSelectedStack() != None:
-##            if player.inventory.getSelectedStack().getItemID() == "rusty_mirror":
-##                player.inventory.setItemStack(None, player.inventory.selected_slot)
-##                player.inventory.addItemStack(ItemStack("purifying_mirror", 1))
-##                BOSS_CONDITIONS.setSnailSpawn(False)
+    def gatherAllIDS(self, world, tile_pos):
+        self.items = {}
+        
+        for entity in world.getEntitiesInRange(5):
+            if entity.isItem():
+                ID = entity.stack.getItemID()
+                self.items[ID] = self.items.get(ID, 0) + entity.stack.getCount()
                 
-##            player.inventory.setItemStack((ItemStack("purifying_mirror", 1), player.inventory.selected_slot))
-####            player.inventory.addItemStack(ItemStack("purifying_mirror", 1))
 
-    
+    def onLeft(self,world,tile_pos):
+        player = world.getPlayer()
+        for item in self.items:
+            entity = ItemStack(item, self.items[item])
+        
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "red_gem" and entity.getRarity() == 0:
+                entity.setRarity(1)
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "green_gem" and entity.getRarity() == 1:
+                entity.setRarity(2)
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
+                entity.setRarity(3)
+
+    def onRight(self, world, tile_pos):
+        blob = ENTITY_CLASSES.Blob()
+        blob.setPos(tile_pos)
+        world.addEntity(blob)
+            
 class VolcanoMolten(DamageTile):
     def __init__(self):
         super().__init__("volcanomolten", "volcanomolten", 0.1)    
 
-    def onLeft(self, world, tile_pos):pass
+    def gatherAllIDS(self, world, tile_pos):
+        self.items = {}
+        for entity in world.getEntitiesInRange(5):
+            if entity.isItem():
+                ID = entity.stack.getItemID()
+                self.items[ID] = self.items.get(ID, 0) + entity.stack.getCount()
+                
+
+    def onLeft(self,world,tile_pos):
+        player = world.getPlayer()
+        for item in self.items:
+            entity = ItemStack(item, self.items[item])
+        
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "red_gem" and entity.getRarity() == 0:
+                entity.setRarity(1)
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "green_gem" and entity.getRarity() == 1:
+                entity.setRarity(2)
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
+                entity.setRarity(3)
+
+    def onRight(self, world, tile_pos):
+        blob = ENTITY_CLASSES.Blob()
+        blob.setPos(tile_pos)
+        world.addEntity(blob)
