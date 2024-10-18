@@ -4,7 +4,7 @@ from ..classes import Enemy
 
 class CrystalGolem(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 40)
         """ CODE FOR MOB DROPS
         self.loadInventory() """
 
@@ -18,7 +18,7 @@ class CrystalGolem(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     """ CODE FOR MOB DROPS
     def tick(self):
@@ -39,7 +39,7 @@ class CrystalGolem(Enemy):
 
 class CrystalKnight(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 25)
 
     @staticmethod
     def getNeededAssets():
@@ -66,7 +66,7 @@ class CrystalKnight(Enemy):
 
 class CrystalScorpion(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 25)
 
     @staticmethod
     def getNeededAssets():
@@ -78,7 +78,7 @@ class CrystalScorpion(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -93,7 +93,7 @@ class CrystalScorpion(Enemy):
 
 class CrystalSlime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 1)
 
     @staticmethod
     def getNeededAssets():
@@ -105,7 +105,8 @@ class CrystalSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.5)
+                self.damage(1)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -120,7 +121,7 @@ class CrystalSlime(Enemy):
 
 class CrystalBat(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 25)
 
     @staticmethod
     def getNeededAssets():

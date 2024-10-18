@@ -65,11 +65,17 @@ class GameManager(events.Alpha):
 
         self.first = True
 
+        self.won = False
+
     def exitButtonAction(self):
+        if self.won:
+            GAME.BOSS_CONDITIONS.reset()
         self.paused = False
         self.player.setAttribute("health", self.player.getAttribute("max_health"))
-        self.player.alive = True
         self.died = False
+        self.won = False
+        self.player.kill()
+        self.player.alive = True
         self.first_tick()
 
         pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
@@ -100,6 +106,11 @@ class GameManager(events.Alpha):
     def changeWorld(self, world_name):
         self.active_world = world_name
         self.player.setWorld(self.getWorld())
+        if world_name == "bossarena" and not GAME.BOSS_CONDITIONS.getCraneAlive():
+            self.player.world.addEntity(GAME.BOSS_CONDITIONS.getCrane())
+            GAME.BOSS_CONDITIONS.setCraneAlive(True)
+
+
 
     ## HELPER
     def getScreenBufferDelta(self):
@@ -136,10 +147,16 @@ class GameManager(events.Alpha):
             if not self.player.alive:
                 self.died = True
                 self.paused = True
+
+            self.won = GAME.BOSS_CONDITIONS.hasWon()
+            if self.won:
+                self.paused = True
     
     ## EVENTS
     def start(self):
         print("Game starting!")
+        self.won = False
+        
         self.player.setAttribute("health", self.player.getAttribute("max_health"))
         self.player.alive = True
         self.first_tick()
@@ -196,7 +213,10 @@ class GameManager(events.Alpha):
     
     ## DRAW
     def draw(self, surface):
-        if self.died:
+        if self.won:
+            self.drawVictoryScreen(surface)
+            return
+        elif self.died:
             self.drawDeathMenu(surface)
             return
         elif self.paused:
@@ -220,6 +240,11 @@ class GameManager(events.Alpha):
         surface.blit(PAUSE_TITLE_FONT.render(message, True, (255,255,255)), (surface.get_width()/2-PAUSE_TITLE_FONT.size(message)[0]/2, (surface.get_height()/2-PAUSE_TITLE_FONT.size(message)[1]/2-100)))
         self.pause_exit.draw(surface)
 
+    def drawVictoryScreen (self, surface):
+        message = "YOU'VE WON!! PLEASE EXIT THE GAME!!"
+        surface.blit(PAUSE_TITLE_FONT.render(message, True, (255,255,255)), (surface.get_width()/2-PAUSE_TITLE_FONT.size(message)[0]/2, (surface.get_height()/2-PAUSE_TITLE_FONT.size(message)[1]/2-100)))
+        self.pause_exit.draw(surface)
+
 
     def drawWorld(self, surface):
         viewing_rect = pygame.Rect(self.getScreenBufferDelta(), self.screen_size)
@@ -227,3 +252,4 @@ class GameManager(events.Alpha):
 
     def drawPlayer(self, surface):
         self.player.draw(surface)
+

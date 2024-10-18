@@ -1,5 +1,6 @@
 import json
 import os
+import random
 from ...entities import ENTITY_CLASSES as EC
 
 
@@ -125,24 +126,28 @@ class SpawningRegistry:
         classes = []
 
         world = self.getWorldTable(world_name).get("biome", {})
-        biome_data = world[biome]
+        biome_data = world.get(biome, None)
+
         entities = {}
-        
-        for spawning_id in biome_data.keys():
-            entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]
+
+        if biome_data != None:            
+            for spawning_id in biome_data.keys():
+                entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]['chance']
 
         if general:
             all_ = self.getWorldTable("all").get("biome", {})
-            biome_data = all_[biome]
+            biome_data = all_.get(biome, None)
 
-            for spawning_id in biome_data.keys():
-                entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]
+            if biome_data != None:
+                for spawning_id in biome_data.keys():
+                    entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]['chance']
 
 
-        choices = random.choices(entities.keys(), entities.values(), k=n)
+        if entities.keys():
+            choices = random.choices([*entities.keys()], [*entities.values()], k=n)
 
-        for choice in choices:
-            instructions.append(SPAWNING_IDS[choice])
+            for choice in choices:
+                classes.append(SPAWNING_IDS[choice])
 
         return classes
 

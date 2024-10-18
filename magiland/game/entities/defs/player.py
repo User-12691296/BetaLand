@@ -4,6 +4,7 @@ import math
 from misc import events
 from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
+from .bosses import CraneBoss
 
 from constants import GAME
 
@@ -454,8 +455,16 @@ class Player(Creature):
         self.alive = False
         # pass
         # pygame.event.post(pygame.event.Event(events.RETURN_TO_MAIN_MENU))
+        GAME.BOSS_CONDITIONS.setBossFirstMove(True)
+        GAME.BOSS_CONDITIONS.setCooldownFirstMove(True)
+        if self.manager.getWorld().world_name == "bossarena" and GAME.BOSS_CONDITIONS.getCraneAlive() == False:
+            print(GAME.BOSS_CONDITIONS.getCrane())
+            crane = GAME.BOSS_CONDITIONS.getCrane()
+            crane.setPos([30,30])
+
         self.manager.changeWorld("overworld")
         self.setPos([461, 470])
+
             
     def getMapDelta(self):
         bpos = self.getBufferPos()

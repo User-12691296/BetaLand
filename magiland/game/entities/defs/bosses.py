@@ -9,6 +9,7 @@ from ...projectiles import PROJECTILE_CLASSES
 from .darknessenemies import DarknessKnightmare1
 from .swampenemies import SwampAnaconda, SwampTangler
 from ...items import Item, ItemStack, Inventory
+import time
 
 class CrabBoss (Enemy):
     def __init__(self):
@@ -260,7 +261,7 @@ class MedusaBoss (Enemy):
 # FINAL BOSSES
 class CraneBoss (Enemy):
     def __init__(self):
-        super().__init__(200, 2, 7)
+        super().__init__(300, 2, 7)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
@@ -276,37 +277,9 @@ class CraneBoss (Enemy):
         self.image_rect = self.image.get_rect()
 
         self.initial_tick = True
-        self.max_health = 200
-
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
-
-    def kill(self):
-        super().kill()
-        self.clearInventory()
-
-    @staticmethod
-    def getNeededAssets(self):
-        self.attack_pattern = 0
-        self.attack_progress = 0
-
-        self.x, self.y = 0,0
-        self.normal_movement_speed = 8
-
-        self.image = pygame.image.load(os.path.join(BOSS_PATH, "KungFuKrane.png")).convert_alpha()
-        self.image = pygame.transform.scale_by(self.image, 4)
-        self.image_rect = self.image.get_rect()
-
-        self.loadInventory()
+        self.max_health = 300
+        self.should_spawn_snail = False
+        self.should_spawn_whale = False
 
     def loadInventory(self):
         self.inventory = Inventory(5,1,1)
@@ -319,7 +292,11 @@ class CraneBoss (Enemy):
             self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
 
     def kill(self):
+        self.clearAttributes(0)
+        BOSS_CONDITIONS.setCrane(self)
+
         super().kill()
+        BOSS_CONDITIONS.setCraneAlive(False)
         self.clearInventory()
 
     @staticmethod
@@ -350,22 +327,42 @@ class CraneBoss (Enemy):
             self.setAttribute("health", self.max_health)
         super().tick()
 
-        if BOSS_CONDITIONS.getBossFirstMove():
-            if BOSS_CONDITIONS.getDougSpawn():
-                whale = WhaleBoss()
-                whale.setPos([self.pos[0]+10, self.pos[1]])
-                whale.setFinalBoss()
-                self.world.addEntity(whale)
-            if BOSS_CONDITIONS.getSnailSpawn():
-                snail = EvilSnail()
-                snail.setPos([self.pos[0]-5, self.pos[1]])
-                self.world.addEntity(snail)
+        if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
+            self.whale = WhaleBoss()
+            BOSS_CONDITIONS.setWhaleAlive(True)
+            self.should_spawn_whale = True
+        if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
+            self.snail = EvilSnail()
+            BOSS_CONDITIONS.setSnailAlive(True)
+            self.should_spawn_snail = True
 
-            self.registerCooldown("first_move", 200)
+        if BOSS_CONDITIONS.getBossFirstMove():
+            self.setAttribute("health", self.max_health)
+            self.pos = [30,30]
+
+            if BOSS_CONDITIONS.getDougSpawn():
+                self.whale.setPos([self.pos[0]+10, self.pos[1]])
+                self.whale.setFinalBoss()
+
+                if self.should_spawn_whale:
+                    self.world.addEntity(self.whale)
+
+            if BOSS_CONDITIONS.getSnailSpawn():
+                self.snail.setPos([self.pos[0]-5, self.pos[1]])
+
+                if self.should_spawn_snail:
+                    self.world.addEntity(self.snail)
+
             BOSS_CONDITIONS.setBossFirstMove(False)
+            self.registerCooldown("first_move", 120)
+
+
+        if BOSS_CONDITIONS.getTrueBossFirstMove():
+            BOSS_CONDITIONS.setTrueBossFirstMove(False)
 
         if not self.isCooldownActive("first_move"):
-            BOSS_CONDITIONS.setTrueBossFirstMove(False)
+            BOSS_CONDITIONS.setCooldownFirstMove(False)
+        else:
             return
 
         if self.attack_pattern == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
@@ -472,23 +469,16 @@ class WhaleBoss (Enemy):
 
         self.max_health = 400
         self.first_move = True
-
-    def loadInventory(self):
-        self.inventory = Inventory(5,1,1)
-        self.inventory.setItemStack(ItemStack("wood_mace", 1), 0)
-        self.inventory.setItemStack(ItemStack("watermelon", 4), 1)
-        self.inventory.setItemStack(ItemStack("lemon", 4), 2)
-
-
-    def clearInventory(self):
-        for i in range(self.inventory.size):
-            self.inventory.throwStackInLoc(self.world, self.pos, i, 0)
+        
+        self.first_time = time.time()
 
     def kill(self):
         super().kill()
         self.clearInventory()
-        BOSS_CONDITIONS.setDougSpawn(False)
-        
+        if not self.isFinalBoss():
+            BOSS_CONDITIONS.setDougSpawn(False)
+        BOSS_CONDITIONS.setWhaleAlive(False)
+
     def setFinalBoss(self):
         self.final_boss = True
 
@@ -530,12 +520,9 @@ class WhaleBoss (Enemy):
             self.setAttribute("health", self.max_health)
 
         super().tick()
-
-        print(BOSS_CONDITIONS.getBossFirstMove())
-        if self.attack_pattern == 0 and (BOSS_CONDITIONS.getTrueBossFirstMove() == False):
-            if self.alpha >= 255:
-                self.alpha = 0
-            self.attack_pattern = random.randint(1, 1)
+        self.first_time = time.time()
+        if self.attack_pattern == 0 and ((BOSS_CONDITIONS.getCooldownFirstMove() == False and self.final_boss == True) or not self.final_boss) and self.attack_progress == 0 and not self.isCooldownActive("attack_pattern_cooldown"):
+            self.attack_pattern = 1
             self.attack_progress = 1
             self.initial_player_pos = self.world.getPlayer().getPos().copy()
             if self.attack_pattern == 1:
@@ -543,7 +530,6 @@ class WhaleBoss (Enemy):
                 self.alpha = 1
                 self.pos = self.initial_player_pos
                 self.registerCooldown("bullets", 10)
-
 
         if self.attack_pattern == 1:
             self.updatePositionForPattern1()
@@ -559,7 +545,7 @@ class WhaleBoss (Enemy):
     def clearAttributes(self, cooldown):
         self.attack_progress = 0
         self.attack_pattern = 0
-        self.registerCooldown("attack_pattern_cooldown", cooldown)        
+        self.registerCooldown("attack_pattern_cooldown", cooldown)    
 
     def updatePositionForPattern1(self):
         if not self.active:
@@ -630,6 +616,7 @@ class EvilSnail (Enemy):
     def __init__(self):
         super().__init__(300, 0, 35)
         self.stuck = False
+        BOSS_CONDITIONS.setBossInvincibillity(True)
 
     @staticmethod
     def getNeededAssets():
@@ -652,6 +639,7 @@ class EvilSnail (Enemy):
     def kill(self):
         super().kill()
         BOSS_CONDITIONS.setBossInvincibillity(False)
+        BOSS_CONDITIONS.setSnailAlive(False)
 
     def movementTick(self):
         if self.world.changes_this_tick:

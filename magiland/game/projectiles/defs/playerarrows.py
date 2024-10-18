@@ -26,7 +26,7 @@ class Arrow(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(2)
+                entity.damage(2.5)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
@@ -86,7 +86,7 @@ class MoltenArrow(BasicProjectileWithEffects):
         return ["MoltenArrow"]
 
     def molten_tick_effect(self, entity, world, tile_pos):
-        entity.damage(0.3)
+        entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):    
         super().draw(display, display_topleft)

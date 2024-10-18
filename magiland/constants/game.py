@@ -43,6 +43,12 @@ class ShouldSpawnBossAndInvincibillity():
         self.boss_invincibillity = True
         self.first_move = True
         self.true_move = True
+        self.true_first_move = True
+        self.cooldown_first_move = True
+        self.crane_alive = True
+        self.whale_alive = True
+        self.snail_alive = True
+        self.crane = None
 
     def setSnailSpawn(self, value):
         self.snail_spawn = value
@@ -69,9 +75,53 @@ class ShouldSpawnBossAndInvincibillity():
         self.first_move = value
     
     def getTrueBossFirstMove(self):
-        return self.first_move
+        return self.true_move
     
     def setTrueBossFirstMove(self, value):
-        self.first_move = value
+        self.true_move = value
+
+    def getCooldownFirstMove(self):
+        return self.cooldown_first_move
+    
+    def setCooldownFirstMove(self, value):
+        self.cooldown_first_move = value
+
+    def getCraneAlive(self):
+        return self.crane_alive
+    def setCraneAlive(self, value):
+        self.crane_alive = value
+
+    def getWhaleAlive(self):
+        return self.whale_alive
+    
+    def setWhaleAlive(self, value):
+        self.whale_alive = value
+
+    def getSnailAlive(self):
+        return self.snail_alive
+    def setSnailAlive(self, value):
+        self.snail_alive = value
+
+    def getCrane(self):
+        return self.crane
+    
+    def setCrane(self, value): 
+        self.crane = value
+
+    def hasWon (self):
+        return not self.whale_alive and not self.snail_alive and not self.crane_alive
+    
+    def reset(self):
+        self.snail_spawn = True
+        self.doug_spawn = True
+        self.boss_invincibillity = True
+        self.first_move = True
+        self.true_move = True
+        self.true_first_move = True
+        self.cooldown_first_move = True
+        self.crane_alive = True
+        self.whale_alive = True
+        self.snail_alive = True
+
 
 BOSS_CONDITIONS = ShouldSpawnBossAndInvincibillity()

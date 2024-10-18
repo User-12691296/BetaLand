@@ -5,7 +5,7 @@ from ...projectiles import PROJECTILE_CLASSES
 
 class SwampAnaconda(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -23,7 +23,7 @@ class SwampAnaconda(Enemy):
             
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if entity.isEnemyTarget():
-                entity.damage(0.1)
+                entity.damage(0.15)
                 
 
     def draw(self, display, display_topleft=(0, 0)):
@@ -39,7 +39,7 @@ class SwampAnaconda(Enemy):
 
 class SwampOtter(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 25)
 
     @staticmethod
     def getNeededAssets():
@@ -51,7 +51,7 @@ class SwampOtter(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -66,7 +66,7 @@ class SwampOtter(Enemy):
 
 class SwampTangler(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -78,7 +78,7 @@ class SwampTangler(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.2)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -93,7 +93,7 @@ class SwampTangler(Enemy):
 
 class SwampSlime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 20)
 
     @staticmethod
     def getNeededAssets():
@@ -105,7 +105,8 @@ class SwampSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(1)
+                self.damage(20)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
