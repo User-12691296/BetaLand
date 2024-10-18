@@ -4,7 +4,7 @@ from ..classes import Enemy
 
 class FrozenKnight(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 50)
 
     @staticmethod
     def getNeededAssets():
@@ -16,7 +16,7 @@ class FrozenKnight(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.25)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -31,7 +31,7 @@ class FrozenKnight(Enemy):
 
 class FrozenPuffer(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 45)
 
     @staticmethod
     def getNeededAssets():
@@ -43,7 +43,7 @@ class FrozenPuffer(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.25)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -58,7 +58,7 @@ class FrozenPuffer(Enemy):
 
 class FrozenTroll(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 55)
 
     @staticmethod
     def getNeededAssets():
@@ -70,7 +70,7 @@ class FrozenTroll(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.3)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -85,7 +85,7 @@ class FrozenTroll(Enemy):
 
 class FrozenSlime(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 40)
 
     @staticmethod
     def getNeededAssets():
@@ -97,7 +97,7 @@ class FrozenSlime(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.25)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
@@ -112,7 +112,7 @@ class FrozenSlime(Enemy):
 
 class FrozenWolf(Enemy):
     def __init__(self):
-        super().__init__(5, 0, 30)
+        super().__init__(5, 0, 35)
 
     @staticmethod
     def getNeededAssets():
@@ -124,7 +124,7 @@ class FrozenWolf(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
-                entity.damage(0.1)
+                entity.damage(0.15)
 
     def draw(self, display, display_topleft=(0, 0)):
         bpos = self.world.tilePosToBufferPos(self.pos)
