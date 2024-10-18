@@ -72,6 +72,7 @@ class Sword(Item):
 
     def onLeft(self, data, player, world, tile_pos, tile):
         self.startSwing(data, player, world, tile_pos, tile)
+        print(data["rarity"])
         return True
 
     def isUpgradeable(self, data, player, world):
