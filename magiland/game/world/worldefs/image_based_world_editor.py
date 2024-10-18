@@ -3,8 +3,8 @@ import pygame
 import numpy
 import json
 
-IMAGE_PATH = "overworld.png"
-WORLD_NAME = "overworld"
+IMAGE_PATH = "pixil-frame-0 (10).png"
+WORLD_NAME = "crystal_level"
 LEVELS_PATH = "levels.json"
 
 TILE_SEP = ";"
