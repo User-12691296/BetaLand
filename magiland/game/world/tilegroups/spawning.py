@@ -115,7 +115,7 @@ class SpawningRegistry:
         return instructions
 
     def getBiomeSpawn(self, biome, world_name, general=True, n=1):
-        instructions = []
+        classes = []
 
         world = self.getWorldTable(world_name).get("biome", {})
         biome_data = world[biome]
@@ -132,6 +132,11 @@ class SpawningRegistry:
                 entities[spawning_id] = entities.get(spawning_id, 0) + biome_data[spawning_id]
 
 
-        return random.choices(entities.keys(), entities.values(), k=n)
+        choices = random.choices(entities.keys(), entities.values(), k=n)
+
+        for choice in choices:
+            instructions.append(SPAWNING_IDS[choice])
+
+        return classes
 
 SPAWNING_REGISTRY = SpawningRegistry()
