@@ -139,8 +139,10 @@ class ItemStack:
 
     def getRarity(self):
         return self.data.get("rarity", 1)
+    
     def setRarity(self, rarity):
         self.data["rarity"] = rarity
+        
     def upgradeRarity(self):
         if self.item.isUpgreadable():
             rarity = self.getRarity()
