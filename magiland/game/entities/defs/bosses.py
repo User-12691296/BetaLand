@@ -710,7 +710,7 @@ class EvilSnail (Enemy):
 
 class DragonBoss (Enemy):
     def __init__(self):
-        super().__init__(300, 2, 8)
+        super().__init__(150, 2, 8)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()

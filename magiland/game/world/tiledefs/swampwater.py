@@ -16,6 +16,7 @@ class SwampWater(SlowTile):
                 player.inventory.setItemStack(None, player.inventory.selected_slot)
                 player.inventory.addItemStack(ItemStack("purifying_mirror", 1))
                 BOSS_CONDITIONS.setSnailSpawn(False)
+                BOSS_CONDITIONS.setBossInvincibillity(False)
                 
 ##            player.inventory.setItemStack((ItemStack("purifying_mirror", 1), player.inventory.selected_slot))
 ####            player.inventory.addItemStack(ItemStack("purifying_mirror", 1))

@@ -22,11 +22,11 @@ class VolcanoLava(DamageTile):
         for item in self.items:
             entity = ItemStack(item, self.items[item])
         
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "red_gem" and entity.getRarity() == 0:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "redgem" and entity.getRarity() == 0:
                 entity.setRarity(1)
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "green_gem" and entity.getRarity() == 1:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "greengem" and entity.getRarity() == 1:
                 entity.setRarity(2)
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "bluegem" and entity.getRarity() == 2:
                 entity.setRarity(3)
             
 class VolcanoMolten(DamageTile):
@@ -46,10 +46,10 @@ class VolcanoMolten(DamageTile):
         for item in self.items:
             entity = ItemStack(item, self.items[item])
         
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "red_gem" and entity.getRarity() == 0:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "redgem" and entity.getRarity() == 0:
                 entity.setRarity(1)
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "green_gem" and entity.getRarity() == 1:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "greengem" and entity.getRarity() == 1:
                 entity.setRarity(2)
-            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "blue_gem" and entity.getRarity() == 2:
+            if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "bluegem" and entity.getRarity() == 2:
                 entity.setRarity(3)
 

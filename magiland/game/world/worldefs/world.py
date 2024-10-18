@@ -541,7 +541,10 @@ class World(events.EventAcceptor):
         for spawn in self.spawned_entities:
             if spawn.distanceTo2(self.player.pos) > 400:
                 self.spawned_entities.remove(spawn)
-                self.entities.remove(spawn)
+                try:
+                    self.entities.remove(spawn)
+                except ValueError:
+                    print("grrrr")
     
     def wipeSpawns(self):
         for spawn in self.spawned_entities:

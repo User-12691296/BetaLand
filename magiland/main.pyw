@@ -30,10 +30,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
-                pygame.event.post(pygame.event.Event(events.RUN_TUTORIAL, stage=1))
-
         main_manager.handleEvent(event)
 
     # Tick after input
