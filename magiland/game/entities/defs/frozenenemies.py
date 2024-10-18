@@ -101,6 +101,11 @@ class FrozenSlime(Enemy):
         return True
 
     def damageTick(self):
+        if self.world.player.diagonalTo(self.pos) <= 8 and not self.isCooldownActive("laser"):
+            laser = PROJECTILE_CLASSES.IceBullet.fromStartEnd(self.pos, self.world.player.getPos())
+            laser.giveImmunity(self)
+            self.world.addProjectile(laser)
+            self.registerCooldown("laser", 50)
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, 1.5):
             if not entity.isEnemy():
                 entity.damage(0.25)
