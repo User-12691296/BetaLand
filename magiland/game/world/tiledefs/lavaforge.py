@@ -5,8 +5,8 @@ from ...entities import ENTITY_CLASSES
 from ...projectiles import PROJECTILE_CLASSES
 
 class VolcanoLava(DamageTile):
-    def __init__(self):
-        super().__init__("volcanolava", "volcanolava", 0.2)
+    def __init__(self, tex_name):
+        super().__init__(tex_name, tex_name, 0.2)
         self.items = {}
 
     def gatherAllIDS(self, world, tile_pos):
@@ -22,6 +22,7 @@ class VolcanoLava(DamageTile):
         player = world.getPlayer()
         self.gatherAllIDS(world, tile_pos)
         for item in self.items:
+
             stack = ItemStack(item, self.items[item])
             entity = ItemStack(item, self.items[item]).item
 
