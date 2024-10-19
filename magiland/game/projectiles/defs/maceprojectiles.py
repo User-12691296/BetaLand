@@ -58,7 +58,7 @@ class CrystalMaceProj(Projectile):
 
         for entity in self.world.getEntitiesOnTile(tpos):
             if self.isValidHit(entity):
-                entity.damage(0.5)
+                entity.damage(0.2)
                 self.kill()
 
     def draw(self, display, display_topleft=(0, 0)):
