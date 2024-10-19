@@ -30,9 +30,11 @@ class Player(Creature):
         self.inventory = PlayerInventory()
         self.inventory.setPlayer(self)
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
-        self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
-        self.inventory.setItemStack(ItemStack("apple",3),2)
-        # self.inventory.setItemStack(ItemStack("dynamite", 3), 2)
+        self.inventory.setItemStack(ItemStack("rusty_mirror",1), 1)
+        self.inventory.setItemStack(ItemStack("apple", 3), 2)
+        self.inventory.addItemStack(ItemStack("scissors", 1))
+        self.inventory.addItemStack(ItemStack("clawofcrabking", 1))
+        self.inventory.addItemStack(ItemStack("clawofsnakequeen", 1))
 
     def initAttributes(self):
         # Frames per movement
@@ -378,35 +380,6 @@ class Player(Creature):
         if pressed[GAME.CONTROLS_KEYS["right"]]:
             self.move(( 1,  0))
             moved = True
-
-
-        ##DEBUG
-        if pressed[pygame.K_h]:
-            self.move(( 0, -10))
-            moved = True
-        if pressed[pygame.K_b]:
-            self.move((-10,  0))
-            moved = True
-        if pressed[pygame.K_n]:
-            self.move(( 0,  10))
-            moved = True
-        if pressed[pygame.K_m]:
-            self.move(( 10,  0))
-            moved = True
-
-        if pressed[pygame.K_i]:
-            self.move(( 0, -40))
-            moved = True
-        if pressed[pygame.K_j]:
-            self.move((-40,  0))
-            moved = True
-        if pressed[pygame.K_k]:
-            self.move(( 0,  40))
-            moved = True
-        if pressed[pygame.K_l]:
-            self.move(( 40,  0))
-            moved = True
-        ##
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
