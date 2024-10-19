@@ -34,16 +34,22 @@ class Fruit(Item):
         player.changeHealth(self.heal_amount)
         self.effect(player, world, tile, tile_pos)
         fruit = player.inventory.getItemStack(player.inventory.selected_slot)
-        fruit.changeCount(-1)
-        if fruit.isEmpty():
-            player.inventory.setItemStack(None,player.inventory.selected_slot)
+        fruit.consume()
 
 
     def tick(self, data, player, world):
         data["animations"].tick()
 
-# def placeholderFunction():
-#     return lambda x,y,z: None
+class Watermelon (Item):
+    def __init__(self, itemid, tex_name, size):
+        super().__init__(itemid, tex_name, size)
+
+    def onLeft(self, data, player, world, tile, tile_pos):
+        insulation = player.getAttribute("thermal_insulation")
+        insulation *= 1.2
+        player.setAttribute("thermal_insulation", insulation)
+        fruit = player.inventory.getItemStack(player.inventory.selected_slot)
+        fruit.consume()
 
 class Lemon (Fruit):
     def __init__(self, itemid, tex_name, size, heal_amount, effect_duration):
@@ -76,9 +82,9 @@ class SilverFruit(Fruit):
         player.setArmorValues(self.original_armor_value, self.original_dmg_threshold)
 
 FRUITS = []
-Fruit("orange", "orange", 0, 30).addToGroup(FRUITS)
-Fruit("banana", "banana", 0, 30).addToGroup(FRUITS)
-Fruit("watermelon", "watermelon", 0, 30).addToGroup(FRUITS)
-Fruit("apple", "apple", 0, 100).addToGroup(FRUITS)
-Lemon("lemon", "lemon", 0, 30, 100).addToGroup(FRUITS)
+Fruit("orange", "orange", 0, 1).addToGroup(FRUITS)
+Fruit("banana", "banana", 0, 1).addToGroup(FRUITS)
+Watermelon("watermelon", "watermelon", 0).addToGroup(FRUITS)
+Fruit("apple", "apple", 0, 3).addToGroup(FRUITS)
+Lemon("lemon", "lemon", 0, 1, 100).addToGroup(FRUITS)
 SilverFruit("silver_apple", "silver_apple", 1, 100, 100, 10).addToGroup(FRUITS)

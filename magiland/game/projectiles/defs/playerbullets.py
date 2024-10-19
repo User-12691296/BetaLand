@@ -268,5 +268,6 @@ PoisonDart.addToGroup(PLAYERBULLETS)
 ColdDoug.addToGroup(PLAYERBULLETS)
 FrogBullet.addToGroup(PLAYERBULLETS)
 DartProjectile.addToGroup(PLAYERBULLETS)
+CannonBall.addToGroup(PLAYERBULLETS)
                                 
 

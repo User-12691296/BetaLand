@@ -11,9 +11,6 @@ class Bow(Item):
         super().__init__(itemid, tex_name, False, size)
         self.cooldown = cooldown # In frames
         self.arrow=arrow
-##    def initData(self):
-##        data = super().initData()
-##        return data
 
     def tick(self, data, player, world):
         data["animations"].tick()
