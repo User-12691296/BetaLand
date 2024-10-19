@@ -32,4 +32,4 @@ class SigWeapon(Sword):
 SIGWEAPONS = []
 SigWeapon("clawofcrabking", "clawofcrabking", 35, 2, 360, laser=PROJECTILE_CLASSES.CelestialMaceProj, cooldown=20).addToGroup(SIGWEAPONS)
 SigWeapon("clawofsnakequeen", "clawnofsnakequeen", 35, 2, 360, laser=PROJECTILE_CLASSES.PoisonDart, cooldown=20).addToGroup(SIGWEAPONS)
-SigWeapon("scissors", "scissors", 35,2,360,laser=PROJECTILE_CLASSES.IceBullet,cooldown=20).addToGroup(SIGWEAPONS)
+SigWeapon("scissors", "scissors", 35,2,360,laser=PROJECTILE_CLASSES.ScissorBullet,cooldown=20).addToGroup(SIGWEAPONS)
