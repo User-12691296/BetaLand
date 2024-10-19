@@ -32,9 +32,6 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1), 1)
         self.inventory.setItemStack(ItemStack("apple", 3), 2)
-        self.inventory.addItemStack(ItemStack("scissors", 1))
-        self.inventory.addItemStack(ItemStack("clawofcrabking", 1))
-        self.inventory.addItemStack(ItemStack("clawofsnakequeen", 1))
 
     def initAttributes(self):
         # Frames per movement
@@ -192,6 +189,11 @@ class Player(Creature):
         # Die when hunger drops to 0
         if hunger <= 0:
             self.damage(0.2)
+            
+        if hunger >= 1:
+            self.damage(hunger-1)
+            self.setAttribute("hunger", 1)
+            
     def changeHunger(self, delta):
         self.setAttribute("hunger", self.getAttribute("hunger")+delta)
 
@@ -431,6 +433,7 @@ class Player(Creature):
         self.manager.changeWorld("overworld")
         self.setPos([461, 470])
 
+        self.changeHunger(0.5)
             
     def getMapDelta(self):
         bpos = self.getBufferPos()
