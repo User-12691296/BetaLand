@@ -32,7 +32,7 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1),1)
         self.inventory.setItemStack(ItemStack("apple",3),2)
-        self.inventory.setItemStack(ItemStack("dynamite", 3), 2)
+        # self.inventory.setItemStack(ItemStack("dynamite", 3), 2)
 
     def initAttributes(self):
         # Frames per movement
