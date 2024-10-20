@@ -8,7 +8,7 @@ from .bosses import CraneBoss, DarknessBoss
 
 from constants import GAME
 
-INITIAL_PLAYER_HEALTH = 10
+INITIAL_PLAYER_HEALTH = 40
 
 class Player(Creature):    
     def __init__(self):
@@ -92,7 +92,7 @@ class Player(Creature):
         # > 1.0 teleports you to the final boss, half movement, controls flipped
         self.defineAttribute("insanity", 0)
         self.setAttribute("insanity", 0)
-        self.defineAttribute("insanity_progress_speed", 40) #seconds
+        self.defineAttribute("insanity_progress_speed", 25) #seconds
         self.defineAttribute("insanity_regen_speed", 8) #seconds
 
         # 0 to 1

@@ -82,7 +82,7 @@ class CrabBoss (Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, self.size[0]-1):
             if not entity.isEnemy():
-                entity.damage(0.5)
+                entity.damage(0.15)
 
     def movementTick(self):
         if self.attack_pattern == 0 or self.attack_pattern == 2:
@@ -198,7 +198,7 @@ class MedusaBoss (Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, self.size[0]-1):
             if not entity.isEnemy():
-                entity.damage(0.7)
+                entity.damage(0.4)
 
     def movementTick(self):
         super().movementTick()
@@ -299,7 +299,7 @@ class MedusaBoss (Enemy):
 # FINAL BOSSES
 class CraneBoss (Enemy):
     def __init__(self):
-        super().__init__(300, 2, 7)
+        super().__init__(400, 2, 7)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
@@ -366,6 +366,7 @@ class CraneBoss (Enemy):
 
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
+            print("hi")
             BOSS_CONDITIONS.setWhaleAlive(True)
             self.should_spawn_whale = True
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
@@ -379,7 +380,6 @@ class CraneBoss (Enemy):
 
             if BOSS_CONDITIONS.getDougSpawn():
                 self.whale.setPos([self.pos[0]+10, self.pos[1]])
-                self.whale.setAttribute("health", 400)
                 self.whale.setFinalBoss()
 
                 if self.should_spawn_whale:
@@ -388,8 +388,6 @@ class CraneBoss (Enemy):
 
             if BOSS_CONDITIONS.getSnailSpawn():
                 self.snail.setPos([self.pos[0]-5, self.pos[1]])
-                self.snail.setAttribute("health", 300)
-                BOSS_CONDITIONS.setBossInvincibillity(True)
 
                 if self.should_spawn_snail:
                     self.world.addEntity(self.snail)
@@ -492,7 +490,7 @@ class CraneBoss (Enemy):
 
 class WhaleBoss (Enemy):
     def __init__(self):
-        super().__init__(400, 2, 8)
+        super().__init__(600, 2, 8)
         self.size = (9,9)
         self.radius = 2
         self.loadInventory()
@@ -655,8 +653,9 @@ class WhaleBoss (Enemy):
 
 class EvilSnail (Enemy):
     def __init__(self):
-        super().__init__(300, 0, 35)
+        super().__init__(1000, 0, 35)
         self.stuck = False
+        BOSS_CONDITIONS.setBossInvincibillity(True)
 
     @staticmethod
     def getNeededAssets():
@@ -748,7 +747,7 @@ class EvilSnail (Enemy):
 
 class DragonBoss (Enemy):
     def __init__(self):
-        super().__init__(200, 2, 8)
+        super().__init__(300, 2, 8)
         self.size = (5,5)
         self.radius = 2
         self.loadInventory()
@@ -930,7 +929,7 @@ class WormBoss(Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, self.size[0]-1):
             if not entity.isEnemy():
-                entity.damage(1.0)
+                entity.damage(0.8)
 
     def movementTick(self):
         if self.attack_pattern == 0:
@@ -1214,6 +1213,8 @@ class DarknessBoss (Enemy):
         self.image = pygame.image.load(os.path.join(BOSS_PATH, "DarknessCorruptedSalamander.png")).convert_alpha()
         self.image = pygame.transform.scale_by(self.image, 4)
         self.image_rect = self.image.get_rect()
+
+        self.total_time = 120
 
 
     def loadInventory(self):

@@ -68,7 +68,7 @@ class DarknessGold(Barrel):
         self.loadInventory()
         self.inventory.setItemStack(ItemStack("cosmic_mace", 1), 1)
         self.inventory.setItemStack(ItemStack("knightmare_scythe", 1), 2)
-
+        self.inventory.setItemStack(ItemStack("deepdark_armor", 1), 0)
 
     @staticmethod
     def getNeededAssets():
