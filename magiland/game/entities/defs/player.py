@@ -308,7 +308,7 @@ class Player(Creature):
         if self.getAttribute("insanity")>0.98:
             for i in range(6):
                 boss = DarknessBoss()
-                boss.setPos(self.pos[0] + random.randint(-10, 10), self.pos[1] + random.randint(-10, 10))
+                boss.setPos((self.pos[0] + random.randint(-10, 10), self.pos[1] + random.randint(-10, 10)))
                 self.world.addEntity(boss)
 
             player.setAttribute("insanity", 0.8)
