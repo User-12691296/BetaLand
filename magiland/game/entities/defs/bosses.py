@@ -366,7 +366,6 @@ class CraneBoss (Enemy):
 
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getWhaleAlive()):
             self.whale = WhaleBoss()
-            print("hi")
             BOSS_CONDITIONS.setWhaleAlive(True)
             self.should_spawn_whale = True
         if BOSS_CONDITIONS.getTrueBossFirstMove() or (BOSS_CONDITIONS.getBossFirstMove() and not BOSS_CONDITIONS.getSnailAlive()):
@@ -380,6 +379,7 @@ class CraneBoss (Enemy):
 
             if BOSS_CONDITIONS.getDougSpawn():
                 self.whale.setPos([self.pos[0]+10, self.pos[1]])
+                self.whale.setAttribute("health", 400)
                 self.whale.setFinalBoss()
 
                 if self.should_spawn_whale:
@@ -388,6 +388,8 @@ class CraneBoss (Enemy):
 
             if BOSS_CONDITIONS.getSnailSpawn():
                 self.snail.setPos([self.pos[0]-5, self.pos[1]])
+                self.snail.setAttribute("health", 300)
+                BOSS_CONDITIONS.setBossInvincibillity(True)
 
                 if self.should_spawn_snail:
                     self.world.addEntity(self.snail)
@@ -655,7 +657,6 @@ class EvilSnail (Enemy):
     def __init__(self):
         super().__init__(300, 0, 35)
         self.stuck = False
-        BOSS_CONDITIONS.setBossInvincibillity(True)
 
     @staticmethod
     def getNeededAssets():

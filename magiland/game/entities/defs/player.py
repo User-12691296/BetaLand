@@ -387,7 +387,8 @@ class Player(Creature):
             moved = True
         if pressed[GAME.CONTROLS_KEYS["right"]]:
             self.move(( 1,  0))
-            moved = True        
+            moved = True
+
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos
