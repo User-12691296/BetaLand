@@ -1,5 +1,6 @@
 import pygame
 import math
+import ranodm
 
 from misc import events
 from ..classes import Entity, Creature, Enemy
@@ -305,10 +306,12 @@ class Player(Creature):
             self.setAttribute("insanity", intern_insanity - 1/60/self.getAttribute("insanity_regen_speed"))
 
         if self.getAttribute("insanity")>0.98:
-            for i in range(4):
+            for i in range(6):
                 boss = DarknessBoss()
-                boss.setPos(self.pos)
+                boss.setPos(self.pos[0] + random.randint(-10, 10), self.pos[1] + random.randint(-10, 10))
                 self.world.addEntity(boss)
+
+            player.setAttribute("insanity", 0.8)
 
     def thirstTick(self):
         pass
