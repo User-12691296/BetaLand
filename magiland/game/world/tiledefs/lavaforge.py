@@ -15,16 +15,16 @@ class VolcanoLava(DamageTile):
         for entity in world.getEntitiesInRangeOfTile(tile_pos, 5):
             if entity.isItemEntity():
                 ID = entity.stack.getItemID()
-                self.items[ID] = self.items.get(ID, 0) + entity.stack.getCount()
+                self.items[ID] = entity
                 
 
     def onLeft(self,world, tile_pos):
         player = world.getPlayer()
         self.gatherAllIDS(world, tile_pos)
-        for item in self.items:
+        for item_entity in self.items:
 
-            stack = ItemStack(item, self.items[item])
-            entity = ItemStack(item, self.items[item]).item
+            stack = self.items[item_entity].stack
+            entity = stack.item
 
             if entity.isUpgradeable() and player.inventory.getSelectedStack().getItemID() == "redgem" and stack.getRarity() == 0:
                 stack.setRarity(1)
@@ -45,6 +45,8 @@ class VolcanoLava(DamageTile):
                 player.inventory.cullEmptyStacks()
 
             
+            print(stack.getRarity())
+
 class VolcanoMolten(DamageTile):
     def __init__(self):
         super().__init__("volcanomolten", "volcanomolten", 0.1)    

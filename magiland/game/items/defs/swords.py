@@ -74,7 +74,7 @@ class Sword(Item):
         self.startSwing(data, player, world, tile_pos, tile)
         return True
 
-    def isUpgradeable(self, data, player, world):
+    def isUpgradeable(self):
         return True
 
         
