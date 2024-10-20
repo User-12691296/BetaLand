@@ -32,6 +32,8 @@ class Player(Creature):
         self.inventory.setItemStack(ItemStack("golf_club", 1), 0)
         self.inventory.setItemStack(ItemStack("rusty_mirror",1), 1)
         self.inventory.setItemStack(ItemStack("apple", 3), 2)
+        self.inventory.setItemStack(ItemStack("dragon_hide", 1), 3)
+        self.inventory.setItemStack(ItemStack("scissors", 1), 4)
 
     def initAttributes(self):
         # Frames per movement
@@ -381,7 +383,15 @@ class Player(Creature):
             moved = True
         if pressed[GAME.CONTROLS_KEYS["right"]]:
             self.move(( 1,  0))
-            moved = True        
+            moved = True
+
+        if pressed[pygame.K_i]:
+            self.move(( 0, -10))
+            moved = True
+        if pressed[pygame.K_k]:
+            self.move(( 0, -10))
+            moved = True
+
 
         if not self.world.isTileValidForWalking(self.pos):
             self.pos = self.prev_pos

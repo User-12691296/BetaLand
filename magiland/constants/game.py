@@ -64,6 +64,7 @@ class ShouldSpawnBossAndInvincibillity():
 
     def setBossInvincibillity(self, value):
         self.boss_invincibillity = value
+        print(value)
 
     def getBossInvincibillity(self):
         return self.boss_invincibillity
