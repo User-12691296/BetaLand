@@ -1,6 +1,6 @@
 import pygame
 import math
-import ranodm
+import random
 
 from misc import events
 from ..classes import Entity, Creature, Enemy
