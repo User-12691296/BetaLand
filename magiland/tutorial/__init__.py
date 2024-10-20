@@ -83,7 +83,7 @@ class TutorialManager(events.Alpha):
                          "drawrect":self.cmdDrawRect,
                          "drawchar":self.cmdDrawChar,
                          "drawentity":self.cmdDrawEntity,
-                         "drawitems":self.cmdDrawItem,
+                         "drawitem":self.cmdDrawItem,
                          "switchlayer":self.cmdSwitchLayers,
                          "shiftlayer":self.cmdShiftLayers,
                          "drawellipse":self.cmdDrawEllipse,

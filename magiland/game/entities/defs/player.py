@@ -4,7 +4,7 @@ import math
 from misc import events
 from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
-from .bosses import CraneBoss
+from .bosses import CraneBoss, DarknessBoss
 
 from constants import GAME
 
@@ -303,6 +303,12 @@ class Player(Creature):
         if extern_insanity < intern_insanity:
             # insanity drops in 5 seconds
             self.setAttribute("insanity", intern_insanity - 1/60/self.getAttribute("insanity_regen_speed"))
+
+        if self.getAttribute("insanity")>0.98:
+            for i in range(4):
+                boss = DarknessBoss()
+                boss.setPos(self.pos)
+                self.world.addEntity(boss)
 
     def thirstTick(self):
         pass
