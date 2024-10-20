@@ -311,7 +311,7 @@ class Player(Creature):
                 boss.setPos((self.pos[0] + random.randint(-10, 10), self.pos[1] + random.randint(-10, 10)))
                 self.world.addEntity(boss)
 
-            player.setAttribute("insanity", 0.8)
+            self.setAttribute("insanity", 0.8)
 
     def thirstTick(self):
         pass

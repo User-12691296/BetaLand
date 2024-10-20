@@ -1239,7 +1239,7 @@ class DarknessBoss (Enemy):
     def damageTick(self):
         for entity in self.world.getEntitiesInRangeOfTile(self.pos, self.size[0]-1):
             if not entity.isEnemy():
-                entity.damage(1.2)
+                entity.damage(2.0)
 
     def movementTick(self):
         if self.attack_pattern == 0:
