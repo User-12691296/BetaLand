@@ -1,14 +1,15 @@
 import pygame
 import math
+import random
 
 from misc import events
 from ..classes import Entity, Creature, Enemy
 from ...items import PlayerInventory, ItemStack
-from .bosses import CraneBoss
+from .bosses import CraneBoss, DarknessBoss
 
 from constants import GAME
 
-INITIAL_PLAYER_HEALTH = 10
+INITIAL_PLAYER_HEALTH = 40
 
 class Player(Creature):    
     def __init__(self):
@@ -92,7 +93,7 @@ class Player(Creature):
         # > 1.0 teleports you to the final boss, half movement, controls flipped
         self.defineAttribute("insanity", 0)
         self.setAttribute("insanity", 0)
-        self.defineAttribute("insanity_progress_speed", 40) #seconds
+        self.defineAttribute("insanity_progress_speed", 25) #seconds
         self.defineAttribute("insanity_regen_speed", 8) #seconds
 
         # 0 to 1
@@ -303,6 +304,14 @@ class Player(Creature):
         if extern_insanity < intern_insanity:
             # insanity drops in 5 seconds
             self.setAttribute("insanity", intern_insanity - 1/60/self.getAttribute("insanity_regen_speed"))
+
+        if self.getAttribute("insanity")>0.98:
+            for i in range(6):
+                boss = DarknessBoss()
+                boss.setPos((self.pos[0] + random.randint(-10, 10), self.pos[1] + random.randint(-10, 10)))
+                self.world.addEntity(boss)
+
+            self.setAttribute("insanity", 0.8)
 
     def thirstTick(self):
         pass
