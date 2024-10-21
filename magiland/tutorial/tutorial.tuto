@@ -1,14 +1,8 @@
 #HEADER
-buy items
-buy entities
-buy tiles
 pausebeforereturn 120
+buy clear
 #FRAMES
 #INITIAL
-#frame
-drawentity player1 10 10
-drawitem small golf_club 80 10
-drawtile grass 150 10
 #LOBBY
 #DUNGEON
 #SWAMP
